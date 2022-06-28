@@ -26,42 +26,52 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-            child: Column(
-      children: [
-        Stack(
-          children: [
-            Container(
-              color: Colors.red[300],
-              height: 300,
-            ),
-            Column(
-              children: [
-                Container(
-                  color: Colors.black,
-                  width: 125,
-                  height: 125,
-                  margin: const EdgeInsets.all(30.0),
-                ),
-                Text(
-                  "인덕대학교",
-                  style: TextStyle(
-                      fontSize: 40,
-                      fontStyle: FontStyle.normal,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-                Text(
-                  "정보통신공학과 학생회",
-                  style: TextStyle(
-                      fontSize: 40,
-                      fontStyle: FontStyle.normal,
-                      color: Colors.white),
-                )
-              ],
-            )
-          ],
-        )
-      ],
-    )));
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              Container(
+                color: Colors.red[300],
+                height: 300,
+              ),
+              Column(
+                children: [
+                  Container(
+                    color: Colors.black,
+                    width: 125,
+                    height: 125,
+                    margin: const EdgeInsets.all(30.0),
+                  ),
+                  Text(
+                    "인덕대학교",
+                    style: TextStyle(
+                        fontSize: 40,
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  Text(
+                    "정보통신공학과 학생회",
+                    style: TextStyle(
+                        fontSize: 40,
+                        fontStyle: FontStyle.normal,
+                        color: Colors.white),
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(), labelText: "학번을 입력하세요."),
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "비밀번호를 입력하세요."),
+                  )
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    ));
   }
 }
