@@ -20,14 +20,22 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text("제목"),
         ),
-        body: Text(
-            "여기에 예제를 작성") // This trailing comma makes auto-formatting nicer for build methods.
-        );
+        body: Center(
+            child: Column(
+          children: [
+            Container(
+              color: Colors.red[200],
+              height: 100,
+            )
+          ],
+        )));
   }
 }
