@@ -25,17 +25,43 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("제목"),
-        ),
         body: Center(
             child: Column(
+      children: [
+        Stack(
           children: [
             Container(
-              color: Colors.red[200],
-              height: 100,
+              color: Colors.red[300],
+              height: 300,
+            ),
+            Column(
+              children: [
+                Container(
+                  color: Colors.black,
+                  width: 125,
+                  height: 125,
+                  margin: const EdgeInsets.all(30.0),
+                ),
+                Text(
+                  "인덕대학교",
+                  style: TextStyle(
+                      fontSize: 40,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                Text(
+                  "정보통신공학과 학생회",
+                  style: TextStyle(
+                      fontSize: 40,
+                      fontStyle: FontStyle.normal,
+                      color: Colors.white),
+                )
+              ],
             )
           ],
-        )));
+        )
+      ],
+    )));
   }
 }
