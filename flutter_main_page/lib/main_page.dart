@@ -1,28 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/login_page.dart';
+import 'package:flutter_main_page/main_page_sub/main_home.dart';
+import 'package:flutter_main_page/main_page_sub/main_user_info.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  var _index = 0; //0, 1, 2
+  var _pages = [
+    MainPage1(),
+    MainPage2(),
+    //MainPage3(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-      child: Column(
-        children: [
-          Text(
-            "메인화면",
-            style: TextStyle(fontSize: 40),
+      body: _pages[_index],
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (index) {
+          setState(() {
+            _index = index;
+          });
+        },
+        currentIndex: _index,
+        items: [
+          BottomNavigationBarItem(
+            label: '홈',
+            icon: Icon(Icons.home),
           ),
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.pop(context);
-            },
-            child: Text("로그인 화면으로"),
-            style: TextButton.styleFrom(backgroundColor: Colors.red[400]),
-          )
+          BottomNavigationBarItem(
+            label: "내정보",
+            icon: Icon(Icons.account_circle),
+          ),
         ],
       ),
-    ));
+    );
   }
 }
