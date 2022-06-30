@@ -27,3 +27,9 @@
 홈 페이지에서 상단 페이지와 하단 페이지로 분리하여서,
 상단 페이지에는 이벤트 이미지를 삽입할 수 있게 변경했고, 자동으로 좌우 스크롤링 됩니다.
 하단 페이지에는 아직까지는 미완성이지만, 공지사항 목록이 출력되게 코드를 추가했습니다.
+![로그인 화면](https://user-images.githubusercontent.com/108314973/176630186-41ba3607-a2ef-4dac-9b9a-bc8d062722d8.png)
+![로그인 화면 개선사항](https://user-images.githubusercontent.com/108314973/176630226-fee164a2-100d-404a-9bcf-83c4553a9258.png)
+![메인_내정보 화면](https://user-images.githubusercontent.com/108314973/176630242-57858f4c-b90c-449e-be1c-446558a64bf5.png)
+![메인_알람 화면](https://user-images.githubusercontent.com/108314973/176630250-26f12c7a-ae1e-4878-8700-711d70e35b30.png)
+![메인_커뮤니티 화면](https://user-images.githubusercontent.com/108314973/176630311-b8eefef9-45d0-442f-bde0-fef33b5271b2.png)
+![메인_홈 화면](https://user-images.githubusercontent.com/108314973/176630330-e169ffff-b40c-42e2-84af-e607fd4b542e.png)
