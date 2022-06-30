@@ -17,7 +17,7 @@ class MainPage1 extends StatelessWidget {
 
 Widget _buildTop() {
   return CarouselSlider(
-    options: CarouselOptions(height: 200.0, autoPlay: true),
+    options: CarouselOptions(height: 300.0, autoPlay: true),
     items: [1, 2, 3, 4, 5].map((i) {
       return Builder(
         builder: (BuildContext context) {
