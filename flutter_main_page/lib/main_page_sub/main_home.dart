@@ -17,7 +17,7 @@ class MainPage1 extends StatelessWidget {
 
 Widget _buildTop() {
   return CarouselSlider(
-    options: CarouselOptions(height: 400.0),
+    options: CarouselOptions(height: 200.0, autoPlay: true),
     items: [1, 2, 3, 4, 5].map((i) {
       return Builder(
         builder: (BuildContext context) {
@@ -25,10 +25,11 @@ Widget _buildTop() {
               width: MediaQuery.of(context).size.width,
               margin: const EdgeInsets.symmetric(horizontal: 5.0),
               decoration: const BoxDecoration(color: Colors.amber),
-              child: Text(
+              child: Center(
+                  child: Text(
                 'text $i',
                 style: const TextStyle(fontSize: 16.0),
-              ));
+              )));
         },
       );
     }).toList(),
@@ -36,5 +37,16 @@ Widget _buildTop() {
 }
 
 Widget _buildBottom() {
-  return Text("Top");
+  final items = List.generate(10, (i) {
+    return const ListTile(
+      leading: Icon(Icons.notification_important),
+      title: Text("[공지사항] 공지사항 제목"),
+    );
+  });
+
+  return ListView(
+    physics: NeverScrollableScrollPhysics(),
+    shrinkWrap: true,
+    children: items,
+  );
 }
