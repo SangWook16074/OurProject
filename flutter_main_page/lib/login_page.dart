@@ -81,7 +81,7 @@ class LoginPage extends StatelessWidget {
                                                 Radius.circular(4.0))),
                                         suffixIcon: GestureDetector(
                                           child: const Icon(
-                                            Icons.cancel,
+                                            Icons.clear,
                                             color: Colors.redAccent,
                                             size: 20,
                                           ),
@@ -121,7 +121,7 @@ class LoginPage extends StatelessWidget {
                                                 Radius.circular(4.0))),
                                         suffixIcon: GestureDetector(
                                           child: const Icon(
-                                            Icons.cancel,
+                                            Icons.clear,
                                             color: Colors.redAccent,
                                             size: 20,
                                           ),
