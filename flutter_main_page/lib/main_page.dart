@@ -11,7 +11,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   var _index = 0; //0, 1, 2
-  var _pages = [
+  final _pages = [
     MainPage1(),
     MainPage2(),
     //MainPage3(),
@@ -20,6 +20,14 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: const Text(
+          "제목",
+          style: TextStyle(color: Colors.black),
+        ),
+        centerTitle: true,
+      ),
       body: _pages[_index],
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {

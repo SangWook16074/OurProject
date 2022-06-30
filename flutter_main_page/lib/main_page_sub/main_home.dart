@@ -6,12 +6,11 @@ class MainPage1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-          child: Text(
-        "홈 페이지",
-        style: TextStyle(fontSize: 40),
-      )),
+    return ListView(
+      children: [
+        _buildTop(),
+        _buildBottom(),
+      ],
     );
   }
 }
@@ -24,11 +23,11 @@ Widget _buildTop() {
         builder: (BuildContext context) {
           return Container(
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.symmetric(horizontal: 5.0),
-              decoration: BoxDecoration(color: Colors.amber),
+              margin: const EdgeInsets.symmetric(horizontal: 5.0),
+              decoration: const BoxDecoration(color: Colors.amber),
               child: Text(
                 'text $i',
-                style: TextStyle(fontSize: 16.0),
+                style: const TextStyle(fontSize: 16.0),
               ));
         },
       );
