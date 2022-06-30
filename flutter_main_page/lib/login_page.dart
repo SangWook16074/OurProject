@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_main_page/main_page.dart';
 
 final TextEditingController _textEditingController = TextEditingController();
+var isChecked = false;
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: Colors.red[50],
+        backgroundColor: Colors.white,
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: SingleChildScrollView(
@@ -21,7 +22,7 @@ class LoginPage extends StatelessWidget {
                     Stack(
                       children: [
                         Container(
-                          color: Colors.red[300],
+                          color: Colors.blue[400],
                           height: 450,
                         ),
                         Column(
@@ -44,8 +45,15 @@ class LoginPage extends StatelessWidget {
                             const Text(
                               "정보통신공학과",
                               style: TextStyle(
-                                  fontSize: 40,
+                                  fontSize: 30,
                                   fontStyle: FontStyle.normal,
+                                  color: Colors.white),
+                            ),
+                            const Text(
+                              "Information and Communication",
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontFamily: 'Pacifico',
                                   color: Colors.white),
                             ),
                             const SizedBox(height: 30),
@@ -57,6 +65,8 @@ class LoginPage extends StatelessWidget {
                                     TextField(
                                       onChanged: (value) {},
                                       decoration: InputDecoration(
+                                        prefixIcon:
+                                            const Icon(Icons.account_circle),
                                         labelText: "학번",
                                         hintText: "학번을 입력하세요.",
                                         contentPadding:
@@ -68,21 +78,21 @@ class LoginPage extends StatelessWidget {
                                                 Radius.circular(4.0))),
                                         enabledBorder: const OutlineInputBorder(
                                           borderSide: BorderSide(
-                                              color: Colors.redAccent,
+                                              color: Colors.blueAccent,
                                               width: 1.0),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(4.0)),
                                         ),
                                         focusedBorder: const OutlineInputBorder(
                                             borderSide: BorderSide(
-                                                color: Colors.redAccent,
+                                                color: Colors.blueAccent,
                                                 width: 2.0),
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(4.0))),
                                         suffixIcon: GestureDetector(
                                           child: const Icon(
                                             Icons.clear,
-                                            color: Colors.redAccent,
+                                            color: Colors.blueAccent,
                                             size: 20,
                                           ),
                                           onTap: () =>
@@ -97,6 +107,7 @@ class LoginPage extends StatelessWidget {
                                       onChanged: (value) {},
                                       obscureText: true,
                                       decoration: InputDecoration(
+                                        prefixIcon: const Icon(Icons.lock),
                                         labelText: "비밀번호",
                                         hintText: "비밀번호를 입력하세요.",
                                         contentPadding:
@@ -108,21 +119,21 @@ class LoginPage extends StatelessWidget {
                                                 Radius.circular(4.0))),
                                         enabledBorder: const OutlineInputBorder(
                                           borderSide: BorderSide(
-                                              color: Colors.redAccent,
+                                              color: Colors.blueAccent,
                                               width: 1.0),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(4.0)),
                                         ),
                                         focusedBorder: const OutlineInputBorder(
                                             borderSide: BorderSide(
-                                                color: Colors.redAccent,
+                                                color: Colors.blueAccent,
                                                 width: 2.0),
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(4.0))),
                                         suffixIcon: GestureDetector(
                                           child: const Icon(
                                             Icons.clear,
-                                            color: Colors.redAccent,
+                                            color: Colors.blueAccent,
                                             size: 20,
                                           ),
                                           onTap: () =>
@@ -140,7 +151,7 @@ class LoginPage extends StatelessWidget {
                                   await Navigator.pushNamed(context, '/main');
                                 },
                                 style: TextButton.styleFrom(
-                                    backgroundColor: Colors.red[400],
+                                    backgroundColor: Colors.blue[400],
                                     padding: const EdgeInsets.all(16.0),
                                     minimumSize: const Size(400, 25)),
                                 child: const Text(
@@ -157,7 +168,7 @@ class LoginPage extends StatelessWidget {
                               child: Text(
                                 "회원가입",
                                 style: TextStyle(
-                                    fontSize: 15, color: Colors.red[400]),
+                                    fontSize: 15, color: Colors.blue[400]),
                               ),
                             )
                           ],

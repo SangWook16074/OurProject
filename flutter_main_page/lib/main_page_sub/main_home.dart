@@ -45,7 +45,7 @@ Widget _buildBottom() {
   });
 
   return ListView(
-    physics: NeverScrollableScrollPhysics(),
+    physics: const NeverScrollableScrollPhysics(),
     shrinkWrap: true,
     children: items,
   );

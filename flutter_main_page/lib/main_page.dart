@@ -14,19 +14,17 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   var _index = 0; //0, 1, 2
   final _pages = [
-    MainPage1(),
-    MainPage2(),
-    MainPage3(),
-    MainPage4(),
-    // MainPage3(),
-    // MainPage4(),
+    const MainPage1(),
+    const MainPage2(),
+    const MainPage3(),
+    const MainPage4(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.blue,
         title: const Text(
           "제목",
           style: TextStyle(color: Colors.white),
@@ -43,18 +41,20 @@ class _MainPageState extends State<MainPage> {
         currentIndex: _index,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        selectedItemColor: Colors.red[400],
+        selectedItemColor: Colors.blue,
+        // ignore: prefer_const_literals_to_create_immutables
         items: [
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             label: '홈',
             icon: Icon(Icons.home),
           ),
-          BottomNavigationBarItem(label: '커뮤니티', icon: Icon(Icons.assignment)),
-          BottomNavigationBarItem(
-            label: '알람',
+          const BottomNavigationBarItem(
+              label: '커뮤니티', icon: Icon(Icons.assignment)),
+          const BottomNavigationBarItem(
+            label: '알림',
             icon: Icon(Icons.alarm),
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
               label: '내정보', icon: Icon(Icons.account_circle)),
         ],
       ),
