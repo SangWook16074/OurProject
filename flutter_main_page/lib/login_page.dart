@@ -148,7 +148,15 @@ class _LoginPageState extends State<LoginPage> {
 
                         onPressed: () async {
                           //회원확인 절차 넣을것임
-                          if (_textEditingControllerPassWd.text.isEmpty) {
+                          if (_textEditingControllerUser.text.isEmpty) {
+                            Fluttertoast.showToast(
+                              msg: "학번을 입력하세요.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              fontSize: 16,
+                            );
+                          } else if (_textEditingControllerPassWd
+                              .text.isEmpty) {
                             Fluttertoast.showToast(
                               msg: "비밀번호를 입력하세요.",
                               toastLength: Toast.LENGTH_SHORT,
@@ -161,20 +169,34 @@ class _LoginPageState extends State<LoginPage> {
                                     .collection('UserInfo')
                                     .doc(_textEditingControllerUser.text)
                                     .get();
-
-                            if (_textEditingControllerPassWd.text !=
-                                userInfoData['userPass']) {
+                            try {
+                              if (_textEditingControllerPassWd.text !=
+                                  userInfoData['userPass']) {
+                                Fluttertoast.showToast(
+                                  msg: "비밀번호가 틀립니다.",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  fontSize: 16,
+                                );
+                              } else {
+                                final result =
+                                    // ignore: use_build_context_synchronously
+                                    Fluttertoast.showToast(
+                                  msg: "환영합니다!",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  fontSize: 16,
+                                );
+                                await Navigator.pushNamed(context, '/main');
+                                print(result);
+                              }
+                            } catch (err) {
                               Fluttertoast.showToast(
-                                msg: "비밀번호가 다릅니다.",
+                                msg: "존재하지 않는 학번입니다.",
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.BOTTOM,
                                 fontSize: 16,
                               );
-                            } else {
-                              final result =
-                                  // ignore: use_build_context_synchronously
-                                  await Navigator.pushNamed(context, '/main');
-                              print(result);
                             }
                           }
                         },
