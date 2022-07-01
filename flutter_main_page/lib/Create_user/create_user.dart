@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -94,6 +96,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       ),
                       TextField(
                         controller: _userPass,
+                        obscureText: true,
                         onChanged: (text) {},
                         decoration: InputDecoration(
                             hintText: "비밀번호",
@@ -139,6 +142,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       ),
                       TextField(
                         controller: _userPassAgain,
+                        obscureText: true,
                         onChanged: (text) {},
                         decoration: InputDecoration(
                             hintText: "비밀번호 확인",
@@ -262,59 +266,134 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       const SizedBox(
                         height: 30,
                       ),
-                      ElevatedButton(
-                          //회원가입 버튼
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 30,
+                          ),
+                          ElevatedButton(
+                              //회원가입 버튼
 
-                          onPressed: () async {
-                            //회원 추가 항목 넣을거임
-                            bool isAdmin = false;
-                            DocumentSnapshot userinfoData =
-                                await FirebaseFirestore.instance
-                                    .collection('UserInfo')
-                                    .doc(_userName.text)
-                                    .get();
+                              onPressed: () async {
+                                //회원 추가 항목 넣을거임
+                                bool isAdmin = false;
+                                if (_userName.text.isEmpty) {
+                                  Fluttertoast.showToast(
+                                    msg: "학번을 입력하세요.",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    fontSize: 16,
+                                  );
+                                } else if (_userPass.text.isEmpty) {
+                                  Fluttertoast.showToast(
+                                    msg: "비밀번호를 입력하세요.",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    fontSize: 16,
+                                  );
+                                } else if (_userPassAgain.text.isEmpty) {
+                                  Fluttertoast.showToast(
+                                    msg: "비밀번호를 확인해야 합니다.",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    fontSize: 16,
+                                  );
+                                } else if (_userGrade.text.isEmpty) {
+                                  Fluttertoast.showToast(
+                                    msg: "학년을 입력해야 합니다.",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    fontSize: 16,
+                                  );
+                                } else if (_userClass.text.isEmpty) {
+                                  Fluttertoast.showToast(
+                                    msg: "반을 입력해야 합니다.",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    fontSize: 16,
+                                  );
+                                } else if (_userPass.text !=
+                                    _userPassAgain.text) {
+                                  Fluttertoast.showToast(
+                                    msg: "비밀번호 확인이 안됩니다.",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    fontSize: 16,
+                                  );
+                                } else {
+                                  DocumentSnapshot userinfoData =
+                                      await FirebaseFirestore.instance
+                                          .collection('UserInfo')
+                                          .doc(_userName.text)
+                                          .get();
 
-                            try {
-                              if (userinfoData['userName'] == _userName.text) {
-                                Fluttertoast.showToast(
-                                  msg: "이미 계정이 있어요.",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  fontSize: 16,
-                                );
-                              }
-                            } catch (err) {
-                              await firestore
-                                  .collection('UserInfo')
-                                  .doc(_userName.text)
-                                  .set({
-                                'userName': _userName.text,
-                                'userPass': _userPass.text,
-                                'userGrade': _userGrade.text,
-                                'userClass': _userClass.text,
-                                'isAdmin': isAdmin,
-                              });
-                              Fluttertoast.showToast(
-                                msg: "생성 완료!",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                fontSize: 16,
-                              );
-                              final result =
-                                  // ignore: use_build_context_synchronously
-                                  await Navigator.pushNamed(context, '/login');
-                              // ignore: avoid_print
-                              print(result);
-                            }
-                          },
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.blue[700],
-                              padding: const EdgeInsets.all(16.0),
-                              minimumSize: const Size(355, 25)),
-                          child: const Text(
-                            "회원가입",
-                            style: TextStyle(fontSize: 15, letterSpacing: 4.0),
-                          )),
+                                  try {
+                                    if (userinfoData['userName'] ==
+                                        _userName.text) {
+                                      Fluttertoast.showToast(
+                                        msg: "이미 계정이 있어요.",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        fontSize: 16,
+                                      );
+                                    }
+                                  } catch (err) {
+                                    await firestore
+                                        .collection('UserInfo')
+                                        .doc(_userName.text)
+                                        .set({
+                                      'userName': _userName.text,
+                                      'userPass': _userPass.text,
+                                      'userGrade': _userGrade.text,
+                                      'userClass': _userClass.text,
+                                      'isAdmin': isAdmin,
+                                    });
+                                    Fluttertoast.showToast(
+                                      msg: "생성 완료!",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      fontSize: 16,
+                                    );
+                                    final result =
+                                        // ignore: use_build_context_synchronously
+                                        await Navigator.pushNamed(
+                                            context, '/login');
+                                    // ignore: avoid_print
+                                    print(result);
+                                  }
+                                }
+                              },
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Colors.blue[700],
+                                  padding: const EdgeInsets.all(16.0),
+                                  minimumSize: const Size(130, 25)),
+                              child: const Text(
+                                "회원가입",
+                                style:
+                                    TextStyle(fontSize: 15, letterSpacing: 4.0),
+                              )),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton(
+                              //회원가입 버튼
+
+                              onPressed: () async {
+                                final result = await Navigator.pushNamed(
+                                    context, '/login');
+                                print(result);
+                              },
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Colors.blue[700],
+                                  padding: const EdgeInsets.all(16.0),
+                                  minimumSize: const Size(130, 25)),
+                              child: const Text(
+                                "취소",
+                                style:
+                                    TextStyle(fontSize: 15, letterSpacing: 4.0),
+                              )),
+                        ],
+                      )
                     ],
                   )),
             ]),
