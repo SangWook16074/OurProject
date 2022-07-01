@@ -1,10 +1,11 @@
-// ignore_for_file: unused_field, avoid_print
+// ignore_for_file: unused_field, avoid_print, use_build_context_synchronously
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/main.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 // import 'package:flutter_main_page/main_page.dart';
-
 var isChecked = false;
 
 class LoginPage extends StatefulWidget {
@@ -141,6 +142,27 @@ class _LoginPageState extends State<LoginPage> {
                                   filled: true,
                                   fillColor: Colors.white),
                             ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                    value: isChecked,
+                                    activeColor: Colors.white,
+                                    checkColor: Colors.black,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isChecked = value!;
+                                        MyApp().isAutoLogin = isChecked;
+                                      });
+                                    }),
+                                const Text(
+                                  "자동로그인",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      letterSpacing: (4.0)),
+                                )
+                              ],
+                            )
                           ],
                         )),
                     ElevatedButton(
@@ -179,14 +201,13 @@ class _LoginPageState extends State<LoginPage> {
                                   fontSize: 16,
                                 );
                               } else {
-                                final result =
-                                    // ignore: use_build_context_synchronously
-                                    Fluttertoast.showToast(
+                                final result = Fluttertoast.showToast(
                                   msg: "환영합니다!",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   fontSize: 16,
                                 );
+
                                 await Navigator.pushNamed(context, '/main');
                                 print(result);
                               }

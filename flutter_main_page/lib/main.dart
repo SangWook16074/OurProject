@@ -9,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  runApp(const MyApp());
+  runApp(MyApp());
   Fluttertoast.showToast(
       msg: "Hello !",
       toastLength: Toast.LENGTH_SHORT,
@@ -17,22 +17,40 @@ void main() async {
       fontSize: 16);
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  var isAutoLogin = false;
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const LoginPage(),
-      routes: {
-        '/login': (context) => const LoginPage(),
-        '/main': (context) => const MainPage(),
-        '/creat': (context) => const CreateUserPage(),
-      },
-    );
+    if (isAutoLogin = false) {
+      return MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: LoginPage(),
+        routes: {
+          '/login': (context) => const LoginPage(),
+          '/main': (context) => const MainPage(),
+          '/creat': (context) => const CreateUserPage(),
+        },
+      );
+    } else {
+      return MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MainPage(),
+        routes: {
+          '/login': (context) => const LoginPage(),
+          '/main': (context) => const MainPage(),
+          '/creat': (context) => const CreateUserPage(),
+        },
+      );
+    }
+    ;
   }
 }
