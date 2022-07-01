@@ -33,3 +33,19 @@
 ![메인_알람 화면](https://user-images.githubusercontent.com/108314973/176630250-26f12c7a-ae1e-4878-8700-711d70e35b30.png)
 ![메인_커뮤니티 화면](https://user-images.githubusercontent.com/108314973/176630311-b8eefef9-45d0-442f-bde0-fef33b5271b2.png)
 ![메인_홈 화면](https://user-images.githubusercontent.com/108314973/176630330-e169ffff-b40c-42e2-84af-e607fd4b542e.png)
+
+
+3차 업로드
+
+앱 테마가 별로라는 의견이 있어서 전체적인 앱 테마에 변화를 주었습니다.
+
+![로그인 화면 2](https://user-images.githubusercontent.com/108314973/176837800-e26dd4f2-45af-4eb7-8707-f75a5f6384e8.png)
+
+![메인 화면 2](https://user-images.githubusercontent.com/108314973/176837823-e7bedd39-6169-474c-903a-75c4fcc065af.png)
+
+파이어베이스와 연동하여 회원가입 페이지, 계정과 패스워드를 입력해야 로그인 되는 기능이 추가되었습니다. 현재는 제가 임의로 만든 계정만 존재하니 사용시 꼭 연락해 주세요.
+
+
+![회원가입 화면](https://user-images.githubusercontent.com/108314973/176837965-6ef02a76-c912-46ef-a45c-9dbcc2d7b01e.png)
+
+![개선사항 1](https://user-images.githubusercontent.com/108314973/176837989-81b5e9a1-7e77-4349-a11f-6607672194c6.png)
