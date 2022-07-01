@@ -26,8 +26,11 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: const Text(
-          "제목",
-          style: TextStyle(color: Colors.white),
+          "Information and Communication",
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'Pacifico',
+          ),
         ),
         centerTitle: true,
       ),

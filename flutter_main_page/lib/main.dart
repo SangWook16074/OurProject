@@ -1,10 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_main_page/Create_user/create_user.dart';
 import 'package:flutter_main_page/login_page.dart';
 import 'package:flutter_main_page/main_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
+  Fluttertoast.showToast(
+      msg: "Hello !",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      fontSize: 16);
 }
 
 class MyApp extends StatelessWidget {
@@ -21,6 +31,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const LoginPage(),
         '/main': (context) => const MainPage(),
+        '/creat': (context) => const CreateUserPage(),
       },
     );
   }
