@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 class Posting {
@@ -28,7 +30,96 @@ class _MainPage2State extends State<MainPage2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("커뮤니티 페이지"),
+      body: Center(
+        child: Column(
+          children: [
+            _buildIcon(),
+            _buildNot(),
+            _buildEvent(),
+            _buildInfo(),
+            _buildCom(),
+          ],
+        ),
+      ),
     );
+  }
+
+  Widget _buildIcon() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            GestureDetector(
+              onTap: () {},
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.notifications,
+                    size: 40,
+                  ),
+                  Text('공지사항'),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.favorite,
+                    size: 40,
+                  ),
+                  Text('학과이벤트'),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.thumb_up,
+                    size: 40,
+                  ),
+                  Text('취업정보'),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.reorder,
+                    size: 40,
+                  ),
+                  Text('익명게시글'),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNot() {
+    return Text("notice");
+  }
+
+  Widget _buildEvent() {
+    return Text("Event");
+  }
+
+  Widget _buildInfo() {
+    return Text("Info of JOB");
+  }
+
+  Widget _buildCom() {
+    return Text("Community");
   }
 }
