@@ -25,7 +25,7 @@ class _MainPage4State extends State<MainPage4> {
         children: [
           Container(
             width: 380,
-            height: 400,
+            height: 340,
             padding: EdgeInsets.all(8.0),
             margin: EdgeInsets.all(8.0),
             decoration: BoxDecoration(
@@ -63,12 +63,28 @@ class _MainPage4State extends State<MainPage4> {
                   Icons.account_circle_rounded,
                   size: 60,
                 ),
+                Text(
+                  '이름 : hi',
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  '학번 : ',
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  '학년 : ',
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  '반 : ',
+                  style: TextStyle(fontSize: 20),
+                ),
                 ElevatedButton(
                     onPressed: (() {
                       MyApp().isAutoLogin = false;
                       Navigator.pushNamed(context, '/login');
                     }),
-                    child: const Text("로그아웃"))
+                    child: Text("로그아웃"))
               ],
             ),
           ),

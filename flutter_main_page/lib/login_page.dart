@@ -2,20 +2,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 // import 'package:flutter_main_page/main_page.dart';
 var isChecked = false;
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final userData = _LoginPageState()._textEditingControllerUser.text;
+
+  LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var userInfo;
   final _textEditingControllerUser = TextEditingController();
   final _textEditingControllerPassWd = TextEditingController();
 
@@ -191,6 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                                     .collection('UserInfo')
                                     .doc(_textEditingControllerUser.text)
                                     .get();
+
                             try {
                               if (_textEditingControllerPassWd.text !=
                                   userInfoData['userPass']) {

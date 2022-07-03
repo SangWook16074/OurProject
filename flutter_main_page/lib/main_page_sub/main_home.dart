@@ -50,7 +50,7 @@ Widget _buildIcon(BuildContext context) {
             child: Column(
               children: [
                 Icon(
-                  Icons.favorite,
+                  Icons.card_giftcard,
                   size: 40,
                 ),
                 Text('학과이벤트'),
@@ -64,7 +64,7 @@ Widget _buildIcon(BuildContext context) {
             child: Column(
               children: [
                 Icon(
-                  Icons.thumb_up,
+                  Icons.lightbulb,
                   size: 40,
                 ),
                 Text('취업정보'),

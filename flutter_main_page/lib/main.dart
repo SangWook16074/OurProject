@@ -36,13 +36,13 @@ class MyApp extends StatelessWidget {
         ),
         home: LoginPage(),
         routes: {
-          '/login': (context) => const LoginPage(),
-          '/main': (context) => const MainPage(),
-          '/creat': (context) => const CreateUserPage(),
-          '/notice': (context) => const NoticePage(),
-          // '/event': (context) => const EventPage(),
-          // '/infoJob': (context) => const InfoJobPage(),
-          // '/community': (context) => const CommunityPage(),
+          '/login': (context) => LoginPage(),
+          '/main': (context) => MainPage(),
+          '/creat': (context) => CreateUserPage(),
+          '/notice': (context) => NoticePage(),
+          '/event': (context) => EventPage(),
+          '/infoJob': (context) => InfoJobPage(),
+          '/community': (context) => ComPage(),
         },
       );
     } else {
@@ -53,16 +53,15 @@ class MyApp extends StatelessWidget {
         ),
         home: MainPage(),
         routes: {
-          '/login': (context) => const LoginPage(),
-          '/main': (context) => const MainPage(),
-          '/creat': (context) => const CreateUserPage(),
-          '/notice': (context) => const NoticePage(),
-          '/event': (context) => const EventPage(),
-          '/infoJob': (context) => const InfoJobPage(),
-          '/community': (context) => const ComPage(),
+          '/login': (context) => LoginPage(),
+          '/main': (context) => MainPage(),
+          '/creat': (context) => CreateUserPage(),
+          '/notice': (context) => NoticePage(),
+          '/event': (context) => EventPage(),
+          '/infoJob': (context) => InfoJobPage(),
+          '/community': (context) => ComPage(),
         },
       );
     }
-    ;
   }
 }
