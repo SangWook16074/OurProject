@@ -1,14 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../Community_house/com_notice.dart';
-
-class Posting {
-  String title;
-  String content;
-
-  Posting(this.title, this.content);
-}
 
 class MainPage2 extends StatefulWidget {
   const MainPage2({Key? key}) : super(key: key);
@@ -18,8 +8,6 @@ class MainPage2 extends StatefulWidget {
 }
 
 class _MainPage2State extends State<MainPage2> {
-  final _items = [];
-
   var _postingController = TextEditingController();
 
   @override
@@ -34,7 +22,6 @@ class _MainPage2State extends State<MainPage2> {
       child: Center(
         child: Column(
           children: [
-            _buildIcon(),
             _buildNot(),
             _buildEvent(),
             _buildInfo(),
@@ -42,69 +29,6 @@ class _MainPage2State extends State<MainPage2> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildIcon() {
-    return Column(
-      children: [
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            GestureDetector(
-              onTap: () {},
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.notifications,
-                    size: 40,
-                  ),
-                  Text('공지사항'),
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.favorite,
-                    size: 40,
-                  ),
-                  Text('학과이벤트'),
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.thumb_up,
-                    size: 40,
-                  ),
-                  Text('취업정보'),
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.reorder,
-                    size: 40,
-                  ),
-                  Text('익명게시글'),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 
