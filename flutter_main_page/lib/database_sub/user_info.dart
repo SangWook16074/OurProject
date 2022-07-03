@@ -1,10 +1,29 @@
+// ignore_for_file: unused_local_variable
+
 class UserInfo {
-  String userName;
-  String password;
-  int grade;
-  String classify;
+  String? userNumber;
+  String? userName;
+  String? password;
+  int? userGrade;
+  String? userClassify;
   bool isAdmin;
 
-  UserInfo(this.userName, this.password, this.grade, this.classify,
-      {this.isAdmin = false});
+  UserInfo(this.userNumber, this.userName, this.userGrade, this.userClassify,
+      {this.password, this.isAdmin = false});
+
+  name() {
+    return this.userName;
+  }
+
+  number() {
+    return this.userNumber;
+  }
+
+  grade() {
+    return this.userGrade;
+  }
+
+  classify() {
+    return this.userClassify;
+  }
 }

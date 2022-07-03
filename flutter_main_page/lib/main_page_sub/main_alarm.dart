@@ -5,11 +5,24 @@ class MainPage3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-          child: Text(
-        "알람 페이지",
-        style: TextStyle(fontSize: 40),
+          child: Column(
+        children: [
+          Container(
+            width: 380,
+            padding: EdgeInsets.all(8.0),
+            margin: EdgeInsets.all(8.0),
+            child: Text(
+              "알림 메시지",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Text(
+            "알람 페이지",
+            style: TextStyle(fontSize: 40),
+          ),
+        ],
       )),
     );
   }
