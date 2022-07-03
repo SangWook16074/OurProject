@@ -39,7 +39,7 @@ Widget _buildTop() {
 Widget _buildBottom() {
   final items = List.generate(10, (i) {
     return const ListTile(
-      leading: Icon(Icons.notification_important),
+      leading: Icon(Icons.notifications),
       title: Text("[공지사항] 공지사항 제목"),
     );
   });

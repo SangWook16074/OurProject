@@ -1,5 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/Community_house/com_community.dart';
+import 'package:flutter_main_page/Community_house/com_event.dart';
+import 'package:flutter_main_page/Community_house/com_info_job.dart';
+import 'package:flutter_main_page/Community_house/com_notice.dart';
 import 'package:flutter_main_page/Create_user/create_user.dart';
 import 'package:flutter_main_page/login_page.dart';
 import 'package:flutter_main_page/main_page.dart';
@@ -35,6 +39,10 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const LoginPage(),
           '/main': (context) => const MainPage(),
           '/creat': (context) => const CreateUserPage(),
+          '/notice': (context) => const NoticePage(),
+          // '/event': (context) => const EventPage(),
+          // '/infoJob': (context) => const InfoJobPage(),
+          // '/community': (context) => const CommunityPage(),
         },
       );
     } else {
@@ -48,6 +56,10 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const LoginPage(),
           '/main': (context) => const MainPage(),
           '/creat': (context) => const CreateUserPage(),
+          '/notice': (context) => const NoticePage(),
+          '/event': (context) => const EventPage(),
+          '/infoJob': (context) => const InfoJobPage(),
+          '/community': (context) => const ComPage(),
         },
       );
     }
