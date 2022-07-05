@@ -13,6 +13,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   var _index = 0; //0, 1, 2
+  var infos = [];
   final _pages = [
     const MainPage1(),
     const MainPage2(),

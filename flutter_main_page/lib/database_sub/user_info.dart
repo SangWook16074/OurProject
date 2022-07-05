@@ -9,21 +9,5 @@ class UserInfo {
   bool isAdmin;
 
   UserInfo(this.userNumber, this.userName, this.userGrade, this.userClassify,
-      {this.password, this.isAdmin = false});
-
-  name() {
-    return this.userName;
-  }
-
-  number() {
-    return this.userNumber;
-  }
-
-  grade() {
-    return this.userGrade;
-  }
-
-  classify() {
-    return this.userClassify;
-  }
+      this.password, this.isAdmin);
 }

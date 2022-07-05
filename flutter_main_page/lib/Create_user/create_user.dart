@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/login_page.dart';
+import 'package:flutter_main_page/main_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // import '../database_sub/user_info.dart';
 
@@ -14,6 +16,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   final _userName = TextEditingController();
+  final _userNumber = TextEditingController();
   final _userPass = TextEditingController();
   final _userPassAgain = TextEditingController();
   final _userGrade = TextEditingController();
@@ -33,7 +36,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                   child: Column(
                     children: [
                       const Text(
-                        "본인의 학번을 입력하세요.",
+                        "본인의 이름을 입력하세요.",
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.white,
@@ -44,6 +47,49 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       ),
                       TextField(
                         controller: _userName,
+                        onChanged: (text) {},
+                        decoration: InputDecoration(
+                            hintText: "이름 ex.홍길동",
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 20.0),
+                            border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4.0))),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.blueAccent, width: 1.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4.0)),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Colors.blueAccent, width: 2.0),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4.0))),
+                            suffixIcon: GestureDetector(
+                              child: const Icon(
+                                Icons.clear,
+                                color: Colors.blueAccent,
+                                size: 20,
+                              ),
+                              onTap: () => _userName.clear(),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white),
+                      ),
+                      const SizedBox(height: 30),
+                      const Text(
+                        "본인의 학번을 입력하세요.",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextField(
+                        controller: _userNumber,
                         onChanged: (text) {},
                         decoration: InputDecoration(
                             hintText: "학번 ex.2022XXXXX",
@@ -69,7 +115,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                 color: Colors.blueAccent,
                                 size: 20,
                               ),
-                              onTap: () => _userName.clear(),
+                              onTap: () => _userNumber.clear(),
                             ),
                             filled: true,
                             fillColor: Colors.white),
@@ -352,12 +398,10 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                       gravity: ToastGravity.BOTTOM,
                                       fontSize: 16,
                                     );
-                                    final result =
-                                        // ignore: use_build_context_synchronously
-                                        await Navigator.pushNamed(
-                                            context, '/login');
-                                    // ignore: avoid_print
-                                    print(result);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()));
                                   }
                                 }
                               },
@@ -374,12 +418,10 @@ class _CreateUserPageState extends State<CreateUserPage> {
                             width: 20,
                           ),
                           ElevatedButton(
-                              //회원가입 버튼
+                              //취소 버튼
 
-                              onPressed: () async {
-                                final result = await Navigator.pushNamed(
-                                    context, '/login');
-                                print(result);
+                              onPressed: () {
+                                Navigator.pop(context);
                               },
                               style: TextButton.styleFrom(
                                   backgroundColor: Colors.blue[700],

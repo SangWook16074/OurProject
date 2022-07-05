@@ -1,7 +1,9 @@
 // ignore_for_file: unused_field, avoid_print, use_build_context_synchronously
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/Create_user/create_user.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/main_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 // import 'package:flutter_main_page/main_page.dart';
@@ -74,7 +76,9 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             TextField(
                               controller: _textEditingControllerUser,
-                              onChanged: (text) {},
+                              onChanged: (text) {
+                                setState(() {});
+                              },
                               decoration: InputDecoration(
                                   prefixIcon: const Icon(Icons.account_circle),
                                   hintText: "학번을 입력하세요.",
@@ -111,7 +115,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             TextField(
                               controller: _textEditingControllerPassWd,
-                              onChanged: (text) {},
+                              onChanged: (text) {
+                                setState(() {});
+                              },
                               obscureText: true,
                               decoration: InputDecoration(
                                   prefixIcon: const Icon(Icons.lock),
@@ -211,8 +217,10 @@ class _LoginPageState extends State<LoginPage> {
                                   fontSize: 16,
                                 );
 
-                                await Navigator.pushNamed(context, '/main');
-                                print(result);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MainPage()));
                               }
                             } catch (err) {
                               Fluttertoast.showToast(
@@ -235,8 +243,10 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       //회원가입 버튼
                       onPressed: () {
-                        final result = Navigator.pushNamed(context, '/creat');
-                        print(result);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CreateUserPage()));
                       },
                       style: TextButton.styleFrom(),
                       child: const Text(

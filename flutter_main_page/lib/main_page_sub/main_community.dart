@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/Community_house/com_community.dart';
+import 'package:flutter_main_page/Community_house/com_event.dart';
+import 'package:flutter_main_page/Community_house/com_info_job.dart';
 
 class MainPage2 extends StatefulWidget {
   const MainPage2({Key? key}) : super(key: key);
@@ -22,69 +25,11 @@ class _MainPage2State extends State<MainPage2> {
       child: Center(
         child: Column(
           children: [
-            _buildNot(),
             _buildEvent(),
             _buildInfo(),
             _buildCom(),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildNot() {
-    return Center(
-      child: Stack(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            margin: const EdgeInsets.all(8.0),
-            width: 380,
-            height: 400,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                border: Border.all(color: Colors.black, width: 3)),
-          ),
-          Column(
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Container(
-                    width: 280,
-                    padding: const EdgeInsets.all(8.0),
-                    margin: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            "  공지사항",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  TextButton(
-                    //더보기 버튼
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/notice');
-                    },
-                    style: TextButton.styleFrom(),
-                    child: const Text(
-                      "더보기 >",
-                      style: TextStyle(fontSize: 15, color: Colors.black),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
@@ -129,7 +74,8 @@ class _MainPage2State extends State<MainPage2> {
                   TextButton(
                     //더보기 버튼
                     onPressed: () {
-                      Navigator.pushNamed(context, '/event');
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => EventPage()));
                     },
                     style: TextButton.styleFrom(),
                     child: const Text(
@@ -186,7 +132,10 @@ class _MainPage2State extends State<MainPage2> {
                   TextButton(
                     //더보기 버튼
                     onPressed: () {
-                      Navigator.pushNamed(context, '/infoJob');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => InfoJobPage()));
                     },
                     style: TextButton.styleFrom(),
                     child: const Text(
@@ -243,7 +192,8 @@ class _MainPage2State extends State<MainPage2> {
                   TextButton(
                     //더보기 버튼
                     onPressed: () {
-                      Navigator.pushNamed(context, '/community');
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => ComPage()));
                     },
                     style: TextButton.styleFrom(),
                     child: const Text(
