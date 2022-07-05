@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/Community_house/com_community.dart';
+import 'package:flutter_main_page/Community_house/com_event.dart';
+import 'package:flutter_main_page/Community_house/com_info_job.dart';
 
 class MainPage2 extends StatefulWidget {
   const MainPage2({Key? key}) : super(key: key);
@@ -71,7 +74,8 @@ class _MainPage2State extends State<MainPage2> {
                   TextButton(
                     //더보기 버튼
                     onPressed: () {
-                      Navigator.pushNamed(context, '/event');
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => EventPage()));
                     },
                     style: TextButton.styleFrom(),
                     child: const Text(
@@ -128,7 +132,10 @@ class _MainPage2State extends State<MainPage2> {
                   TextButton(
                     //더보기 버튼
                     onPressed: () {
-                      Navigator.pushNamed(context, '/infoJob');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => InfoJobPage()));
                     },
                     style: TextButton.styleFrom(),
                     child: const Text(
@@ -185,7 +192,8 @@ class _MainPage2State extends State<MainPage2> {
                   TextButton(
                     //더보기 버튼
                     onPressed: () {
-                      Navigator.pushNamed(context, '/community');
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => ComPage()));
                     },
                     style: TextButton.styleFrom(),
                     child: const Text(

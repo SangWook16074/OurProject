@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_main_page/Community_house/com_community.dart';
+import 'package:flutter_main_page/Community_house/com_event.dart';
+import 'package:flutter_main_page/Community_house/com_info_job.dart';
+import 'package:flutter_main_page/Community_house/com_notice.dart';
 
 class MainPage1 extends StatelessWidget {
   const MainPage1({Key? key}) : super(key: key);
@@ -31,7 +35,8 @@ Widget _buildIcon(BuildContext context) {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, '/notice');
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NoticePage()));
             },
             child: Column(
               children: [
@@ -45,7 +50,8 @@ Widget _buildIcon(BuildContext context) {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, '/event');
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EventPage()));
             },
             child: Column(
               children: [
@@ -59,7 +65,8 @@ Widget _buildIcon(BuildContext context) {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, '/infoJob');
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => InfoJobPage()));
             },
             child: Column(
               children: [
@@ -73,7 +80,8 @@ Widget _buildIcon(BuildContext context) {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, '/community');
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => ComPage()));
             },
             child: Column(
               children: [

@@ -1,10 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/Community_house/com_community.dart';
-import 'package:flutter_main_page/Community_house/com_event.dart';
-import 'package:flutter_main_page/Community_house/com_info_job.dart';
-import 'package:flutter_main_page/Community_house/com_notice.dart';
-import 'package:flutter_main_page/Create_user/create_user.dart';
 import 'package:flutter_main_page/login_page.dart';
 import 'package:flutter_main_page/main_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -35,15 +30,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: LoginPage(),
-        routes: {
-          '/login': (context) => LoginPage(),
-          '/main': (context) => MainPage(),
-          '/creat': (context) => CreateUserPage(),
-          '/notice': (context) => NoticePage(),
-          '/event': (context) => EventPage(),
-          '/infoJob': (context) => InfoJobPage(),
-          '/community': (context) => ComPage(),
-        },
       );
     } else {
       return MaterialApp(
@@ -52,15 +38,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: MainPage(),
-        routes: {
-          '/login': (context) => LoginPage(),
-          '/main': (context) => MainPage(),
-          '/creat': (context) => CreateUserPage(),
-          '/notice': (context) => NoticePage(),
-          '/event': (context) => EventPage(),
-          '/infoJob': (context) => InfoJobPage(),
-          '/community': (context) => ComPage(),
-        },
       );
     }
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/login_page.dart';
 import 'package:flutter_main_page/main.dart';
 
 class MainPage4 extends StatefulWidget {
@@ -82,7 +83,10 @@ class _MainPage4State extends State<MainPage4> {
                 ElevatedButton(
                     onPressed: (() {
                       MyApp().isAutoLogin = false;
-                      Navigator.pushNamed(context, '/login');
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          (route) => false);
                     }),
                     child: Text("로그아웃"))
               ],

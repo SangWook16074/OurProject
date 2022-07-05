@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/login_page.dart';
+import 'package:flutter_main_page/main_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // import '../database_sub/user_info.dart';
 
@@ -396,12 +398,10 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                       gravity: ToastGravity.BOTTOM,
                                       fontSize: 16,
                                     );
-                                    final result =
-                                        // ignore: use_build_context_synchronously
-                                        await Navigator.pushNamed(
-                                            context, '/login');
-                                    // ignore: avoid_print
-                                    print(result);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()));
                                   }
                                 }
                               },
@@ -418,12 +418,10 @@ class _CreateUserPageState extends State<CreateUserPage> {
                             width: 20,
                           ),
                           ElevatedButton(
-                              //회원가입 버튼
+                              //취소 버튼
 
-                              onPressed: () async {
-                                final result = await Navigator.pushNamed(
-                                    context, '/login');
-                                print(result);
+                              onPressed: () {
+                                Navigator.pop(context);
                               },
                               style: TextButton.styleFrom(
                                   backgroundColor: Colors.blue[700],
