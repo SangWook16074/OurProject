@@ -14,6 +14,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   final _userName = TextEditingController();
+  final _userNumber = TextEditingController();
   final _userPass = TextEditingController();
   final _userPassAgain = TextEditingController();
   final _userGrade = TextEditingController();
@@ -33,7 +34,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                   child: Column(
                     children: [
                       const Text(
-                        "본인의 학번을 입력하세요.",
+                        "본인의 이름을 입력하세요.",
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.white,
@@ -44,6 +45,49 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       ),
                       TextField(
                         controller: _userName,
+                        onChanged: (text) {},
+                        decoration: InputDecoration(
+                            hintText: "이름 ex.홍길동",
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 20.0),
+                            border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4.0))),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.blueAccent, width: 1.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4.0)),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Colors.blueAccent, width: 2.0),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4.0))),
+                            suffixIcon: GestureDetector(
+                              child: const Icon(
+                                Icons.clear,
+                                color: Colors.blueAccent,
+                                size: 20,
+                              ),
+                              onTap: () => _userName.clear(),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white),
+                      ),
+                      const SizedBox(height: 30),
+                      const Text(
+                        "본인의 학번을 입력하세요.",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextField(
+                        controller: _userNumber,
                         onChanged: (text) {},
                         decoration: InputDecoration(
                             hintText: "학번 ex.2022XXXXX",
@@ -69,7 +113,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                 color: Colors.blueAccent,
                                 size: 20,
                               ),
-                              onTap: () => _userName.clear(),
+                              onTap: () => _userNumber.clear(),
                             ),
                             filled: true,
                             fillColor: Colors.white),

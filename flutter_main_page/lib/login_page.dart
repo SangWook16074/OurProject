@@ -74,7 +74,9 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             TextField(
                               controller: _textEditingControllerUser,
-                              onChanged: (text) {},
+                              onChanged: (text) {
+                                setState(() {});
+                              },
                               decoration: InputDecoration(
                                   prefixIcon: const Icon(Icons.account_circle),
                                   hintText: "학번을 입력하세요.",
@@ -111,7 +113,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             TextField(
                               controller: _textEditingControllerPassWd,
-                              onChanged: (text) {},
+                              onChanged: (text) {
+                                setState(() {});
+                              },
                               obscureText: true,
                               decoration: InputDecoration(
                                   prefixIcon: const Icon(Icons.lock),

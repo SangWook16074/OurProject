@@ -11,10 +11,21 @@ class _InfoJobPageState extends State<InfoJobPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: const Text(
+            "information of JOB",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pacifico',
+            ),
+          ),
+          centerTitle: true,
+        ),
         body: Center(
             child: Text(
-      "취업정보 게시판",
-      style: TextStyle(fontSize: 40),
-    )));
+          "취업정보 게시판",
+          style: TextStyle(fontSize: 40),
+        )));
   }
 }
