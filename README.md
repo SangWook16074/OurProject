@@ -53,7 +53,10 @@
 4차 업로드
 
 공지사항 게시판에서 데이터베이스의 내용을 리스트로 불러와서 볼 수 있게 되었고, 하단 플로팅 버튼을 이용하면 새로운 글을 적을 수도 있습니다. 아직은 제 계정만 관리자로 부여했기 때문에 실제로 작성은 할 수 없습니다. 이 부분을 참고하면 게시판 부분에서의 파이어베이스 연동사항을 보실 수 있을 겁니다. 하단 이미지 부분 프론트 작업 부탁드립니다.
-![Screenshot_1657005814](https://user-images.githubusercontent.com/108314973/177273171-b735140a-fd35-468c-9719-5fc90a38ee97.png)
-![Screenshot_1657005796](https://user-images.githubusercontent.com/108314973/177273199-b89ec1f2-141a-4172-b506-030bbf042412.png)
-![Screenshot_1657005802](https://user-images.githubusercontent.com/108314973/177273206-5fa998d2-a523-404e-b8cd-c8e31cc78cc8.png)![Screenshot_1657005804](https://user-images.githubusercontent.com/108314973/177273211-eea287c3-364f-4b4e-ae8a-a75d9817d006.png)
 
+
+
+![개선사항 4-1](https://user-images.githubusercontent.com/108314973/177273576-4dd72daa-43e1-4f3e-81f4-6b373b165d25.png)
+![개선사항 4-2](https://user-images.githubusercontent.com/108314973/177273596-3aa05044-82a3-478c-a08b-e7ee12509eed.png)
+![개선사항 4-3](https://user-images.githubusercontent.com/108314973/177273605-7fdfe6b8-9bef-4ea8-bfb0-71416368d1db.png)
+![개선사항 4-4](https://user-images.githubusercontent.com/108314973/177273616-2b205258-a98b-432b-80a2-0cee91d9cb88.png)
