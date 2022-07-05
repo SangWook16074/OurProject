@@ -27,14 +27,14 @@ class _MainPage4State extends State<MainPage4> {
           Container(
             width: 380,
             height: 340,
-            padding: EdgeInsets.all(8.0),
-            margin: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
+            margin: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
               border: Border.all(color: Colors.black, width: 3),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Center(
@@ -45,7 +45,7 @@ class _MainPage4State extends State<MainPage4> {
                     padding: const EdgeInsets.all(8.0),
                     margin: const EdgeInsets.all(8.0),
                     child: Column(
-                      children: [
+                      children: const [
                         Align(
                           alignment: Alignment.topLeft,
                           child: Center(
@@ -60,23 +60,23 @@ class _MainPage4State extends State<MainPage4> {
                         ),
                       ],
                     )),
-                Icon(
+                const Icon(
                   Icons.account_circle_rounded,
                   size: 60,
                 ),
-                Text(
+                const Text(
                   '이름 : hi',
                   style: TextStyle(fontSize: 20),
                 ),
-                Text(
+                const Text(
                   '학번 : ',
                   style: TextStyle(fontSize: 20),
                 ),
-                Text(
+                const Text(
                   '학년 : ',
                   style: TextStyle(fontSize: 20),
                 ),
-                Text(
+                const Text(
                   '반 : ',
                   style: TextStyle(fontSize: 20),
                 ),
@@ -88,7 +88,7 @@ class _MainPage4State extends State<MainPage4> {
                           MaterialPageRoute(builder: (context) => LoginPage()),
                           (route) => false);
                     }),
-                    child: Text("로그아웃"))
+                    child: const Text("로그아웃"))
               ],
             ),
           ),

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/Community_house/com_community.dart';
 import 'package:flutter_main_page/Community_house/com_event.dart';
@@ -11,7 +13,7 @@ class MainPage2 extends StatefulWidget {
 }
 
 class _MainPage2State extends State<MainPage2> {
-  var _postingController = TextEditingController();
+  final _postingController = TextEditingController();
 
   @override
   void dispose() {
@@ -58,7 +60,7 @@ class _MainPage2State extends State<MainPage2> {
                     margin: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        Align(
+                        const Align(
                           alignment: Alignment.topLeft,
                           child: Text(
                             "  학과이벤트",
@@ -74,8 +76,10 @@ class _MainPage2State extends State<MainPage2> {
                   TextButton(
                     //더보기 버튼
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => EventPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const EventPage()));
                     },
                     style: TextButton.styleFrom(),
                     child: const Text(
@@ -116,7 +120,7 @@ class _MainPage2State extends State<MainPage2> {
                     margin: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        Align(
+                        const Align(
                           alignment: Alignment.topLeft,
                           child: Text(
                             "  취업정보",
@@ -135,7 +139,7 @@ class _MainPage2State extends State<MainPage2> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => InfoJobPage()));
+                              builder: (context) => const InfoJobPage()));
                     },
                     style: TextButton.styleFrom(),
                     child: const Text(
@@ -176,7 +180,7 @@ class _MainPage2State extends State<MainPage2> {
                     margin: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        Align(
+                        const Align(
                           alignment: Alignment.topLeft,
                           child: Text(
                             "  익명게시판",
@@ -192,8 +196,10 @@ class _MainPage2State extends State<MainPage2> {
                   TextButton(
                     //더보기 버튼
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ComPage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ComPage()));
                     },
                     style: TextButton.styleFrom(),
                     child: const Text(

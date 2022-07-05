@@ -22,7 +22,7 @@ class _ComPageState extends State<ComPage> {
           ),
           centerTitle: true,
         ),
-        body: Center(
+        body: const Center(
             child: Text(
           "익명 게시판",
           style: TextStyle(fontSize: 40),

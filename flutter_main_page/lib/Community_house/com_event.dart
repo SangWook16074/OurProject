@@ -22,7 +22,7 @@ class _EventPageState extends State<EventPage> {
           ),
           centerTitle: true,
         ),
-        body: Center(
+        body: const Center(
             child: Text(
           "이벤트 게시판",
           style: TextStyle(fontSize: 40),

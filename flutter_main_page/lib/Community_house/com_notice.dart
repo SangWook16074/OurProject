@@ -1,3 +1,7 @@
+// ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously
+
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,8 +13,9 @@ class Notice {
   String content;
   String author;
   String authorNumber;
+  String time;
 
-  Notice(this.title, this.content, this.author, this.authorNumber);
+  Notice(this.title, this.content, this.author, this.authorNumber, this.time);
 }
 
 // class NoticeViewPage extends StatefulWidget {
@@ -181,6 +186,7 @@ class _NoticePageState extends State<NoticePage> {
               StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('notice')
+                      .orderBy('time', descending: true)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
@@ -213,8 +219,8 @@ class _NoticePageState extends State<NoticePage> {
   }
 
   Widget _buildItemWidget(DocumentSnapshot doc) {
-    final notice = Notice(
-        doc['title'], doc['content'], doc['author'], doc['authorNumber']);
+    final notice = Notice(doc['title'], doc['content'], doc['author'],
+        doc['authorNumber'], doc['time']);
     return ListTile(
       onTap: () {
         // Navigator.push(
@@ -222,27 +228,13 @@ class _NoticePageState extends State<NoticePage> {
         //     MaterialPageRoute(
         //         builder: (context) => const NoticeViewPage()));
       },
-      title: Align(
-        alignment: Alignment.topLeft,
-        child: Container(
-          width: 350,
-          height: 50,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 1.0),
-            child: Column(
-              children: [
-                Text(
-                  notice.title,
-                  style: TextStyle(fontSize: 20),
-                ),
-                Text(
-                  "작성자 : ${notice.author}",
-                  style: TextStyle(fontSize: 10),
-                )
-              ],
-            ),
-          ),
-        ),
+      title: Text(
+        notice.title,
+        style: const TextStyle(fontSize: 20),
+      ),
+      subtitle: Text(
+        "작성자 : ${notice.author}",
+        style: const TextStyle(fontSize: 10),
       ),
     );
   }
@@ -256,6 +248,7 @@ class WriteNotice extends StatefulWidget {
 }
 
 class _WriteNoticeState extends State<WriteNotice> {
+  var _now = DateTime.now();
   final _title = TextEditingController();
   final _content = TextEditingController();
   final _author = TextEditingController();
@@ -263,15 +256,28 @@ class _WriteNoticeState extends State<WriteNotice> {
 
   void _addNotice(Notice notice) {
     FirebaseFirestore.instance.collection('notice').add({
-      'title': notice.title,
+      'title': "[공지사항] ${notice.title}",
       'content': notice.content,
       'author': notice.author,
-      'authorNumber': notice.authorNumber
+      'authorNumber': notice.authorNumber,
+      'time': notice.time,
     });
     _title.text = '';
     _content.text = '';
     _author.text = '';
     _authorNumber.text = '';
+  }
+
+  @override
+  void initState() {
+    Timer.periodic((const Duration(seconds: 1)), (v) {
+      if (mounted) {
+        setState(() {
+          _now = DateTime.now();
+        });
+      }
+    });
+    super.initState();
   }
 
   @override
@@ -366,7 +372,7 @@ class _WriteNoticeState extends State<WriteNotice> {
                     "작성자 : ",
                     style: TextStyle(fontSize: 15),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 30,
                   ),
                   Container(
@@ -508,8 +514,12 @@ class _WriteNoticeState extends State<WriteNotice> {
                                 fontSize: 16,
                               );
                             }
-                            _addNotice(Notice(_title.text, _content.text,
-                                _author.text, _authorNumber.text));
+                            _addNotice(Notice(
+                                _title.text,
+                                _content.text,
+                                _author.text,
+                                _authorNumber.text,
+                                _now.toString()));
                             Navigator.pop(context);
                           }
                         },
