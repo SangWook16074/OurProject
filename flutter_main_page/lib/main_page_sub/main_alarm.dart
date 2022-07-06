@@ -11,14 +11,14 @@ class MainPage3 extends StatelessWidget {
         children: [
           Container(
             width: 380,
-            padding: EdgeInsets.all(8.0),
-            margin: EdgeInsets.all(8.0),
-            child: Text(
+            padding: const EdgeInsets.all(8.0),
+            margin: const EdgeInsets.all(8.0),
+            child: const Text(
               "알림 메시지",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          Text(
+          const Text(
             "알람 페이지",
             style: TextStyle(fontSize: 40),
           ),

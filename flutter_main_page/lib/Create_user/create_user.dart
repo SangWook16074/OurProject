@@ -1,7 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/login_page.dart';
-import 'package:flutter_main_page/main_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // import '../database_sub/user_info.dart';
 
@@ -312,7 +313,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       ),
                       Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 30,
                           ),
                           ElevatedButton(
@@ -414,7 +415,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                 style:
                                     TextStyle(fontSize: 15, letterSpacing: 4.0),
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           ElevatedButton(

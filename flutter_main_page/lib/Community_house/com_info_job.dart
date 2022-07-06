@@ -22,7 +22,7 @@ class _InfoJobPageState extends State<InfoJobPage> {
           ),
           centerTitle: true,
         ),
-        body: Center(
+        body: const Center(
             child: Text(
           "취업정보 게시판",
           style: TextStyle(fontSize: 40),

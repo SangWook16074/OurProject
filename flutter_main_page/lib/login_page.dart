@@ -10,8 +10,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 var isChecked = false;
 
 class LoginPage extends StatefulWidget {
-  final userData = _LoginPageState()._textEditingControllerUser.text;
-
   LoginPage({Key? key}) : super(key: key);
 
   @override
@@ -19,7 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var userInfo;
   final _textEditingControllerUser = TextEditingController();
   final _textEditingControllerPassWd = TextEditingController();
 
@@ -210,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                                   fontSize: 16,
                                 );
                               } else {
-                                final result = Fluttertoast.showToast(
+                                Fluttertoast.showToast(
                                   msg: "환영합니다!",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
@@ -220,7 +217,8 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => MainPage()));
+                                        builder: (context) =>
+                                            const MainPage()));
                               }
                             } catch (err) {
                               Fluttertoast.showToast(
@@ -246,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CreateUserPage()));
+                                builder: (context) => const CreateUserPage()));
                       },
                       style: TextButton.styleFrom(),
                       child: const Text(
