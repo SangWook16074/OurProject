@@ -26,30 +26,41 @@ class MainPage1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
+        body: ListView(
       children: [
         _buildIcon(context),
         const SizedBox(
           height: 20,
         ),
         _buildTop(),
+        const Center(
+          child: Text(
+            '공지사항',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+        ),
         StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('notice')
                 .orderBy('time', descending: true)
-                .limit(3)
+                .limit(5)
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
+                return const Align(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator());
               }
               final documents = snapshot.data!.docs;
-              return Expanded(
-                child: ListView(
-                  physics: NeverScrollableScrollPhysics(),
+              if (documents.isEmpty) {
+                return _buildNonItem();
+              } else {
+                return ListView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
                   children: documents.map((doc) => _buildBottom(doc)).toList(),
-                ),
-              );
+                );
+              }
             }),
       ],
     ));
@@ -133,7 +144,7 @@ Widget _buildIcon(BuildContext context) {
 
 Widget _buildTop() {
   return CarouselSlider(
-    options: CarouselOptions(height: 250.0, autoPlay: true),
+    options: CarouselOptions(height: 220.0, autoPlay: true),
     items: [1, 2, 3, 4, 5].map((i) {
       return Builder(
         builder: (BuildContext context) {
@@ -158,20 +169,37 @@ Widget _buildBottom(DocumentSnapshot doc) {
   final notice = Notice(doc['title'], doc['content'], doc['author'],
       doc['authorNumber'], doc['time']);
   return ListTile(
+    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
     onTap: () {
       // Navigator.push(
       //     context,
       //     MaterialPageRoute(
       //         builder: (context) => const NoticeViewPage()));
     },
-    leading: const Icon(Icons.notification_important),
+    leading: const Icon(
+      Icons.notifications,
+      color: Colors.deepPurple,
+    ),
     title: Text(
       notice.title,
-      style: const TextStyle(fontSize: 16),
+      style: const TextStyle(
+          color: Colors.deepPurple, fontSize: 17, fontWeight: FontWeight.bold),
     ),
     subtitle: Text(
       "작성자 : ${notice.author}",
       style: const TextStyle(fontSize: 12),
     ),
+  );
+}
+
+Widget _buildNonItem() {
+  return Container(
+    height: 280,
+    child: const Center(
+        child: Text(
+      '아직 등록된 공지가 없습니다.',
+      style: TextStyle(
+          color: Colors.grey, fontSize: 15, fontWeight: FontWeight.bold),
+    )),
   );
 }

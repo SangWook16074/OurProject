@@ -10,8 +10,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 var isChecked = false;
 
 class LoginPage extends StatefulWidget {
-  final userData = _LoginPageState()._textEditingControllerUser.text;
-
   LoginPage({Key? key}) : super(key: key);
 
   @override
