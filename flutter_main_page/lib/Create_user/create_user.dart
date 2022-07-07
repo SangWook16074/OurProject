@@ -400,10 +400,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                       gravity: ToastGravity.BOTTOM,
                                       fontSize: 16,
                                     );
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => LoginPage()));
+                                    Navigator.pop(context);
                                   }
                                 }
                               },
