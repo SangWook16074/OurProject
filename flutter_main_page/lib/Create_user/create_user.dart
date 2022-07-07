@@ -369,7 +369,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                   DocumentSnapshot userinfoData =
                                       await FirebaseFirestore.instance
                                           .collection('UserInfo')
-                                          .doc(_userName.text)
+                                          .doc(_userNumber.text)
                                           .get();
 
                                   try {
@@ -385,9 +385,10 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                   } catch (err) {
                                     await firestore
                                         .collection('UserInfo')
-                                        .doc(_userName.text)
+                                        .doc(_userNumber.text)
                                         .set({
                                       'userName': _userName.text,
+                                      'userNumber': _userNumber.text,
                                       'userPass': _userPass.text,
                                       'userGrade': _userGrade.text,
                                       'userClass': _userClass.text,
