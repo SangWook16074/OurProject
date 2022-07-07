@@ -1,12 +1,11 @@
-// ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously
+// ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously, avoid_unnecessary_containers
 
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/View_pages/notice_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-final items = <Notice>[];
 
 class Notice {
   String title;
@@ -17,102 +16,6 @@ class Notice {
 
   Notice(this.title, this.content, this.author, this.authorNumber, this.time);
 }
-
-// class NoticeViewPage extends StatefulWidget {
-//   const NoticeViewPage({Key? key}) : super(key: key);
-
-//   @override
-//   State<NoticeViewPage> createState() => _NoticeViewPageState();
-// }
-
-// class _NoticeViewPageState extends State<NoticeViewPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         body: SingleChildScrollView(
-//       child: Column(
-//         children: [
-//           const SizedBox(
-//             height: 40,
-//           ),
-//           Align(
-//             alignment: Alignment.topLeft,
-//             child: Center(
-//               child: const Text(
-//                 "공지사항",
-//                 style: TextStyle(
-//                     color: Colors.black,
-//                     fontSize: 30,
-//                     fontWeight: FontWeight.bold),
-//               ),
-//             ),
-//           ),
-//           StreamBuilder<QuerySnapshot>(
-//               stream:
-//                   FirebaseFirestore.instance.collection('notice').snapshots(),
-//               builder: (context, snapshot) {
-//                 if (!snapshot.hasData) {
-//                   return const CircularProgressIndicator();
-//                 }
-//                 final documents = snapshot.data!.docs;
-//                 return Expanded(
-//                   child: ListView(
-//                     children:
-//                         documents.map((doc) => _buildItemWidget(doc)).toList(),
-//                   ),
-//                 );
-//               }),
-//         ],
-//       ),
-//     ));
-//   }
-
-//   Widget _buildItemWidget(DocumentSnapshot doc) {
-//     final notice = Notice(doc['title'], doc['content']);
-//     return Padding(
-//       padding: const EdgeInsets.all(8.0),
-//       child: Column(
-//         children: [
-//           Container(
-//             width: 380,
-//             height: 60,
-//             padding: const EdgeInsets.all(8.0),
-//             margin: const EdgeInsets.all(8.0),
-//             child:
-//                 // ignore: prefer_const_constructors
-//                 Align(
-//               alignment: Alignment.topLeft,
-//               child: Text(
-//                 notice.title,
-//                 style: TextStyle(
-//                     color: Colors.black,
-//                     fontSize: 30,
-//                     fontWeight: FontWeight.bold),
-//               ),
-//             ),
-//           ),
-//           Container(
-//             width: 380,
-//             padding: const EdgeInsets.all(8.0),
-//             margin: const EdgeInsets.all(8.0),
-//             child:
-//                 // ignore: prefer_const_constructors
-//                 Align(
-//               alignment: Alignment.topLeft,
-//               child: Text(
-//                 notice.content,
-//                 style: TextStyle(
-//                     color: Colors.black,
-//                     fontSize: 30,
-//                     fontWeight: FontWeight.bold),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 class NoticePage extends StatefulWidget {
   const NoticePage({Key? key}) : super(key: key);
@@ -229,12 +132,13 @@ class _NoticePageState extends State<NoticePage> {
     final notice = Notice(doc['title'], doc['content'], doc['author'],
         doc['authorNumber'], doc['time']);
     return ListTile(
-      visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => const NoticeViewPage()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NoticeViewPage(
+                    notice.title, notice.content, notice.author, notice.time)));
       },
       leading: const Icon(
         Icons.notifications,

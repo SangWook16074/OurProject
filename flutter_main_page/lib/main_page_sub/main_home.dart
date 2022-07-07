@@ -7,6 +7,7 @@ import 'package:flutter_main_page/Community_house/com_community.dart';
 import 'package:flutter_main_page/Community_house/com_event.dart';
 import 'package:flutter_main_page/Community_house/com_info_job.dart';
 import 'package:flutter_main_page/Community_house/com_notice.dart';
+import 'package:flutter_main_page/View_pages/notice_view.dart';
 
 final items = <Notice>[];
 
@@ -58,7 +59,9 @@ class MainPage1 extends StatelessWidget {
                 return ListView(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  children: documents.map((doc) => _buildBottom(doc)).toList(),
+                  children: documents
+                      .map((doc) => _buildBottom(doc, context))
+                      .toList(),
                 );
               }
             }),
@@ -165,16 +168,17 @@ Widget _buildTop() {
   );
 }
 
-Widget _buildBottom(DocumentSnapshot doc) {
+Widget _buildBottom(DocumentSnapshot doc, BuildContext context) {
   final notice = Notice(doc['title'], doc['content'], doc['author'],
       doc['authorNumber'], doc['time']);
   return ListTile(
     visualDensity: VisualDensity(horizontal: 0, vertical: -4),
     onTap: () {
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => const NoticeViewPage()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => NoticeViewPage(
+                  notice.title, notice.content, notice.author, notice.time)));
     },
     leading: const Icon(
       Icons.notifications,

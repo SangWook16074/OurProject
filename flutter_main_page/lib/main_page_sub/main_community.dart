@@ -10,7 +10,6 @@ class Event {
   String title;
   String content;
   String author;
-
   String time;
 
   Event(this.title, this.content, this.author, this.time);
@@ -20,7 +19,6 @@ class Job {
   String title;
   String content;
   String author;
-
   String time;
 
   Job(this.title, this.content, this.author, this.time);
@@ -30,7 +28,6 @@ class Com {
   String title;
   String content;
   String author;
-
   String time;
 
   Com(this.title, this.content, this.author, this.time);
