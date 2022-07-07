@@ -7,6 +7,7 @@ import 'package:flutter_main_page/Community_house/com_community.dart';
 import 'package:flutter_main_page/Community_house/com_event.dart';
 import 'package:flutter_main_page/Community_house/com_info_job.dart';
 import 'package:flutter_main_page/Community_house/com_notice.dart';
+import 'package:flutter_main_page/View_pages/notice_view.dart';
 
 final items = <Notice>[];
 
@@ -14,21 +15,27 @@ class Notice {
   String title;
   String content;
   String author;
-  String authorNumber;
   String time;
 
-  Notice(this.title, this.content, this.author, this.authorNumber, this.time);
+  Notice(this.title, this.content, this.author, this.time);
 }
 
-class MainPage1 extends StatelessWidget {
-  const MainPage1({Key? key}) : super(key: key);
+class MainPage1 extends StatefulWidget {
+  final String user;
+  final bool isAdmin;
+  const MainPage1(this.user, this.isAdmin, {Key? key}) : super(key: key);
 
+  @override
+  State<MainPage1> createState() => _MainPage1State();
+}
+
+class _MainPage1State extends State<MainPage1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
       children: [
-        _buildIcon(context),
+        _buildIcon(context, widget.user, widget.isAdmin),
         const SizedBox(
           height: 20,
         ),
@@ -58,7 +65,9 @@ class MainPage1 extends StatelessWidget {
                 return ListView(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  children: documents.map((doc) => _buildBottom(doc)).toList(),
+                  children: documents
+                      .map((doc) => _buildBottom(doc, context))
+                      .toList(),
                 );
               }
             }),
@@ -67,7 +76,7 @@ class MainPage1 extends StatelessWidget {
   }
 }
 
-Widget _buildIcon(BuildContext context) {
+Widget _buildIcon(BuildContext context, String user, bool isAdmin) {
   return Column(
     children: [
       const SizedBox(
@@ -78,8 +87,10 @@ Widget _buildIcon(BuildContext context) {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const NoticePage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NoticePage(user, isAdmin)));
             },
             child: Column(
               children: const [
@@ -165,16 +176,17 @@ Widget _buildTop() {
   );
 }
 
-Widget _buildBottom(DocumentSnapshot doc) {
-  final notice = Notice(doc['title'], doc['content'], doc['author'],
-      doc['authorNumber'], doc['time']);
+Widget _buildBottom(DocumentSnapshot doc, BuildContext context) {
+  final notice =
+      Notice(doc['title'], doc['content'], doc['author'], doc['time']);
   return ListTile(
     visualDensity: VisualDensity(horizontal: 0, vertical: -4),
     onTap: () {
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => const NoticeViewPage()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => NoticeViewPage(
+                  notice.title, notice.content, notice.author, notice.time)));
     },
     leading: const Icon(
       Icons.notifications,

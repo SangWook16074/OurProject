@@ -5,7 +5,15 @@ import 'package:flutter_main_page/main_page_sub/main_user_info.dart';
 import 'package:flutter_main_page/main_page_sub/main_community.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  final String userNumber;
+  final String user;
+  final String userGrade;
+  final String userClass;
+  final bool isAdmin;
+  const MainPage(
+      this.userNumber, this.user, this.userGrade, this.userClass, this.isAdmin,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -14,15 +22,16 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   var _index = 0; //0, 1, 2
   var infos = [];
-  final _pages = [
-    const MainPage1(),
-    const MainPage2(),
-    const MainPage3(),
-    const MainPage4(),
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final pages = [
+      MainPage1(widget.user, widget.isAdmin),
+      const MainPage2(),
+      const MainPage3(),
+      MainPage4(widget.userNumber, widget.user, widget.userGrade,
+          widget.userClass, widget.isAdmin),
+    ];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -35,7 +44,7 @@ class _MainPageState extends State<MainPage> {
         ),
         centerTitle: true,
       ),
-      body: _pages[_index],
+      body: pages[_index],
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           setState(() {
