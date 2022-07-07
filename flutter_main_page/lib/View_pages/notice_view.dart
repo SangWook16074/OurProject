@@ -27,6 +27,7 @@ class _NoticeViewPageState extends State<NoticeViewPage> {
           ),
         ),
         centerTitle: true,
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.refresh))],
       ),
       body: ListView(
         children: [
@@ -34,8 +35,8 @@ class _NoticeViewPageState extends State<NoticeViewPage> {
             padding: const EdgeInsets.all(8.0),
             margin: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(3),
-                border: Border.all(color: Colors.black, width: 3)),
+              borderRadius: BorderRadius.circular(3),
+            ),
             child: ListView(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -62,16 +63,6 @@ class _NoticeViewPageState extends State<NoticeViewPage> {
                     fontSize: 20,
                   ),
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text(
-                      "확인",
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ))
               ],
             ),
           )

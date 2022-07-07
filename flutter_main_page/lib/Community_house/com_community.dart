@@ -88,7 +88,7 @@ class _ComPageState extends State<ComPage> {
             fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
-        "작성자 : ${com.author}",
+        com.author,
         style: const TextStyle(fontSize: 10),
       ),
     );

@@ -28,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _textEditingControllerUser.dispose();
     _textEditingControllerPassWd.dispose();
+    _textEditingControllerPassWd.clear();
     super.dispose();
   }
 
@@ -191,10 +192,11 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: 16,
                             );
                           } else {
+                            final String user = _textEditingControllerUser.text;
                             DocumentSnapshot userInfoData =
                                 await FirebaseFirestore.instance
                                     .collection('UserInfo')
-                                    .doc(_textEditingControllerUser.text)
+                                    .doc(user)
                                     .get();
 
                             try {
@@ -214,11 +216,24 @@ class _LoginPageState extends State<LoginPage> {
                                   fontSize: 16,
                                 );
 
+                                DocumentSnapshot userInfoData =
+                                    await FirebaseFirestore.instance
+                                        .collection('UserInfo')
+                                        .doc(user)
+                                        .get();
+
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            const MainPage()));
+                                        builder: (context) => MainPage(
+                                            userInfoData.id,
+                                            userInfoData['userName'],
+                                            userInfoData['userGrade'],
+                                            userInfoData['userClass'],
+                                            userInfoData['isAdmin'])));
+
+                                _textEditingControllerUser.clear();
+                                _textEditingControllerPassWd.clear();
                               }
                             } catch (err) {
                               Fluttertoast.showToast(

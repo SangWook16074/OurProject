@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/Community_house/com_noticeWrite.dart';
 import 'package:flutter_main_page/View_pages/notice_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -11,14 +12,15 @@ class Notice {
   String title;
   String content;
   String author;
-  String authorNumber;
   String time;
 
-  Notice(this.title, this.content, this.author, this.authorNumber, this.time);
+  Notice(this.title, this.content, this.author, this.time);
 }
 
 class NoticePage extends StatefulWidget {
-  const NoticePage({Key? key}) : super(key: key);
+  final String user;
+  final bool isAdmin;
+  const NoticePage(this.user, this.isAdmin, {Key? key}) : super(key: key);
 
   @override
   State<NoticePage> createState() => _NoticePageState();
@@ -35,102 +37,186 @@ class _NoticePageState extends State<NoticePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          "NOTICE",
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+    if (widget.isAdmin == true) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: const Text(
+            "NOTICE",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pacifico',
+            ),
           ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      resizeToAvoidBottomInset: true,
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-          child: ListView(
-            children: [
-              TextField(
-                controller: search,
-                onChanged: (text) {
-                  setState(() {});
-                },
-                decoration: InputDecoration(
-                    hintText: "제목 검색",
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 20.0),
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.blueAccent, width: 1.0),
-                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
+        resizeToAvoidBottomInset: true,
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+            child: ListView(
+              children: [
+                TextField(
+                  controller: search,
+                  onChanged: (text) {
+                    setState(() {});
+                  },
+                  decoration: InputDecoration(
+                      hintText: "제목 검색",
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 20.0),
+                      border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(4.0))),
+                      enabledBorder: const OutlineInputBorder(
                         borderSide:
-                            BorderSide(color: Colors.blueAccent, width: 2.0),
-                        borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                    suffixIcon: GestureDetector(
-                        child: const Icon(
-                          Icons.search,
-                          color: Colors.blueAccent,
-                          size: 20,
-                        ),
-                        onTap: () {
-                          //제목 포함 내용 찾기 기능
-                        }),
-                    filled: true,
-                    fillColor: Colors.white),
-              ),
-              StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('notice')
-                      .orderBy('time', descending: true)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(
-                          child: Container(
-                              height: 250,
-                              width: 250,
-                              child: const CircularProgressIndicator()));
-                    }
-                    final documents = snapshot.data!.docs;
-                    if (documents.isEmpty) {
-                      return _buildNonItem();
-                    } else {
-                      return ListView(
-                        shrinkWrap: true,
-                        children: documents
-                            .map((doc) => _buildItemWidget(doc))
-                            .toList(),
-                      );
-                    }
-                  }),
-            ],
+                            BorderSide(color: Colors.blueAccent, width: 1.0),
+                        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.blueAccent, width: 2.0),
+                          borderRadius: BorderRadius.all(Radius.circular(4.0))),
+                      suffixIcon: GestureDetector(
+                          child: const Icon(
+                            Icons.search,
+                            color: Colors.blueAccent,
+                            size: 20,
+                          ),
+                          onTap: () {
+                            //제목 포함 내용 찾기 기능
+                          }),
+                      filled: true,
+                      fillColor: Colors.white),
+                ),
+                StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('notice')
+                        .orderBy('time', descending: true)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(
+                            child: Container(
+                                height: 250,
+                                width: 250,
+                                child: const CircularProgressIndicator()));
+                      }
+                      final documents = snapshot.data!.docs;
+                      if (documents.isEmpty) {
+                        return _buildNonItem();
+                      } else {
+                        return ListView(
+                          shrinkWrap: true,
+                          children: documents
+                              .map((doc) => _buildItemWidget(doc))
+                              .toList(),
+                        );
+                      }
+                    }),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //글쓰기 페이지 이동
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const WriteNotice()),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            //글쓰기 페이지 이동
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => WriteNotice(widget.user)),
+            );
+          },
+          child: const Icon(Icons.add),
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: const Text(
+            "NOTICE",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pacifico',
+            ),
+          ),
+          centerTitle: true,
+        ),
+        resizeToAvoidBottomInset: true,
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+            child: ListView(
+              children: [
+                TextField(
+                  controller: search,
+                  onChanged: (text) {
+                    setState(() {});
+                  },
+                  decoration: InputDecoration(
+                      hintText: "제목 검색",
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 20.0),
+                      border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(4.0))),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.blueAccent, width: 1.0),
+                        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.blueAccent, width: 2.0),
+                          borderRadius: BorderRadius.all(Radius.circular(4.0))),
+                      suffixIcon: GestureDetector(
+                          child: const Icon(
+                            Icons.search,
+                            color: Colors.blueAccent,
+                            size: 20,
+                          ),
+                          onTap: () {
+                            //제목 포함 내용 찾기 기능
+                          }),
+                      filled: true,
+                      fillColor: Colors.white),
+                ),
+                StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('notice')
+                        .orderBy('time', descending: true)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(
+                            child: Container(
+                                height: 250,
+                                width: 250,
+                                child: const CircularProgressIndicator()));
+                      }
+                      final documents = snapshot.data!.docs;
+                      if (documents.isEmpty) {
+                        return _buildNonItem();
+                      } else {
+                        return ListView(
+                          shrinkWrap: true,
+                          children: documents
+                              .map((doc) => _buildItemWidget(doc))
+                              .toList(),
+                        );
+                      }
+                    }),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Widget _buildItemWidget(DocumentSnapshot doc) {
-    final notice = Notice(doc['title'], doc['content'], doc['author'],
-        doc['authorNumber'], doc['time']);
+    final notice =
+        Notice(doc['title'], doc['content'], doc['author'], doc['time']);
     return ListTile(
       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
       onTap: () {
@@ -168,328 +254,6 @@ class _NoticePageState extends State<NoticePage> {
             style: TextStyle(
                 color: Colors.grey, fontSize: 15, fontWeight: FontWeight.bold),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class WriteNotice extends StatefulWidget {
-  const WriteNotice({Key? key}) : super(key: key);
-
-  @override
-  State<WriteNotice> createState() => _WriteNoticeState();
-}
-
-class _WriteNoticeState extends State<WriteNotice> {
-  var _now = DateTime.now();
-  final _title = TextEditingController();
-  final _content = TextEditingController();
-  final _author = TextEditingController();
-  final _authorNumber = TextEditingController();
-
-  void _addNotice(Notice notice) {
-    FirebaseFirestore.instance.collection('notice').add({
-      'title': "[공지사항] ${notice.title}",
-      'content': notice.content,
-      'author': notice.author,
-      'authorNumber': notice.authorNumber,
-      'time': notice.time,
-    });
-    _title.text = '';
-    _content.text = '';
-    _author.text = '';
-    _authorNumber.text = '';
-  }
-
-  @override
-  void initState() {
-    Timer.periodic((const Duration(seconds: 1)), (v) {
-      if (mounted) {
-        setState(() {
-          _now = DateTime.now();
-        });
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _title.dispose();
-    _content.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          "NOTICE",
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
-          ),
-        ),
-        centerTitle: true,
-      ),
-      resizeToAvoidBottomInset: true,
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildTitle(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTitle() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "작성자학번 : ",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  Container(
-                    width: 275,
-                    child: TextField(
-                      controller: _authorNumber,
-                      onChanged: (text) {
-                        setState(() {});
-                      },
-                      decoration: const InputDecoration(
-                          hintText: "학번",
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0))),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.blueAccent, width: 1.0),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4.0)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.blueAccent, width: 2.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0))),
-                          filled: true,
-                          fillColor: Colors.white),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  const Text(
-                    "작성자 : ",
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  const SizedBox(
-                    width: 30,
-                  ),
-                  Container(
-                    width: 275,
-                    child: TextField(
-                      controller: _author,
-                      onChanged: (text) {
-                        setState(() {});
-                      },
-                      decoration: const InputDecoration(
-                          hintText: "이름",
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0))),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.blueAccent, width: 1.0),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4.0)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.blueAccent, width: 2.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0))),
-                          filled: true,
-                          fillColor: Colors.white),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              width: 360,
-              child: TextField(
-                controller: _title,
-                onChanged: (text) {
-                  setState(() {});
-                },
-                decoration: const InputDecoration(
-                    hintText: "글 제목",
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.blueAccent, width: 1.0),
-                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.blueAccent, width: 2.0),
-                        borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                    filled: true,
-                    fillColor: Colors.white),
-              ),
-            ),
-            const SizedBox(height: 5),
-            Container(
-              width: 360,
-              child: TextField(
-                controller: _content,
-                maxLength: 300,
-                maxLines: 30,
-                onChanged: (text) {
-                  setState(() {});
-                },
-                decoration: const InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.blueAccent, width: 1.0),
-                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.blueAccent, width: 2.0),
-                        borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                    filled: true,
-                    fillColor: Colors.white),
-              ),
-            ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    ElevatedButton(
-
-                        //글 작성 버튼
-
-                        onPressed: () async {
-                          if (_title.text.isEmpty) {
-                            Fluttertoast.showToast(
-                              msg: "제목을 입력하세요.",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              fontSize: 16,
-                            );
-                          } else if (_content.text.isEmpty) {
-                            Fluttertoast.showToast(
-                              msg: "내용을 입력하세요.",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              fontSize: 16,
-                            );
-                          } else if (_author.text.isEmpty) {
-                            Fluttertoast.showToast(
-                              msg: "작성자를 입력하세요.",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              fontSize: 16,
-                            );
-                          } else if (_authorNumber.text.isEmpty) {
-                            Fluttertoast.showToast(
-                              msg: "작성자의 학번을 입력하세요.",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              fontSize: 16,
-                            );
-                          } else {
-                            DocumentSnapshot userInfoData =
-                                await FirebaseFirestore.instance
-                                    .collection('UserInfo')
-                                    .doc(_authorNumber.text)
-                                    .get();
-
-                            if (userInfoData['isAdmin'] != true) {
-                              Fluttertoast.showToast(
-                                msg: "관리자만 작성할 수 있습니다.",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                fontSize: 16,
-                              );
-                            }
-                            _addNotice(Notice(
-                                _title.text,
-                                _content.text,
-                                _author.text,
-                                _authorNumber.text,
-                                _now.toString()));
-                            Navigator.pop(context);
-                          }
-                        },
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.blue[700],
-                            padding: const EdgeInsets.all(16.0),
-                            minimumSize: const Size(130, 25)),
-                        child: const Text(
-                          "완료",
-                          style: TextStyle(fontSize: 20, letterSpacing: 4.0),
-                        )),
-                    const SizedBox(
-                      width: 40,
-                    ),
-                    ElevatedButton(
-                        //취소 버튼
-
-                        onPressed: () async {
-                          Navigator.pop(context);
-                        },
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.blue[700],
-                            padding: const EdgeInsets.all(16.0),
-                            minimumSize: const Size(130, 25)),
-                        child: const Text(
-                          "취소",
-                          style: TextStyle(fontSize: 20, letterSpacing: 4.0),
-                        )),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-          ],
         ),
       ),
     );

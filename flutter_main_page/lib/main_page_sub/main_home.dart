@@ -15,21 +15,27 @@ class Notice {
   String title;
   String content;
   String author;
-  String authorNumber;
   String time;
 
-  Notice(this.title, this.content, this.author, this.authorNumber, this.time);
+  Notice(this.title, this.content, this.author, this.time);
 }
 
-class MainPage1 extends StatelessWidget {
-  const MainPage1({Key? key}) : super(key: key);
+class MainPage1 extends StatefulWidget {
+  final String user;
+  final bool isAdmin;
+  const MainPage1(this.user, this.isAdmin, {Key? key}) : super(key: key);
 
+  @override
+  State<MainPage1> createState() => _MainPage1State();
+}
+
+class _MainPage1State extends State<MainPage1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
       children: [
-        _buildIcon(context),
+        _buildIcon(context, widget.user, widget.isAdmin),
         const SizedBox(
           height: 20,
         ),
@@ -70,7 +76,7 @@ class MainPage1 extends StatelessWidget {
   }
 }
 
-Widget _buildIcon(BuildContext context) {
+Widget _buildIcon(BuildContext context, String user, bool isAdmin) {
   return Column(
     children: [
       const SizedBox(
@@ -81,8 +87,10 @@ Widget _buildIcon(BuildContext context) {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const NoticePage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NoticePage(user, isAdmin)));
             },
             child: Column(
               children: const [
@@ -169,8 +177,8 @@ Widget _buildTop() {
 }
 
 Widget _buildBottom(DocumentSnapshot doc, BuildContext context) {
-  final notice = Notice(doc['title'], doc['content'], doc['author'],
-      doc['authorNumber'], doc['time']);
+  final notice =
+      Notice(doc['title'], doc['content'], doc['author'], doc['time']);
   return ListTile(
     visualDensity: VisualDensity(horizontal: 0, vertical: -4),
     onTap: () {

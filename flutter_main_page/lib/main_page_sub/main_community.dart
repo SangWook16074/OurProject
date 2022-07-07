@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_main_page/Community_house/com_community.dart';
 import 'package:flutter_main_page/Community_house/com_event.dart';
 import 'package:flutter_main_page/Community_house/com_info_job.dart';
+import 'package:flutter_main_page/Community_house/com_write.dart';
 
 class Event {
   String title;
@@ -151,9 +152,10 @@ class _MainPage2State extends State<MainPage2> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Align(
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator());
+                  return const SizedBox(
+                    height: 280,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
                 }
                 final documents = snapshot.data!.docs;
                 if (documents.isEmpty) {
@@ -238,9 +240,10 @@ class _MainPage2State extends State<MainPage2> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Align(
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator());
+                  return const SizedBox(
+                    height: 280,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
                 }
                 final documents = snapshot.data!.docs;
                 if (documents.isEmpty) {
@@ -324,9 +327,10 @@ class _MainPage2State extends State<MainPage2> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Align(
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator());
+                  return const SizedBox(
+                    height: 280,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
                 }
                 final documents = snapshot.data!.docs;
                 if (documents.isEmpty) {
@@ -366,33 +370,6 @@ class _MainPage2State extends State<MainPage2> {
         "작성자 : ${com.author}",
         style: const TextStyle(fontSize: 12),
       ),
-    );
-  }
-}
-
-class WritePage extends StatefulWidget {
-  const WritePage({Key? key}) : super(key: key);
-
-  @override
-  State<WritePage> createState() => _WritePageState();
-}
-
-class _WritePageState extends State<WritePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          "Write Content",
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: Center(child: Text("글쓰기 페이지")),
     );
   }
 }
