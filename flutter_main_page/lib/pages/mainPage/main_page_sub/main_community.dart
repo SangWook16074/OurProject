@@ -2,10 +2,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/Community_house/com_community.dart';
-import 'package:flutter_main_page/Community_house/com_event.dart';
-import 'package:flutter_main_page/Community_house/com_info_job.dart';
-import 'package:flutter_main_page/Community_house/com_write.dart';
+import 'package:flutter_main_page/pages/Community_house/com_community.dart';
+import 'package:flutter_main_page/pages/Community_house/com_event.dart';
+import 'package:flutter_main_page/pages/Community_house/com_info_job.dart';
+import 'package:flutter_main_page/pages/Community_house/com_write.dart';
 
 class Event {
   String title;

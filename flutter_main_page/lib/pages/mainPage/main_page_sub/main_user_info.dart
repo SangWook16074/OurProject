@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/login_page.dart';
+import 'package:flutter_main_page/pages/loginPage/login_page.dart';
 import 'package:flutter_main_page/main.dart';
 
 class MainPage4 extends StatefulWidget {
@@ -8,7 +8,7 @@ class MainPage4 extends StatefulWidget {
   final String user;
   final String userGrade;
   final String userClass;
-  final bool isAdmin;
+  final bool? isAdmin;
   const MainPage4(
       this.userNumber, this.user, this.userGrade, this.userClass, this.isAdmin,
       {Key? key})
@@ -19,15 +19,26 @@ class MainPage4 extends StatefulWidget {
 }
 
 class _MainPage4State extends State<MainPage4> {
+  Future<void> _deleteAutoLoginStatus() async {
+    prefs.setBool('autoLoginStatus', false);
+    prefs.remove('userNumber');
+    prefs.remove('user');
+    prefs.remove('userGrade');
+    prefs.remove('Class');
+    prefs.remove('isAdmin');
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
         _buildUserInfo(),
         ElevatedButton(
-            onPressed: (() {
-              MyApp().isAutoLogin = false;
-              Navigator.pushAndRemoveUntil(
+            onPressed: (() async {
+              isChecked = false;
+              _deleteAutoLoginStatus();
+
+              await Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
                   (route) => false);

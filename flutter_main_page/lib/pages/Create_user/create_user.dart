@@ -2,7 +2,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/login_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // import '../database_sub/user_info.dart';
 
