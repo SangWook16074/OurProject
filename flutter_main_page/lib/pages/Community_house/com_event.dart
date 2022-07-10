@@ -46,11 +46,7 @@ class _EventPageState extends State<EventPage> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(
-                          child: Container(
-                              height: 250,
-                              width: 250,
-                              child: const CircularProgressIndicator()));
+                      return _loading();
                     }
                     final documents = snapshot.data!.docs;
                     if (documents.isEmpty) {
@@ -108,5 +104,9 @@ class _EventPageState extends State<EventPage> {
         ),
       ),
     );
+  }
+
+  Widget _loading() {
+    return Center(child: CircularProgressIndicator());
   }
 }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/main_page_sub/main_alarm.dart';
-import 'package:flutter_main_page/main_page_sub/main_home.dart';
-import 'package:flutter_main_page/main_page_sub/main_user_info.dart';
-import 'package:flutter_main_page/main_page_sub/main_community.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_alarm.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_home.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info.dart';
 
 class MainPage extends StatefulWidget {
   final String userNumber;
   final String user;
   final String userGrade;
   final String userClass;
-  final bool isAdmin;
+  final bool? isAdmin;
   const MainPage(
       this.userNumber, this.user, this.userGrade, this.userClass, this.isAdmin,
       {Key? key})
@@ -42,6 +42,7 @@ class _MainPageState extends State<MainPage> {
             fontFamily: 'Pacifico',
           ),
         ),
+        automaticallyImplyLeading: false,
         centerTitle: true,
       ),
       body: pages[_index],

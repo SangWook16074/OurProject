@@ -3,11 +3,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_main_page/Community_house/com_community.dart';
-import 'package:flutter_main_page/Community_house/com_event.dart';
-import 'package:flutter_main_page/Community_house/com_info_job.dart';
-import 'package:flutter_main_page/Community_house/com_notice.dart';
-import 'package:flutter_main_page/View_pages/notice_view.dart';
+import 'package:flutter_main_page/pages/Community_house/com_community.dart';
+import 'package:flutter_main_page/pages/Community_house/com_event.dart';
+import 'package:flutter_main_page/pages/Community_house/com_info_job.dart';
+import 'package:flutter_main_page/pages/Community_house/com_notice.dart';
+import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 
 final items = <Notice>[];
 
@@ -22,7 +22,7 @@ class Notice {
 
 class MainPage1 extends StatefulWidget {
   final String user;
-  final bool isAdmin;
+  final bool? isAdmin;
   const MainPage1(this.user, this.isAdmin, {Key? key}) : super(key: key);
 
   @override
@@ -76,7 +76,7 @@ class _MainPage1State extends State<MainPage1> {
   }
 }
 
-Widget _buildIcon(BuildContext context, String user, bool isAdmin) {
+Widget _buildIcon(BuildContext context, String user, bool? isAdmin) {
   return Column(
     children: [
       const SizedBox(

@@ -4,8 +4,8 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/Community_house/com_noticeWrite.dart';
-import 'package:flutter_main_page/View_pages/notice_view.dart';
+import 'package:flutter_main_page/pages/Community_house/com_noticeWrite.dart';
+import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Notice {
@@ -19,7 +19,7 @@ class Notice {
 
 class NoticePage extends StatefulWidget {
   final String user;
-  final bool isAdmin;
+  final bool? isAdmin;
   const NoticePage(this.user, this.isAdmin, {Key? key}) : super(key: key);
 
   @override

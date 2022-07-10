@@ -24,8 +24,6 @@ class _WriteNoticeState extends State<WriteNotice> {
   var _now = DateTime.now();
   final _title = TextEditingController();
   final _content = TextEditingController();
-  final _author = TextEditingController();
-  final _authorNumber = TextEditingController();
 
   void _addNotice(NoticeWrite notice, String user) {
     FirebaseFirestore.instance.collection('notice').add({
