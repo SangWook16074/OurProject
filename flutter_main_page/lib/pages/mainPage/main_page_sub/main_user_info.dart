@@ -55,13 +55,15 @@ class _MainPage4State extends State<MainPage4> {
   }
 
   Widget _buildUserInfo() {
-    return ListView(shrinkWrap: true, children: [
-      Center(
-          child:
-              Text('내 정보', style: TextStyle(color: Colors.blue, fontSize: 20))),
-      userInfoBox.set_user_info(
-          widget.user, widget.userGrade, widget.userClass, widget.userNumber)
-    ]);
+
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Center(child: Text('내 정보',style: TextStyle(color: Colors.blue,fontSize: 20))),
+        userInfoBox.set_user_info(user, userGrade, userClass, userNumber)
+      ]  
+      );
+
   }
 
   // Widget _buildCalculator() {
@@ -118,3 +120,4 @@ class _MainPage4State extends State<MainPage4> {
   //   );
   // }
 }
+                  
