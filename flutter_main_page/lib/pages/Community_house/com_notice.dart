@@ -119,15 +119,15 @@ class _NoticePageState extends State<NoticePage> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            //글쓰기 페이지 이동
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => WriteNotice(widget.user)),
-            );
-          },
-          child: const Icon(Icons.add),
-        ),
+            onPressed: () {
+              //글쓰기 페이지 이동
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => WriteNotice(widget.user)),
+              );
+            },
+            child: const Icon(Icons.border_color)),
       );
     } else {
       return Scaffold(

@@ -43,6 +43,7 @@ class _InfoJobPageState extends State<InfoJobPage> {
                   stream: FirebaseFirestore.instance
                       .collection('job')
                       .orderBy('time', descending: true)
+                      .limit(5)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {

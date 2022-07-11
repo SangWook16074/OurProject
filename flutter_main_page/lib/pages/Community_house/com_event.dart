@@ -43,6 +43,7 @@ class _EventPageState extends State<EventPage> {
                   stream: FirebaseFirestore.instance
                       .collection('event')
                       .orderBy('time', descending: true)
+                      .limit(5)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {

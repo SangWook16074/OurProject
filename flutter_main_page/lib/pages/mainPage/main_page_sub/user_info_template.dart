@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class userInfoBox extends StatelessWidget {
+
   String userNumber='';
   String user='';
   String userGrade='';
