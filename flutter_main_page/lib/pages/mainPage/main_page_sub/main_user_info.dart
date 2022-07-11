@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/loginPage/login_page.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/user_info_template.dart';
 
 class MainPage4 extends StatefulWidget {
   final String userNumber;
@@ -52,58 +53,10 @@ class _MainPage4State extends State<MainPage4> {
     return ListView(
       shrinkWrap: true,
       children: [
-        Container(
-          width: 380,
-          padding: const EdgeInsets.all(8.0),
-          margin: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            border: Border.all(color: Colors.black, width: 3),
-          ),
-          child: Column(
-            children: [
-              Center(
-                child: Text(
-                  "사용자정보",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              const Icon(
-                Icons.account_circle_rounded,
-                size: 60,
-              ),
-              ListView(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                children: [
-                  Text(
-                    '이름 : ${widget.user}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  Text(
-                    '학번 : ${widget.userNumber}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  Text(
-                    '학년 : ${widget.userGrade}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  Text(
-                    '반 : ${widget.userClass}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+        Center(child: Text('내 정보',style: TextStyle(color: Colors.blue,fontSize: 20))),
+        userInfoBox.set_user_info(user, userGrade, userClass, userNumber)
+      ]  
+      );
   }
 }
+                  
