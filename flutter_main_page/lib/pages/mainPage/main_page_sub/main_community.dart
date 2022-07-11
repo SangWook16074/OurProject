@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/Community_house/com_community.dart';
 import 'package:flutter_main_page/pages/Community_house/com_event.dart';
 import 'package:flutter_main_page/pages/Community_house/com_info_job.dart';
-import 'package:flutter_main_page/pages/Community_house/com_write.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/expandable_FAB.dart';
 
 class Event {
   String title;
@@ -35,7 +35,9 @@ class Com {
 }
 
 class MainPage2 extends StatefulWidget {
-  const MainPage2({Key? key}) : super(key: key);
+  final String user;
+  final bool? isAdmin;
+  const MainPage2(this.user, this.isAdmin, {Key? key}) : super(key: key);
 
   @override
   State<MainPage2> createState() => _MainPage2State();
@@ -62,16 +64,7 @@ class _MainPage2State extends State<MainPage2> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //글쓰기 페이지 이동
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const WritePage()),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: ExpandableFab(widget.user, widget.isAdmin),
     );
   }
 
@@ -125,9 +118,8 @@ class _MainPage2State extends State<MainPage2> {
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              const SizedBox(
-                width: 280,
-                child: Text(
+              Expanded(
+                child: const Text(
                   '학과 이벤트',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
@@ -213,8 +205,7 @@ class _MainPage2State extends State<MainPage2> {
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              const SizedBox(
-                width: 280,
+              const Expanded(
                 child: Text(
                   '취업 정보',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
@@ -300,8 +291,7 @@ class _MainPage2State extends State<MainPage2> {
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              const SizedBox(
-                width: 280,
+              const Expanded(
                 child: Text(
                   '익명 게시판',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),

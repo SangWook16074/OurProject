@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/loginPage/login_page.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/user_info_template.dart';
 
 class MainPage4 extends StatefulWidget {
   final String userNumber;
@@ -19,6 +19,11 @@ class MainPage4 extends StatefulWidget {
 }
 
 class _MainPage4State extends State<MainPage4> {
+  var _index = 0;
+  var subjects = [];
+  var points = [];
+  var grades = [];
+
   Future<void> _deleteAutoLoginStatus() async {
     prefs.setBool('autoLoginStatus', false);
     prefs.remove('userNumber');
@@ -43,67 +48,73 @@ class _MainPage4State extends State<MainPage4> {
                   MaterialPageRoute(builder: (context) => LoginPage()),
                   (route) => false);
             }),
-            child: const Text("로그아웃"))
+            child: const Text("로그아웃")),
+        //_buildCalculator(),
       ],
     );
   }
 
   Widget _buildUserInfo() {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Container(
-          width: 380,
-          padding: const EdgeInsets.all(8.0),
-          margin: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            border: Border.all(color: Colors.black, width: 3),
-          ),
-          child: Column(
-            children: [
-              Center(
-                child: Text(
-                  "사용자정보",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              const Icon(
-                Icons.account_circle_rounded,
-                size: 60,
-              ),
-              ListView(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                children: [
-                  Text(
-                    '이름 : ${widget.user}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  Text(
-                    '학번 : ${widget.userNumber}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  Text(
-                    '학년 : ${widget.userGrade}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  Text(
-                    '반 : ${widget.userClass}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+    return ListView(shrinkWrap: true, children: [
+      Center(
+          child:
+              Text('내 정보', style: TextStyle(color: Colors.blue, fontSize: 20))),
+      userInfoBox.set_user_info(
+          widget.user, widget.userGrade, widget.userClass, widget.userNumber)
+    ]);
   }
+
+  // Widget _buildCalculator() {
+  //   const int cnt = 1;
+  //   final controller =
+  //       EditController(subjects[_index], points[_index], grades[_index]);
+  //   return Container(
+  //     padding: const EdgeInsets.all(8.0),
+  //     margin: const EdgeInsets.all(8.0),
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(25),
+  //       border: Border.all(color: Colors.black, width: 3),
+  //     ),
+  //     child: Column(
+  //       children: [
+  //         Row(
+  //           children: [
+  //             Expanded(
+  //               child: Text(
+  //                 '학점 계산기',
+  //                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  //               ),
+  //             ),
+  //             IconButton(onPressed: () {}, icon: Icon(Icons.refresh))
+  //           ],
+  //         ),
+  //         ListTile(
+  //           title: Row(
+  //             children: [
+  //               (
+  //                 TextField(
+  //                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  //                 controller: controller.subject,
+  //                 onChanged: (text) {
+  //                   setState(() {});
+  //                 },
+  //                 decoration: const InputDecoration(
+  //                     hintText: "과목",
+  //                     hintStyle:
+  //                         TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  //                     contentPadding:
+  //                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+  //                     filled: true,
+  //                     fillColor: Colors.white),
+  //               ),
+
+  //               ),
+
+  //             ],
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 }

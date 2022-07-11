@@ -1,35 +1,33 @@
-// ignore_for_file: file_names
-
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class NoticeWrite {
+class Write {
   String title;
   String content;
   String time;
 
-  NoticeWrite(this.title, this.content, this.time);
+  Write(this.title, this.content, this.time);
 }
 
-class WriteNotice extends StatefulWidget {
+class WriteJobPage extends StatefulWidget {
   final String user;
-  const WriteNotice(this.user, {Key? key}) : super(key: key);
+  const WriteJobPage(this.user, {Key? key}) : super(key: key);
 
   @override
-  State<WriteNotice> createState() => _WriteNoticeState();
+  State<WriteJobPage> createState() => _WriteJobPageState();
 }
 
-class _WriteNoticeState extends State<WriteNotice> {
+class _WriteJobPageState extends State<WriteJobPage> {
   var _now = DateTime.now();
   final _title = TextEditingController();
   final _content = TextEditingController();
 
-  void _addNotice(NoticeWrite notice, String user) {
-    FirebaseFirestore.instance.collection('notice').add({
-      'title': "[공지사항] ${notice.title}",
+  void _addNotice(Write notice, String user) {
+    FirebaseFirestore.instance.collection('job').add({
+      'title': "[취업정보] ${notice.title}",
       'content': notice.content,
       'author': user,
       'time': notice.time,
@@ -64,7 +62,7 @@ class _WriteNoticeState extends State<WriteNotice> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: const Text(
-          "NOTICE",
+          "information of Job",
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Pacifico',
@@ -89,8 +87,7 @@ class _WriteNoticeState extends State<WriteNotice> {
                     fontSize: 16,
                   );
                 } else {
-                  _addNotice(
-                      NoticeWrite(_title.text, _content.text, _now.toString()),
+                  _addNotice(Write(_title.text, _content.text, _now.toString()),
                       widget.user);
                   Fluttertoast.showToast(
                     msg: "새 공지가 등록되었습니다.",
@@ -101,7 +98,7 @@ class _WriteNoticeState extends State<WriteNotice> {
                   Navigator.pop(context);
                 }
               },
-              icon: Icon(Icons.check))
+              icon: const Icon(Icons.check))
         ],
       ),
       resizeToAvoidBottomInset: true,
@@ -115,7 +112,7 @@ class _WriteNoticeState extends State<WriteNotice> {
                   borderRadius: BorderRadius.circular(3),
                 ),
                 child: ListView(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   children: [
                     TextField(

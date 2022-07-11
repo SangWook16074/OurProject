@@ -27,7 +27,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     final pages = [
       MainPage1(widget.user, widget.isAdmin),
-      const MainPage2(),
+      MainPage2(widget.user, widget.isAdmin),
       const MainPage3(),
       MainPage4(widget.userNumber, widget.user, widget.userGrade,
           widget.userClass, widget.isAdmin),
