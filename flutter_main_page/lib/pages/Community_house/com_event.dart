@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 
 class Event {
   String title;
@@ -74,11 +75,11 @@ class _EventPageState extends State<EventPage> {
     return ListTile(
       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => NoticeViewPage(
-        //             notice.title, notice.content, notice.author, notice.time)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NoticeViewPage(
+                    event.title, event.content, event.author, event.time)));
       },
       title: Text(
         event.title,

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 
 class Job {
   String title;
@@ -77,11 +78,11 @@ class _InfoJobPageState extends State<InfoJobPage> {
     return ListTile(
       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => NoticeViewPage(
-        //             notice.title, notice.content, notice.author, notice.time)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NoticeViewPage(
+                    job.title, job.content, job.author, job.time)));
       },
       title: Text(
         job.title,

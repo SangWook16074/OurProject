@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 
 class Com {
   String title;
   String content;
+  String author;
   String time;
 
-  Com(this.title, this.content, this.time);
+  Com(this.title, this.author, this.content, this.time);
 }
 
 class ComPage extends StatefulWidget {
@@ -72,17 +74,17 @@ class _ComPageState extends State<ComPage> {
   }
 
   Widget _buildItemWidget(DocumentSnapshot doc) {
-    final com = Com(doc['title'], doc['content'], doc['time']);
+    final com = Com(doc['title'], doc['author'], doc['content'], doc['time']);
     return SizedBox(
       height: 500,
       child: ListTile(
         visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
         onTap: () {
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => NoticeViewPage(
-          //             notice.title, notice.content, notice.author, notice.time)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NoticeViewPage(
+                      com.title, com.content, com.author, com.time)));
         },
         title: Text(
           com.title,

@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class NoticeWrite {
   String title;
@@ -23,7 +24,7 @@ class WriteNotice extends StatefulWidget {
 }
 
 class _WriteNoticeState extends State<WriteNotice> {
-  var _now = DateTime.now();
+  var _now;
   final _title = TextEditingController();
   final _content = TextEditingController();
 
@@ -43,7 +44,7 @@ class _WriteNoticeState extends State<WriteNotice> {
     Timer.periodic((const Duration(seconds: 1)), (v) {
       if (mounted) {
         setState(() {
-          _now = DateTime.now();
+          _now = DateFormat('yyyy-MM-dd - HH:mm:ss').format(DateTime.now());
         });
       }
     });

@@ -43,6 +43,7 @@ dependencies:
   fluttertoast: ^8.0.9
   flutter_secure_storage: ^5.0.2
   shared_preferences: ^2.0.15
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
