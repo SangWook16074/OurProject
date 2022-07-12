@@ -3,11 +3,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_main_page/pages/Community_house/com_community.dart';
-import 'package:flutter_main_page/pages/Community_house/com_event.dart';
-import 'package:flutter_main_page/pages/Community_house/com_info_job.dart';
-import 'package:flutter_main_page/pages/Community_house/com_notice.dart';
+
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_community.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_event.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_info_job.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_notice.dart';
 
 final items = <Notice>[];
 

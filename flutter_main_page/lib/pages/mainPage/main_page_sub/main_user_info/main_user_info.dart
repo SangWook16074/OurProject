@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/loginPage/login_page.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/calculate.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/myContentDelete.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/myContentUpdate.dart';
+
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/user_info_template.dart';
 
 class MainPage4 extends StatefulWidget {
@@ -59,9 +63,11 @@ class _MainPage4State extends State<MainPage4> {
             borderRadius: BorderRadius.circular(25),
             border: Border.all(color: Colors.black, width: 3)),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Text(
-              '게시글 관리',
+              '게시물 관리',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
             _buildManageList(),
@@ -75,9 +81,24 @@ class _MainPage4State extends State<MainPage4> {
         shrinkWrap: true,
         children: [
           ListTile(
-            onTap: () {},
-            title: const Text('내가 쓴 글', style: TextStyle(fontSize: 20)),
-            trailing: const Icon(Icons.edit),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyContentDeletePage(widget.user)));
+            },
+            title: const Text('게시물 삭제', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.delete),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyContentUpdatePage(widget.user)));
+            },
+            title: const Text('게시물 수정', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.update),
           ),
         ]);
   }
@@ -90,6 +111,8 @@ class _MainPage4State extends State<MainPage4> {
             borderRadius: BorderRadius.circular(25),
             border: Border.all(color: Colors.black, width: 3)),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Text(
               '기타',
@@ -106,7 +129,10 @@ class _MainPage4State extends State<MainPage4> {
         shrinkWrap: true,
         children: [
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CalculatePage()));
+            },
             title: const Text('학점계산기', style: TextStyle(fontSize: 20)),
             trailing: const Icon(Icons.calculate),
           ),

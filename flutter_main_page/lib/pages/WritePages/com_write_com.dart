@@ -91,7 +91,7 @@ class _WriteComPageState extends State<WriteComPage> {
                   _addNotice(Write(_title.text, _content.text, _now.toString()),
                       widget.user);
                   Fluttertoast.showToast(
-                    msg: "새 공지가 등록되었습니다.",
+                    msg: "새 글이 등록되었습니다.",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                     fontSize: 16,

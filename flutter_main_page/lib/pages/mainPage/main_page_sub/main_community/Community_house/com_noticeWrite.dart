@@ -17,7 +17,8 @@ class NoticeWrite {
 
 class WriteNotice extends StatefulWidget {
   final String user;
-  const WriteNotice(this.user, {Key? key}) : super(key: key);
+  final bool? isAdmin;
+  WriteNotice(this.user, this.isAdmin, {Key? key}) : super(key: key);
 
   @override
   State<WriteNotice> createState() => _WriteNoticeState();
@@ -28,6 +29,39 @@ class _WriteNoticeState extends State<WriteNotice> {
   final _title = TextEditingController();
   final _content = TextEditingController();
 
+  void _createItemDialog(NoticeWrite notice, String user) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                Text('공지를 등록하시겠습니까? 등록된 공지는 내정보 페이지에서 관리할 수 있습니다.')
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    _addNotice(notice, user);
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("확인")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("취소")),
+            ],
+          );
+        });
+  }
+
   void _addNotice(NoticeWrite notice, String user) {
     FirebaseFirestore.instance.collection('notice').add({
       'title': "[공지사항] ${notice.title}",
@@ -35,6 +69,12 @@ class _WriteNoticeState extends State<WriteNotice> {
       'author': user,
       'time': notice.time,
     });
+    Fluttertoast.showToast(
+      msg: "새 공지가 등록되었습니다.",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      fontSize: 16,
+    );
     _title.text = '';
     _content.text = '';
   }
@@ -90,16 +130,9 @@ class _WriteNoticeState extends State<WriteNotice> {
                     fontSize: 16,
                   );
                 } else {
-                  _addNotice(
+                  _createItemDialog(
                       NoticeWrite(_title.text, _content.text, _now.toString()),
                       widget.user);
-                  Fluttertoast.showToast(
-                    msg: "새 공지가 등록되었습니다.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                  Navigator.pop(context);
                 }
               },
               icon: Icon(Icons.check))

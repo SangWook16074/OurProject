@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/WritePages/com_write_com.dart';
 import 'package:flutter_main_page/pages/WritePages/com_write_event.dart';
 import 'package:flutter_main_page/pages/WritePages/com_wrtie_job.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/action_button.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/FAB/action_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 const Duration _duration = Duration(milliseconds: 300);

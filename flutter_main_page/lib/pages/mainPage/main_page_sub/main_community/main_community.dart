@@ -2,11 +2,11 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/pages/Community_house/com_community.dart';
-import 'package:flutter_main_page/pages/Community_house/com_event.dart';
-import 'package:flutter_main_page/pages/Community_house/com_info_job.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/expandable_FAB.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_community.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_event.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_info_job.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/FAB/expandable_FAB.dart';
 
 class Content {
   String title;
@@ -334,8 +334,8 @@ class _MainPage2State extends State<MainPage2> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => NoticeViewPage(
-                    com.title, com.content, com.author, com.time)));
+                builder: (context) =>
+                    NoticeViewPage(com.title, com.content, "익명", com.time)));
       },
       title: Text(
         com.title,
@@ -345,7 +345,7 @@ class _MainPage2State extends State<MainPage2> {
         ),
       ),
       subtitle: Text(
-        "작성자 : ${com.author}",
+        "익명",
         style: const TextStyle(fontSize: 12),
       ),
     );

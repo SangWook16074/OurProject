@@ -33,42 +33,32 @@ class _InfoJobPageState extends State<InfoJobPage> {
         ),
         centerTitle: true,
       ),
-      resizeToAvoidBottomInset: true,
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-          child: ListView(
-            children: [
-              StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('job')
-                      .orderBy('time', descending: true)
-                      .limit(5)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(
-                          child: Container(
-                              height: 250,
-                              width: 250,
-                              child: const CircularProgressIndicator()));
-                    }
-                    final documents = snapshot.data!.docs;
-                    if (documents.isEmpty) {
-                      return _buildNonJob();
-                    } else {
-                      return ListView(
-                        shrinkWrap: true,
-                        children: documents
-                            .map((doc) => _buildItemWidget(doc))
-                            .toList(),
-                      );
-                    }
-                  }),
-            ],
-          ),
-        ),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+        child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('job')
+                .orderBy('time', descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(
+                    child: Container(
+                        height: 250,
+                        width: 250,
+                        child: const CircularProgressIndicator()));
+              }
+              final documents = snapshot.data!.docs;
+              if (documents.isEmpty) {
+                return _buildNonJob();
+              } else {
+                return ListView(
+                  shrinkWrap: true,
+                  children:
+                      documents.map((doc) => _buildItemWidget(doc)).toList(),
+                );
+              }
+            }),
       ),
     );
   }
