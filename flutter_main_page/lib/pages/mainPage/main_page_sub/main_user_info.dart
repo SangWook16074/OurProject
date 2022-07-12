@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/pages/loginPage/login_page.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/pages/loginPage/login_page.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/user_info_template.dart';
 
 class MainPage4 extends StatefulWidget {
@@ -19,11 +19,6 @@ class MainPage4 extends StatefulWidget {
 }
 
 class _MainPage4State extends State<MainPage4> {
-  var _index = 0;
-  var subjects = [];
-  var points = [];
-  var grades = [];
-
   Future<void> _deleteAutoLoginStatus() async {
     prefs.setBool('autoLoginStatus', false);
     prefs.remove('userNumber');
@@ -35,11 +30,88 @@ class _MainPage4State extends State<MainPage4> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ListView(
+          children: [
+            const Center(
+                child: Text('내 정보',
+                    style: TextStyle(color: Colors.blue, fontSize: 20))),
+            _buildUserInfo(),
+            _buildManager(),
+            _buildOthers(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUserInfo() {
+    return userInfoBox.set_user_info(
+        widget.user, widget.userGrade, widget.userClass, widget.userNumber);
+  }
+
+  Widget _buildManager() {
+    return Container(
+        padding: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            border: Border.all(color: Colors.black, width: 3)),
+        child: Column(
+          children: [
+            const Text(
+              '게시글 관리',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+            _buildManageList(),
+          ],
+        ));
+  }
+
+  Widget _buildManageList() {
     return ListView(
-      children: [
-        _buildUserInfo(),
-        ElevatedButton(
-            onPressed: (() async {
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        children: [
+          ListTile(
+            onTap: () {},
+            title: const Text('내가 쓴 글', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.edit),
+          ),
+        ]);
+  }
+
+  Widget _buildOthers() {
+    return Container(
+        padding: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            border: Border.all(color: Colors.black, width: 3)),
+        child: Column(
+          children: [
+            const Text(
+              '기타',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+            _buildOthersList(),
+          ],
+        ));
+  }
+
+  Widget _buildOthersList() {
+    return ListView(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        children: [
+          ListTile(
+            onTap: () {},
+            title: const Text('학점계산기', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.calculate),
+          ),
+          ListTile(
+            onTap: () async {
               isChecked = false;
               _deleteAutoLoginStatus();
 
@@ -47,77 +119,10 @@ class _MainPage4State extends State<MainPage4> {
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
                   (route) => false);
-            }),
-            child: const Text("로그아웃")),
-        //_buildCalculator(),
-      ],
-    );
+            },
+            title: const Text('로그아웃', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.logout),
+          ),
+        ]);
   }
-
-  Widget _buildUserInfo() {
-
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Center(child: Text('내 정보',style: TextStyle(color: Colors.blue,fontSize: 20))),
-        userInfoBox.set_user_info(user, userGrade, userClass, userNumber)
-      ]  
-      );
-
-  }
-
-  // Widget _buildCalculator() {
-  //   const int cnt = 1;
-  //   final controller =
-  //       EditController(subjects[_index], points[_index], grades[_index]);
-  //   return Container(
-  //     padding: const EdgeInsets.all(8.0),
-  //     margin: const EdgeInsets.all(8.0),
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(25),
-  //       border: Border.all(color: Colors.black, width: 3),
-  //     ),
-  //     child: Column(
-  //       children: [
-  //         Row(
-  //           children: [
-  //             Expanded(
-  //               child: Text(
-  //                 '학점 계산기',
-  //                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-  //               ),
-  //             ),
-  //             IconButton(onPressed: () {}, icon: Icon(Icons.refresh))
-  //           ],
-  //         ),
-  //         ListTile(
-  //           title: Row(
-  //             children: [
-  //               (
-  //                 TextField(
-  //                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-  //                 controller: controller.subject,
-  //                 onChanged: (text) {
-  //                   setState(() {});
-  //                 },
-  //                 decoration: const InputDecoration(
-  //                     hintText: "과목",
-  //                     hintStyle:
-  //                         TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-  //                     contentPadding:
-  //                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-  //                     filled: true,
-  //                     fillColor: Colors.white),
-  //               ),
-
-  //               ),
-
-  //             ],
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
 }
-                  
