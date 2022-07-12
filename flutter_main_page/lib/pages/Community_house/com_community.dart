@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 class Com {
   String title;
   String content;
-  String author;
   String time;
 
-  Com(this.title, this.content, this.author, this.time);
+  Com(this.title, this.content, this.time);
 }
 
 class ComPage extends StatefulWidget {
@@ -43,6 +42,7 @@ class _ComPageState extends State<ComPage> {
                   stream: FirebaseFirestore.instance
                       .collection('com')
                       .orderBy('time', descending: true)
+                      .limit(5)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
@@ -72,24 +72,27 @@ class _ComPageState extends State<ComPage> {
   }
 
   Widget _buildItemWidget(DocumentSnapshot doc) {
-    final com = Com(doc['title'], doc['content'], doc['author'], doc['time']);
-    return ListTile(
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => NoticeViewPage(
-        //             notice.title, notice.content, notice.author, notice.time)));
-      },
-      title: Text(
-        com.title,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(
-        com.author,
-        style: const TextStyle(fontSize: 10),
+    final com = Com(doc['title'], doc['content'], doc['time']);
+    return SizedBox(
+      height: 500,
+      child: ListTile(
+        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+        onTap: () {
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => NoticeViewPage(
+          //             notice.title, notice.content, notice.author, notice.time)));
+        },
+        title: Text(
+          com.title,
+          style: const TextStyle(
+              fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          "익명",
+          style: const TextStyle(fontSize: 10),
+        ),
       ),
     );
   }
