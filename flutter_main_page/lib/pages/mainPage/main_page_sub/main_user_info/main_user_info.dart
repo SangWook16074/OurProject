@@ -38,9 +38,6 @@ class _MainPage4State extends State<MainPage4> {
       body: Center(
         child: ListView(
           children: [
-            const Center(
-                child: Text('내 정보',
-                    style: TextStyle(color: Colors.blue, fontSize: 20))),
             _buildUserInfo(),
             _buildManager(),
             _buildOthers(),

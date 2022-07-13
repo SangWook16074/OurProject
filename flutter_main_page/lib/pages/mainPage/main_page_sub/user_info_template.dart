@@ -18,7 +18,7 @@ class userInfoBox extends StatelessWidget {
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: Color.fromRGBO(73, 169, 242, 100), width: 3),
+        border: Border.all(color: Colors.black, width: 3),
         // color: Color.fromRGBO(73, 169, 242, 10)
       ),
       //안에 들어갈 디자인 입니다.
