@@ -2,36 +2,19 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/pages/Community_house/com_community.dart';
-import 'package:flutter_main_page/pages/Community_house/com_event.dart';
-import 'package:flutter_main_page/pages/Community_house/com_info_job.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/expandable_FAB.dart';
+import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_community.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_event.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_info_job.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/FAB/expandable_FAB.dart';
 
-class Event {
+class Content {
   String title;
   String content;
   String author;
   String time;
 
-  Event(this.title, this.content, this.author, this.time);
-}
-
-class Job {
-  String title;
-  String content;
-  String author;
-  String time;
-
-  Job(this.title, this.content, this.author, this.time);
-}
-
-class Com {
-  String title;
-  String content;
-  String author;
-  String time;
-
-  Com(this.title, this.content, this.author, this.time);
+  Content(this.title, this.content, this.author, this.time);
 }
 
 class MainPage2 extends StatefulWidget {
@@ -168,14 +151,15 @@ class _MainPage2State extends State<MainPage2> {
 
   Widget _buildItemEvent(DocumentSnapshot doc) {
     final event =
-        Event(doc['title'], doc['content'], doc['author'], doc['time']);
+        Content(doc['title'], doc['content'], doc['author'], doc['time']);
     return ListTile(
       visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => const NoticeViewPage()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NoticeViewPage(
+                    event.title, event.content, event.author, event.time)));
       },
       title: Text(
         event.title,
@@ -254,14 +238,16 @@ class _MainPage2State extends State<MainPage2> {
   }
 
   Widget _buildItemJob(DocumentSnapshot doc) {
-    final job = Com(doc['title'], doc['content'], doc['author'], doc['time']);
+    final job =
+        Content(doc['title'], doc['content'], doc['author'], doc['time']);
     return ListTile(
       visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => const NoticeViewPage()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NoticeViewPage(
+                    job.title, job.content, job.author, job.time)));
       },
       title: Text(
         job.title,
@@ -340,14 +326,16 @@ class _MainPage2State extends State<MainPage2> {
   }
 
   Widget _buildItemCom(DocumentSnapshot doc) {
-    final com = Com(doc['title'], doc['content'], doc['author'], doc['time']);
+    final com =
+        Content(doc['title'], doc['content'], doc['author'], doc['time']);
     return ListTile(
       visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => const NoticeViewPage()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    NoticeViewPage(com.title, com.content, "익명", com.time)));
       },
       title: Text(
         com.title,
@@ -357,7 +345,7 @@ class _MainPage2State extends State<MainPage2> {
         ),
       ),
       subtitle: Text(
-        "작성자 : ${com.author}",
+        "익명",
         style: const TextStyle(fontSize: 12),
       ),
     );

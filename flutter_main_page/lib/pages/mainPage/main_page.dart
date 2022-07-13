@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_alarm.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_home.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_alarm/main_alarm.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/main_community.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_home/main_home.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_user_info.dart';
 
 class MainPage extends StatefulWidget {
   final String userNumber;

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,28 +7,29 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
-class Write {
+class NoticeWrite {
   String title;
   String content;
   String time;
 
-  Write(this.title, this.content, this.time);
+  NoticeWrite(this.title, this.content, this.time);
 }
 
-class WriteJobPage extends StatefulWidget {
+class WriteNotice extends StatefulWidget {
   final String user;
-  const WriteJobPage(this.user, {Key? key}) : super(key: key);
+  final bool? isAdmin;
+  WriteNotice(this.user, this.isAdmin, {Key? key}) : super(key: key);
 
   @override
-  State<WriteJobPage> createState() => _WriteJobPageState();
+  State<WriteNotice> createState() => _WriteNoticeState();
 }
 
-class _WriteJobPageState extends State<WriteJobPage> {
+class _WriteNoticeState extends State<WriteNotice> {
   var _now;
   final _title = TextEditingController();
   final _content = TextEditingController();
 
-  void _createItemDialog(Write job, String user) {
+  void _createItemDialog(NoticeWrite notice, String user) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -38,13 +41,13 @@ class _WriteJobPageState extends State<WriteJobPage> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: const [
-                Text('취업정보를 등록하시겠습니까? 등록된 취업정보는 내정보 페이지에서 관리할 수 있습니다.')
+                Text('공지를 등록하시겠습니까? 등록된 공지는 내정보 페이지에서 관리할 수 있습니다.')
               ],
             ),
             actions: [
               TextButton(
                   onPressed: () {
-                    _addNotice(job, user);
+                    _addNotice(notice, user);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   },
@@ -59,13 +62,19 @@ class _WriteJobPageState extends State<WriteJobPage> {
         });
   }
 
-  void _addNotice(Write job, String user) {
-    FirebaseFirestore.instance.collection('job').add({
-      'title': "[취업정보] ${job.title}",
-      'content': job.content,
+  void _addNotice(NoticeWrite notice, String user) {
+    FirebaseFirestore.instance.collection('notice').add({
+      'title': "[공지사항] ${notice.title}",
+      'content': notice.content,
       'author': user,
-      'time': job.time,
+      'time': notice.time,
     });
+    Fluttertoast.showToast(
+      msg: "새 공지가 등록되었습니다.",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      fontSize: 16,
+    );
     _title.text = '';
     _content.text = '';
   }
@@ -96,7 +105,7 @@ class _WriteJobPageState extends State<WriteJobPage> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: const Text(
-          "information of Job",
+          "NOTICE",
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Pacifico',
@@ -122,11 +131,11 @@ class _WriteJobPageState extends State<WriteJobPage> {
                   );
                 } else {
                   _createItemDialog(
-                      Write(_title.text, _content.text, _now.toString()),
+                      NoticeWrite(_title.text, _content.text, _now.toString()),
                       widget.user);
                 }
               },
-              icon: const Icon(Icons.check))
+              icon: Icon(Icons.check))
         ],
       ),
       resizeToAvoidBottomInset: true,
@@ -140,7 +149,7 @@ class _WriteJobPageState extends State<WriteJobPage> {
                   borderRadius: BorderRadius.circular(3),
                 ),
                 child: ListView(
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   children: [
                     TextField(

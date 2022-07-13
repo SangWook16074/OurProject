@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class Write {
   String title;
@@ -21,17 +22,56 @@ class WriteComPage extends StatefulWidget {
 }
 
 class _WriteComPageState extends State<WriteComPage> {
-  var _now = DateTime.now();
+  var _now;
   final _title = TextEditingController();
   final _content = TextEditingController();
 
-  void _addNotice(Write notice, String user) {
+  void _createItemDialog(Write com, String user) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                Text('글을 등록하시겠습니까? 등록된 글은 내정보 페이지에서 관리할 수 있습니다.')
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    _addNotice(com, user);
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("확인")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("취소")),
+            ],
+          );
+        });
+  }
+
+  void _addNotice(Write com, String user) {
     FirebaseFirestore.instance.collection('com').add({
-      'title': "[익명] ${notice.title}",
-      'content': notice.content,
+      'title': "[익명] ${com.title}",
+      'content': com.content,
       'author': user,
-      'time': notice.time,
+      'time': com.time,
     });
+    Fluttertoast.showToast(
+      msg: "새 글이 등록되었습니다.",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      fontSize: 16,
+    );
     _title.text = '';
     _content.text = '';
   }
@@ -41,7 +81,7 @@ class _WriteComPageState extends State<WriteComPage> {
     Timer.periodic((const Duration(seconds: 1)), (v) {
       if (mounted) {
         setState(() {
-          _now = DateTime.now();
+          _now = DateFormat('yyyy-MM-dd - HH:mm:ss').format(DateTime.now());
         });
       }
     });
@@ -87,15 +127,9 @@ class _WriteComPageState extends State<WriteComPage> {
                     fontSize: 16,
                   );
                 } else {
-                  _addNotice(Write(_title.text, _content.text, _now.toString()),
+                  _createItemDialog(
+                      Write(_title.text, _content.text, _now.toString()),
                       widget.user);
-                  Fluttertoast.showToast(
-                    msg: "새 공지가 등록되었습니다.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                  Navigator.pop(context);
                 }
               },
               icon: Icon(Icons.check))

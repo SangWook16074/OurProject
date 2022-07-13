@@ -1,87 +1,76 @@
-// ignore_for_file: file_names
-
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class NoticeWrite {
+class Com {
   String title;
   String content;
+  String author;
   String time;
 
-  NoticeWrite(this.title, this.content, this.time);
+  Com(this.title, this.author, this.content, this.time);
 }
 
-class WriteNotice extends StatefulWidget {
-  final String user;
-  const WriteNotice(this.user, {Key? key}) : super(key: key);
+class ContentUpdatePage extends StatefulWidget {
+  final String docID;
+  final String title;
+  final String content;
+  const ContentUpdatePage(this.docID, this.title, this.content, {Key? key})
+      : super(key: key);
 
   @override
-  State<WriteNotice> createState() => _WriteNoticeState();
+  State<ContentUpdatePage> createState() => _ContentUpdatePageState();
 }
 
-class _WriteNoticeState extends State<WriteNotice> {
-  var _now = DateTime.now();
-  final _title = TextEditingController();
-  final _content = TextEditingController();
+class _ContentUpdatePageState extends State<ContentUpdatePage> {
+  late TextEditingController _titleController;
+  late TextEditingController _contentController;
 
-  void _addNotice(NoticeWrite notice, String user) {
-    FirebaseFirestore.instance.collection('notice').add({
-      'title': "[공지사항] ${notice.title}",
-      'content': notice.content,
-      'author': user,
-      'time': notice.time,
-    });
-    _title.text = '';
-    _content.text = '';
-  }
-
-  @override
-  void initState() {
-    Timer.periodic((const Duration(seconds: 1)), (v) {
-      if (mounted) {
-        setState(() {
-          _now = DateTime.now();
-        });
-      }
-    });
-    super.initState();
+  void _updateContent(String docID, String title, String content) {
+    FirebaseFirestore.instance
+        .collection('com')
+        .doc(docID)
+        .update({"title": title, "content": content});
+    _titleController.text = '';
+    _contentController.text = '';
   }
 
   @override
   void dispose() {
-    _title.dispose();
-    _content.dispose();
+    _titleController.dispose();
+    _contentController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    _titleController = TextEditingController(text: widget.title);
+    _contentController = TextEditingController(text: widget.content);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: const Text(
-          "NOTICE",
+          "Modify",
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Pacifico',
           ),
         ),
+        automaticallyImplyLeading: false,
         centerTitle: true,
         actions: [
           IconButton(
               onPressed: () {
-                if (_title.text.isEmpty) {
+                if (_titleController.text.isEmpty) {
                   Fluttertoast.showToast(
                     msg: "제목을 입력하세요.",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                     fontSize: 16,
                   );
-                } else if (_content.text.isEmpty) {
+                } else if (_contentController.text.isEmpty) {
                   Fluttertoast.showToast(
                     msg: "내용을 입력하세요.",
                     toastLength: Toast.LENGTH_SHORT,
@@ -89,19 +78,26 @@ class _WriteNoticeState extends State<WriteNotice> {
                     fontSize: 16,
                   );
                 } else {
-                  _addNotice(
-                      NoticeWrite(_title.text, _content.text, _now.toString()),
-                      widget.user);
+                  //수정하기
+                  _updateContent(widget.docID, _titleController.text,
+                      _contentController.text);
                   Fluttertoast.showToast(
-                    msg: "새 공지가 등록되었습니다.",
+                    msg: "수정이 완료되었습니다.",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                     fontSize: 16,
                   );
                   Navigator.pop(context);
+                  Navigator.pop(context);
                 }
               },
-              icon: Icon(Icons.check))
+              icon: Icon(Icons.check)),
+          IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.close))
         ],
       ),
       resizeToAvoidBottomInset: true,
@@ -123,14 +119,9 @@ class _WriteNoticeState extends State<WriteNotice> {
                           fontSize: 20, fontWeight: FontWeight.bold),
                       minLines: 1,
                       maxLines: 10,
-                      controller: _title,
-                      onChanged: (text) {
-                        setState(() {});
-                      },
+                      controller: _titleController,
+                      onChanged: (text) {},
                       decoration: const InputDecoration(
-                          hintText: "제목",
-                          hintStyle: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 20.0),
                           filled: true,
@@ -142,12 +133,9 @@ class _WriteNoticeState extends State<WriteNotice> {
                     TextField(
                       minLines: 15,
                       maxLines: 100,
-                      controller: _content,
-                      onChanged: (text) {
-                        setState(() {});
-                      },
+                      controller: _contentController,
+                      onChanged: (text) {},
                       decoration: const InputDecoration(
-                          hintText: "내용을 입력하세요",
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 20.0),
                           filled: true,

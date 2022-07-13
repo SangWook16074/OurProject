@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
-import 'package:flutter_main_page/pages/Create_user/create_user.dart';
+import 'package:flutter_main_page/pages/loginPage/Create_user/create_user.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 
 class Event {
   String title;
@@ -33,37 +34,28 @@ class _EventPageState extends State<EventPage> {
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: true,
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-          child: ListView(
-            children: [
-              StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('event')
-                      .orderBy('time', descending: true)
-                      .limit(5)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return _loading();
-                    }
-                    final documents = snapshot.data!.docs;
-                    if (documents.isEmpty) {
-                      return _buildNonEvent();
-                    } else {
-                      return ListView(
-                        shrinkWrap: true,
-                        children: documents
-                            .map((doc) => _buildItemWidget(doc))
-                            .toList(),
-                      );
-                    }
-                  }),
-            ],
-          ),
-        ),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+        child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('event')
+                .orderBy('time', descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return _loading();
+              }
+              final documents = snapshot.data!.docs;
+              if (documents.isEmpty) {
+                return _buildNonEvent();
+              } else {
+                return ListView(
+                  shrinkWrap: true,
+                  children:
+                      documents.map((doc) => _buildItemWidget(doc)).toList(),
+                );
+              }
+            }),
       ),
     );
   }
@@ -74,11 +66,11 @@ class _EventPageState extends State<EventPage> {
     return ListTile(
       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => NoticeViewPage(
-        //             notice.title, notice.content, notice.author, notice.time)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NoticeViewPage(
+                    event.title, event.content, event.author, event.time)));
       },
       title: Text(
         event.title,
