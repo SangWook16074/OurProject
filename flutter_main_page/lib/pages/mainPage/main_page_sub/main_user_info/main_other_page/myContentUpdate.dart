@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/pages/Update_Page/Content_update.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 
 class Com {
@@ -20,7 +21,8 @@ class MyContentUpdatePage extends StatefulWidget {
 }
 
 class _MyContentUpdatePageState extends State<MyContentUpdatePage> {
-  void _deleteItemDialog(DocumentSnapshot doc) {
+  void _updateItemDialog(
+      DocumentSnapshot doc, String docID, String title, String content) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -36,8 +38,11 @@ class _MyContentUpdatePageState extends State<MyContentUpdatePage> {
             actions: [
               TextButton(
                   onPressed: () {
-                    // _deleteItem(doc);
-                    Navigator.of(context).pop();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) =>
+                                ContentUpdatePage(docID, title, content))));
                   },
                   child: const Text("확인")),
               TextButton(
@@ -72,6 +77,7 @@ class _MyContentUpdatePageState extends State<MyContentUpdatePage> {
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('com')
+              .where('author', isEqualTo: widget.user)
               .orderBy('time', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
@@ -115,7 +121,7 @@ class _MyContentUpdatePageState extends State<MyContentUpdatePage> {
       ),
       trailing: IconButton(
         onPressed: () {
-          _deleteItemDialog(doc);
+          _updateItemDialog(doc, doc.id, com.title, com.content);
         },
         icon: Icon(Icons.update),
       ),

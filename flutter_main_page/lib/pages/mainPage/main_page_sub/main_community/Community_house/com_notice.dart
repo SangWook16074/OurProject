@@ -102,7 +102,6 @@ class _NoticePageState extends State<NoticePage> {
                 return _buildNonItem();
               } else {
                 return ListView(
-                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   children:
                       documents.map((doc) => _buildItemWidget(doc)).toList(),
