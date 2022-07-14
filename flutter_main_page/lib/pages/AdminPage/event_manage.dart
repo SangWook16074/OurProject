@@ -23,7 +23,7 @@ class EventManagePage extends StatefulWidget {
 class _EventManagePageState extends State<EventManagePage> {
   void _deleteItemDialog(DocumentSnapshot doc) {
     showDialog(
-        context: context,
+        context: context, 
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
