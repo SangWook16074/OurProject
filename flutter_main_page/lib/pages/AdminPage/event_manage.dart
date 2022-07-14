@@ -32,7 +32,7 @@ class _EventManagePageState extends State<EventManagePage> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [Text('정말로 삭제하시겠습니까?')],
+              children: const [Text('정말로 삭제하시겠습니까?')], 
             ),
             actions: [
               TextButton(

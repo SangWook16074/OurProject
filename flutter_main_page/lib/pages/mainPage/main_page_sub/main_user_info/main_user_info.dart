@@ -153,7 +153,7 @@ class _MainPage4State extends State<MainPage4> {
           ListTile(
             onTap: () async {
               isChecked = false;
-              _deleteAutoLoginStatus();
+              _deleteAutoLoginStatus(); 
 
               await Navigator.pushAndRemoveUntil(
                   context,
