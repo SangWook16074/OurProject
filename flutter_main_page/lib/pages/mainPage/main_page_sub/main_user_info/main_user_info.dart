@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/AdminPage/admin_list.dart';
+import 'package:flutter_main_page/pages/AdminPage/job_manage.dart';
 
 import 'package:flutter_main_page/pages/AdminPage/notice_manage.dart';
 
@@ -212,7 +213,10 @@ class _MainPage4State extends State<MainPage4> {
             trailing: const Icon(Icons.card_giftcard),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => JobManagePage()));
+            },
             title: const Text('취업정보 관리', style: TextStyle(fontSize: 20)),
             trailing: const Icon(Icons.lightbulb),
           ),
