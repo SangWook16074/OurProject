@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 
+import '../Update_Page/Notice_update.dart';
+
 class Notice {
   String title;
   String content;
@@ -19,6 +21,40 @@ class NoticeManagePage extends StatefulWidget {
 }
 
 class _NoticeManagePageState extends State<NoticeManagePage> {
+  void _updateItemDialog(
+      DocumentSnapshot doc, String docID, String title, String content) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [Text('수정하시겠습니까??')],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) =>
+                                NoticeUpdatePage(docID, title, content))));
+                  },
+                  child: const Text("확인")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("취소")),
+            ],
+          );
+        });
+  }
+
   void _deleteItemDialog(DocumentSnapshot doc) {
     showDialog(
         context: context,
@@ -112,11 +148,22 @@ class _NoticeManagePageState extends State<NoticeManagePage> {
         "익명",
         style: const TextStyle(fontSize: 10),
       ),
-      trailing: IconButton(
-        onPressed: () {
-          _deleteItemDialog(doc);
-        },
-        icon: Icon(Icons.delete),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            onPressed: () {
+              _deleteItemDialog(doc);
+            },
+            icon: Icon(Icons.delete),
+          ),
+          IconButton(
+            onPressed: () {
+              _updateItemDialog(doc, doc.id, notice.title, notice.content);
+            },
+            icon: Icon(Icons.update),
+          ),
+        ],
       ),
     );
   }
