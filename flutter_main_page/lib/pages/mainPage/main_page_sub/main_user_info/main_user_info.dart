@@ -70,8 +70,10 @@ class _MainPage4State extends State<MainPage4> {
   }
 
   Widget _buildUserInfo() {
-    return userInfoBox.set_user_info(
-        widget.user, widget.userGrade, widget.userClass, widget.userNumber);
+    return (
+      userInfoBox.set_user_info(
+        widget.user, widget.userGrade, widget.userClass, widget.userNumber)
+        );
   }
 
   Widget _buildManager() {
