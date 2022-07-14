@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/AdminPage/admin_list.dart';
-<<<<<<< HEAD
+
 import 'package:flutter_main_page/pages/AdminPage/notice_manage.dart';
-=======
+
 import 'package:flutter_main_page/pages/AdminPage/event_manage.dart';
->>>>>>> 4db1c1ba731dbeff362620a255547d359ca0667b
+
 import 'package:flutter_main_page/pages/loginPage/login_page.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/calculate.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/myContentDelete.dart';
@@ -147,7 +147,7 @@ class _MainPage4State extends State<MainPage4> {
         shrinkWrap: true,
         children: [
           ListTile(
-            onTap: () { 
+            onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => CalculatePage()));
             },
@@ -157,7 +157,7 @@ class _MainPage4State extends State<MainPage4> {
           ListTile(
             onTap: () async {
               isChecked = false;
-              _deleteAutoLoginStatus(); 
+              _deleteAutoLoginStatus();
 
               await Navigator.pushAndRemoveUntil(
                   context,
@@ -205,7 +205,8 @@ class _MainPage4State extends State<MainPage4> {
           ),
           ListTile(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: ((context) => EventManagePage())));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => EventManagePage())));
             },
             title: const Text('이벤트 관리', style: TextStyle(fontSize: 20)),
             trailing: const Icon(Icons.card_giftcard),
