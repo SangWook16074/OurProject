@@ -84,6 +84,7 @@ Widget _buildIcon(BuildContext context, String user, bool? isAdmin) {
         height: 20,
       ),
       Row(
+        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           GestureDetector(
@@ -161,7 +162,7 @@ Widget _buildTop() {
       return Builder(
         builder: (BuildContext context) {
           return Container(
-              width: MediaQuery.of(context).size.width,
+              // width: MediaQuery.of(context).size.width,
               margin: const EdgeInsets.symmetric(horizontal: 5.0),
               decoration: BoxDecoration(
                   color: Colors.amber,

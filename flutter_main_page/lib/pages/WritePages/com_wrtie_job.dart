@@ -26,12 +26,45 @@ class _WriteJobPageState extends State<WriteJobPage> {
   final _title = TextEditingController();
   final _content = TextEditingController();
 
-  void _addNotice(Write notice, String user) {
+  void _createItemDialog(Write job, String user) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [
+                Text('취업정보를 등록하시겠습니까? 등록된 취업정보는 내정보 페이지에서 관리할 수 있습니다.')
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    _addNotice(job, user);
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("확인")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("취소")),
+            ],
+          );
+        });
+  }
+
+  void _addNotice(Write job, String user) {
     FirebaseFirestore.instance.collection('job').add({
-      'title': "[취업정보] ${notice.title}",
-      'content': notice.content,
+      'title': "[취업정보] ${job.title}",
+      'content': job.content,
       'author': user,
-      'time': notice.time,
+      'time': job.time,
     });
     _title.text = '';
     _content.text = '';
@@ -88,15 +121,9 @@ class _WriteJobPageState extends State<WriteJobPage> {
                     fontSize: 16,
                   );
                 } else {
-                  _addNotice(Write(_title.text, _content.text, _now.toString()),
+                  _createItemDialog(
+                      Write(_title.text, _content.text, _now.toString()),
                       widget.user);
-                  Fluttertoast.showToast(
-                    msg: "새 공지가 등록되었습니다.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                  Navigator.pop(context);
                 }
               },
               icon: const Icon(Icons.check))

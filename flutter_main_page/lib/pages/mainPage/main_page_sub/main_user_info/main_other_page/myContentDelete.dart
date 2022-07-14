@@ -72,6 +72,8 @@ class _MyContentDeletePageState extends State<MyContentDeletePage> {
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('com')
+              .where('field')
+              .where('author', isEqualTo: widget.user)
               .orderBy('time', descending: true)
               .snapshots(),
           builder: (context, snapshot) {

@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late SharedPreferences prefs; //안드로이드만 가능함.
+Color myColor = Color(0xFF87C2F3);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

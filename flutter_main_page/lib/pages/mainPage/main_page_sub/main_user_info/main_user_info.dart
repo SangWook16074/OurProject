@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/pages/AdminPage/admin_list.dart';
+import 'package:flutter_main_page/pages/AdminPage/job_manage.dart';
+
+import 'package:flutter_main_page/pages/AdminPage/notice_manage.dart';
+
+import 'package:flutter_main_page/pages/AdminPage/event_manage.dart';
+
 import 'package:flutter_main_page/pages/loginPage/login_page.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/calculate.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/myContentDelete.dart';
@@ -34,17 +41,32 @@ class _MainPage4State extends State<MainPage4> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: ListView(
-          children: [
-            _buildUserInfo(),
-            _buildManager(),
-            _buildOthers(),
-          ],
+    if (widget.isAdmin == true) {
+      return Scaffold(
+        body: Center(
+          child: ListView(
+            children: [
+              _buildUserInfo(),
+              _buildAdmin(),
+              _buildManager(),
+              _buildOthers(),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Scaffold(
+        body: Center(
+          child: ListView(
+            children: [
+              _buildUserInfo(),
+              _buildManager(),
+              _buildOthers(),
+            ],
+          ),
+        ),
+      );
+    }
   }
 
   Widget _buildUserInfo() {
@@ -58,7 +80,7 @@ class _MainPage4State extends State<MainPage4> {
         margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(color: Colors.black, width: 3)),
+            border: Border.all(color: myColor, width: 3)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -106,7 +128,7 @@ class _MainPage4State extends State<MainPage4> {
         margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(color: Colors.black, width: 3)),
+            border: Border.all(color: myColor, width: 3)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -145,6 +167,79 @@ class _MainPage4State extends State<MainPage4> {
             },
             title: const Text('로그아웃', style: TextStyle(fontSize: 20)),
             trailing: const Icon(Icons.logout),
+          ),
+        ]);
+  }
+
+  Widget _buildAdmin() {
+    return Container(
+        padding: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            border: Border.all(color: myColor, width: 3)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const Text(
+              '관리자 페이지',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+            _buildAdminList(),
+          ],
+        ));
+  }
+
+  Widget _buildAdminList() {
+    return ListView(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        children: [
+          ListTile(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NoticeManagePage()));
+            },
+            title: const Text('공지글 관리', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.notifications),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => EventManagePage())));
+            },
+            title: const Text('이벤트 관리', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.card_giftcard),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => JobManagePage()));
+            },
+            title: const Text('취업정보 관리', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.lightbulb),
+          ),
+          ListTile(
+            onTap: () {},
+            title: const Text('커뮤니티 관리', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.reorder),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AdminPage()));
+            },
+            title: const Text('관리자 명단', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.manage_accounts),
+          ),
+          ListTile(
+            onTap: () {
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => AdminPage()));
+            },
+            title: const Text('이벤트 사진 등록', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.add_a_photo),
           ),
         ]);
   }

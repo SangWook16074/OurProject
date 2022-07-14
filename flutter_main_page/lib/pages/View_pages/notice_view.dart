@@ -20,7 +20,7 @@ class _NoticeViewPageState extends State<NoticeViewPage> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: const Text(
-          "NOTICE",
+          "Content",
           style: TextStyle(
             color: Colors.white,
             fontFamily: 'Pacifico',
