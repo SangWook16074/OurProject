@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/pages/AdminPage/admin_list.dart';
 import 'package:flutter_main_page/pages/loginPage/login_page.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/calculate.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/myContentDelete.dart';
@@ -73,7 +74,7 @@ class _MainPage4State extends State<MainPage4> {
         margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(color: Colors.black, width: 3)),
+            border: Border.all(color: myColor, width: 3)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -121,7 +122,7 @@ class _MainPage4State extends State<MainPage4> {
         margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(color: Colors.black, width: 3)),
+            border: Border.all(color: myColor, width: 3)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -170,7 +171,7 @@ class _MainPage4State extends State<MainPage4> {
         margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            border: Border.all(color: Colors.black, width: 3)),
+            border: Border.all(color: myColor, width: 3)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -210,9 +211,20 @@ class _MainPage4State extends State<MainPage4> {
             trailing: const Icon(Icons.reorder),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AdminPage()));
+            },
             title: const Text('관리자 명단', style: TextStyle(fontSize: 20)),
             trailing: const Icon(Icons.manage_accounts),
+          ),
+          ListTile(
+            onTap: () {
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => AdminPage()));
+            },
+            title: const Text('이벤트 사진 등록', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.add_a_photo),
           ),
         ]);
   }

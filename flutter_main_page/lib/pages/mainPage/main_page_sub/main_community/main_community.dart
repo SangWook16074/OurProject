@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_community.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_event.dart';
@@ -93,7 +94,7 @@ class _MainPage2State extends State<MainPage2> {
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          border: Border.all(color: Colors.black, width: 3)),
+          border: Border.all(color: myColor, width: 3)),
       child: ListView(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
@@ -181,7 +182,7 @@ class _MainPage2State extends State<MainPage2> {
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          border: Border.all(color: Colors.black, width: 3)),
+          border: Border.all(color: myColor, width: 3)),
       child: ListView(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
@@ -269,7 +270,7 @@ class _MainPage2State extends State<MainPage2> {
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          border: Border.all(color: Colors.black, width: 3)),
+          border: Border.all(color: myColor, width: 3)),
       child: ListView(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
