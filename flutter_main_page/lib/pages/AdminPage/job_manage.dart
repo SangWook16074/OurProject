@@ -145,7 +145,7 @@ class _JobManagePageState extends State<JobManagePage> {
             fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
-        "익명",
+        job.author,
         style: const TextStyle(fontSize: 10),
       ),
       trailing: Row(

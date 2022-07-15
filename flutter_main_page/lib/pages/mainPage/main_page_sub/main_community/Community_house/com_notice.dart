@@ -145,8 +145,12 @@ class _NoticePageState extends State<NoticePage> {
   }
 
   Widget _buildItemWidget(DocumentSnapshot doc) {
-    final notice =
-        Notice(doc['title'], doc['content'], doc['author'], doc['time']);
+    final notice = Notice(
+      doc['title'],
+      doc['content'],
+      doc['author'],
+      doc['time'],
+    );
     return ListTile(
       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
       onTap: () {

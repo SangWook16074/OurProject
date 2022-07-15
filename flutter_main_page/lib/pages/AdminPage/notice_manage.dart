@@ -145,7 +145,7 @@ class _NoticeManagePageState extends State<NoticeManagePage> {
             fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
-        "익명",
+        notice.author,
         style: const TextStyle(fontSize: 10),
       ),
       trailing: Row(
