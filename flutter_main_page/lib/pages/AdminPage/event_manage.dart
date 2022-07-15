@@ -147,7 +147,7 @@ class _EventManagePageState extends State<EventManagePage> {
             fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
-        "익명",
+        event.author,
         style: const TextStyle(fontSize: 10),
       ),
       trailing: Row(
