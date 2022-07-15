@@ -1,11 +1,26 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/pages/loginPage/login_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:flutter_main_page/login_page.dart';
+late SharedPreferences prefs; //안드로이드만 가능함.
+Color myColor = Color(0xFF87C2F3);
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  prefs = await SharedPreferences.getInstance(); // 안드로이드만 가능함.
+
+  runApp(MyApp());
+  Fluttertoast.showToast(
+      msg: "Hello !",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      fontSize: 16);
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -16,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: loginPage(),
+      home: LoginPage(),
     );
   }
 }
