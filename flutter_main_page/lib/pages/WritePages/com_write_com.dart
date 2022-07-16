@@ -38,7 +38,7 @@ class _WriteComPageState extends State<WriteComPage> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: const [
-                Text('글을 등록하시겠습니까? 등록된 글은 내정보 페이지에서 관리할 수 있습니다.')
+                Text('글을 등록하시겠습니까? \n등록된 글은 내정보 페이지에서 관리할 수 있습니다.')
               ],
             ),
             actions: [
@@ -65,6 +65,8 @@ class _WriteComPageState extends State<WriteComPage> {
       'content': com.content,
       'author': user,
       'time': com.time,
+      'isLike': 0,
+      'countLike': 0
     });
     Fluttertoast.showToast(
       msg: "새 글이 등록되었습니다.",

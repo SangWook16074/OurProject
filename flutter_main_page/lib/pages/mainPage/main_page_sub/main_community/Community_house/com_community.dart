@@ -1,14 +1,21 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page.dart';
 
 class Com {
   String title;
   String content;
   String author;
   String time;
+  int isLike;
+  int countLike;
 
-  Com(this.title, this.author, this.content, this.time);
+  Com(this.title, this.author, this.content, this.time, this.isLike,
+      this.countLike);
 }
 
 class ComPage extends StatefulWidget {
@@ -60,7 +67,15 @@ class _ComPageState extends State<ComPage> {
   }
 
   Widget _buildItemWidget(DocumentSnapshot doc) {
-    final com = Com(doc['title'], doc['author'], doc['content'], doc['time']);
+    final document = doc.data() as Map<String, dynamic>;
+    final com = new Com(
+      document['title'],
+      document['author'],
+      document['content'],
+      document['time'],
+      document['isLike'],
+      document['countLike'] ?? 0,
+    );
     return ListTile(
       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
       onTap: () {
@@ -78,6 +93,29 @@ class _ComPageState extends State<ComPage> {
       subtitle: Text(
         "익명",
         style: const TextStyle(fontSize: 10),
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(com.countLike.toString()),
+          IconButton(
+              icon: Icon(Icons.favorite),
+              onPressed: () {
+                if (com.isLike == 1) {
+                  com.isLike = 0;
+                  setState(() {
+                    --com.countLike;
+                  });
+                } else if (com.isLike == 0) {
+                  com.isLike = 1;
+                  setState(() {
+                    ++com.countLike;
+                  });
+                }
+                _updatecountLike(doc.id, com.countLike);
+                _updateisLike(doc.id, com.isLike);
+              }),
+        ],
       ),
     );
   }
@@ -99,5 +137,19 @@ class _ComPageState extends State<ComPage> {
 
   Widget _loading() {
     return Center(child: CircularProgressIndicator());
+  }
+
+  void _updateisLike(String docID, int flag) {
+    FirebaseFirestore.instance
+        .collection('com')
+        .doc(docID)
+        .update({'isLike': flag});
+  }
+
+  void _updatecountLike(String docID, int count) {
+    FirebaseFirestore.instance
+        .collection('com')
+        .doc(docID)
+        .set({'countLike': count}, SetOptions(merge: true));
   }
 }
