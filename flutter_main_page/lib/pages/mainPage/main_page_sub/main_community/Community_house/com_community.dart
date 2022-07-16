@@ -1,14 +1,6 @@
-import 'dart:ffi';
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
-import 'package:flutter_main_page/pages/loginPage/login_page.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/user_info_template.dart';
 
 class Com {
   String title;

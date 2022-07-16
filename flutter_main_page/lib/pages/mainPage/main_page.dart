@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_alarm/main_alarm.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_community.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_event.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/main_community.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_home/main_home.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_user_info.dart';
@@ -32,7 +33,8 @@ class _MainPageState extends State<MainPage> {
       const MainPage3(),
       MainPage4(widget.userNumber, widget.user, widget.userGrade,
           widget.userClass, widget.isAdmin),
-      ComPage(widget.userNumber),    
+      ComPage(widget.userNumber),
+      EventPage(widget.userNumber),    
     ];
     return Scaffold(
       appBar: AppBar(

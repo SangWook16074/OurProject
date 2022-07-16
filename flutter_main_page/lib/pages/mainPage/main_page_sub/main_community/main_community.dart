@@ -116,7 +116,7 @@ class _MainPage2State extends State<MainPage2> {
               TextButton(
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => EventPage()));
+                      MaterialPageRoute(builder: (context) => EventPage(widget.userNumber)));
                 },
                 child: const Text(
                   '더보기 >',
