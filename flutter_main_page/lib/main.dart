@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/message_controller/notice_controller.dart';
 import 'package:flutter_main_page/pages/loginPage/login_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late SharedPreferences prefs; //안드로이드만 가능함.
@@ -26,11 +28,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      initialBinding:
+          BindingsBuilder.put(() => NotificationController(), permanent: true),
       home: LoginPage(),
     );
   }

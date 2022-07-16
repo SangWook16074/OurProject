@@ -1,6 +1,5 @@
 // ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously, avoid_unnecessary_containers
 
-import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
