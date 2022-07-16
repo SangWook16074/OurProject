@@ -109,7 +109,7 @@ Widget _buildIcon(BuildContext context, String user, bool? isAdmin) {
           GestureDetector(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const EventPage()));
+                  MaterialPageRoute(builder: (context) => EventPage(userNumber)));
             },
             child: Column(
               children: const [
