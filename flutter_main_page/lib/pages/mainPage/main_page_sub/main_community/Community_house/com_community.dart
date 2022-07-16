@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,11 +15,10 @@ class Com {
   String content;
   String author;
   String time;
-  int isLike;
   int countLike;
   List likedUsersList;
 
-  Com(this.title, this.author, this.content, this.time, this.isLike,
+  Com(this.title, this.author, this.content, this.time,
       this.countLike, this.likedUsersList);
 }
 
@@ -88,7 +88,6 @@ class _ComPageState extends State<ComPage> {
       document['author'],
       document['content'],
       document['time'],
-      document['isLike'],
       document['countLike'] ?? 0,
       document['likedUsersList'] ?? [],
     );
@@ -115,10 +114,12 @@ class _ComPageState extends State<ComPage> {
         children: [
           Text(com.countLike.toString()),
           IconButton(
-              icon: Icon(Icons.favorite),
+              icon: Icon(Icons.favorite,color: com.likedUsersList.contains(widget.userNumber)? Colors.red: Colors.grey, ),
               onPressed: () {
-                _updatelikedUsersList(doc.id, widget.userNumber, com.likedUsersList);
+                _updatelikedUsersList(
+                    doc.id, widget.userNumber, com.likedUsersList);
                 _updatecountLike(doc.id, com.likedUsersList);
+
               }),
         ],
       ),
@@ -144,13 +145,6 @@ class _ComPageState extends State<ComPage> {
     return Center(child: CircularProgressIndicator());
   }
 
-  void _updateisLike(String docID, int flag) {
-    FirebaseFirestore.instance
-        .collection('com')
-        .doc(docID)
-        .update({'isLike': flag});
-  }
-
   void _updatecountLike(String docID, List likedUsersList) {
     FirebaseFirestore.instance
         .collection('com')
@@ -158,10 +152,12 @@ class _ComPageState extends State<ComPage> {
         .set({'countLike': likedUsersList.length}, SetOptions(merge: true));
   }
 
-  void _updatelikedUsersList(String docID,String userNumber, List usersList) {
+  _updatelikedUsersList(
+      String docID, String userNumber, List usersList) {
     FirebaseFirestore.instance.collection('com').doc(docID)
         // .set({'likedUsersMap': userNumber}, SetOptions(merge: true));
-        .set({'likedUsersList': userCheck(usersList, userNumber)}, SetOptions(merge: true));
+        .set({'likedUsersList': userCheck(usersList, userNumber)},
+            SetOptions(merge: true));
   }
 }
 
