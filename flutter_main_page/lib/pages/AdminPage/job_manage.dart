@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/Update_Page/Job_update.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 
-import '../Update_Page/Notice_update.dart';
-
 class Job {
   String title;
   String content;
