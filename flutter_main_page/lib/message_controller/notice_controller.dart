@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_main_page/main.dart';
 import 'package:get/get.dart';
 
 class NotificationController extends GetxController {
@@ -80,6 +81,13 @@ class NotificationController extends GetxController {
       print('Message Data : ${message.data}');
 
       if (message.notification != null) {
+        var db = FirebaseFirestore.instance.collection("UserInfo");
+
+        db.doc().collection(prefs.getString('userNumber').toString()).add({
+          "alarm": message.notification!.body
+          
+        });
+
         print(
             'Message also contained a notofication : ${message.notification!.body}');
       }

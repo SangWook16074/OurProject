@@ -41,6 +41,7 @@ class _WriteNoticeState extends State<WriteNotice> {
         "body": body,
       },
       "data": {
+        
         "type": '0rder',
         "id": '28',
         "click_action": 'FLUTTER_NOTIFICATION_CLICK',
@@ -87,10 +88,8 @@ class _WriteNoticeState extends State<WriteNotice> {
             actions: [
               TextButton(
                   onPressed: () {
-                    setState(() {
-                      callOnFcmApiSendPushNotifications(
+                    callOnFcmApiSendPushNotifications(
                           title: '새 공지사항이 등록되었습니다.', body: notice.title);
-                    });
 
                     _addNotice(notice, user);
                     Navigator.of(context).pop();

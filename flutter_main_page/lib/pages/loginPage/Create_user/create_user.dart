@@ -393,6 +393,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                       'userClass': _userClass.text,
                                       'isAdmin': isAdmin,
                                     });
+                                    
                                     Fluttertoast.showToast(
                                       msg: "생성 완료!",
                                       toastLength: Toast.LENGTH_SHORT,
