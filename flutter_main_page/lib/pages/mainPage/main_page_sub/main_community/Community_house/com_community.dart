@@ -26,6 +26,16 @@ class ComPage extends StatefulWidget {
 }
 
 class _ComPageState extends State<ComPage> {
+
+
+  // void _updateContent(String docID, int num) {
+  //   FirebaseFirestore.instance
+  //       .collection('com')
+  //       .doc(docID)
+  //       .update({"isLike" : num});
+  // }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
