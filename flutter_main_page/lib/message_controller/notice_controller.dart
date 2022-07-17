@@ -29,28 +29,13 @@ class NotificationController extends GetxController {
     super.onInit();
   }
 
-  // void _checkisToken(String? token) async {
-  //   FirebaseFirestore.instance
-  //       .collection('tokens')
-  //       .where('token', isEqualTo: token)
-  //       .get()
-  //       .then((QuerySnapshot querySnapshot) {
-  //     print(querySnapshot.data);
-  //   });
-  // }
-
   Future<void> _getToken() async {
     String? token = await messaging.getToken();
 
     try {
-      _addToken(token);
-      // _checkisToken(token);
+      FirebaseMessaging.instance.subscribeToTopic("connectTopic");
       print(token);
     } catch (e) {}
-  }
-
-  void _addToken(String? token) {
-    FirebaseFirestore.instance.collection('tokens').add({'token': token});
   }
 
   final AndroidNotificationChannel channel = const AndroidNotificationChannel(

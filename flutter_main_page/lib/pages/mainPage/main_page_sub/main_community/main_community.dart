@@ -32,6 +32,9 @@ class MainPage2 extends StatefulWidget {
 class _MainPage2State extends State<MainPage2> {
   final _postingController = TextEditingController();
 
+
+  
+
   @override
   void dispose() {
     _postingController.dispose();

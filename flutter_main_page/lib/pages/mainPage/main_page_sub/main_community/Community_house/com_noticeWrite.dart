@@ -1,11 +1,13 @@
 // ignore_for_file: file_names
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class NoticeWrite {
   String title;
@@ -29,6 +31,44 @@ class _WriteNoticeState extends State<WriteNotice> {
   final _title = TextEditingController();
   final _content = TextEditingController();
 
+  Future<bool> callOnFcmApiSendPushNotifications(
+      {required String title, required String body}) async {
+    const postUrl = 'https://fcm.googleapis.com/fcm/send';
+    final data = {
+      "to": "/topics/connectTopic",
+      "notification": {
+        "title": title,
+        "body": body,
+      },
+      "data": {
+        "type": '0rder',
+        "id": '28',
+        "click_action": 'FLUTTER_NOTIFICATION_CLICK',
+      }
+    };
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+          'key=AAAA4skJqo4:APA91bFmXAZAeG3JGPd5Dym_iILSxUTAwi1mQwxOCz9CuQG9wvAB2Y1lnT_CZv_uOFuWJtpFm3QomTu28sE9C9jWEi1nz3QVTEzL7Ym765LQoTtG9aqYkHYV83fW87P0_mj3eNpPtw5M' // 'key=YOUR_SERVER_KEY'
+    };
+
+    final response = await http.post(Uri.parse(postUrl),
+        body: json.encode(data),
+        encoding: Encoding.getByName('utf-8'),
+        headers: headers);
+
+    if (response.statusCode == 200) {
+      // on success do sth
+      print('test ok push CFM');
+      return true;
+    } else {
+      print(' CFM error');
+      // on failure do sth
+      return false;
+    }
+  }
+
   void _createItemDialog(NoticeWrite notice, String user) {
     showDialog(
         context: context,
@@ -47,6 +87,11 @@ class _WriteNoticeState extends State<WriteNotice> {
             actions: [
               TextButton(
                   onPressed: () {
+                    setState(() {
+                      callOnFcmApiSendPushNotifications(
+                          title: '새 공지사항이 등록되었습니다.', body: notice.title);
+                    });
+
                     _addNotice(notice, user);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
