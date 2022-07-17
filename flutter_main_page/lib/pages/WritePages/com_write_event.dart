@@ -85,7 +85,7 @@ class _WriteEventPageState extends State<WriteEventPage> {
               TextButton(
                   onPressed: () {
                     callOnFcmApiSendPushNotifications(
-                        title: '새 이벤트가 등록되었습니다', body: event.title);
+                        title: '새 이벤트가 등록되었습니다.', body: event.title);
                     _addNotice(event, user);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
