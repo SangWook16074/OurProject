@@ -85,7 +85,7 @@ class _WriteJobPageState extends State<WriteJobPage> {
               TextButton(
                   onPressed: () {
                     callOnFcmApiSendPushNotifications(
-                        title: '새 취업정보가 등록되었습니다', body: job.title);
+                        title: '새 취업정보가 등록되었습니다.', body: job.title);
                     _addNotice(job, user);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();

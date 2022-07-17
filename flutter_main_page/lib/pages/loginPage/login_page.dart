@@ -255,14 +255,15 @@ class _LoginPageState extends State<LoginPage> {
                                 } else {
                                   if (isChecked == true) {
                                     _updateAutoLoginStatus(isChecked);
-                                    _saveUserData(
+                                    
+                                  }
+                                  _saveUserData(
                                         isChecked,
                                         userInfoData.id,
                                         userInfoData['userName'],
                                         userInfoData['userGrade'],
                                         userInfoData['userClass'],
                                         userInfoData['isAdmin']);
-                                  }
 
                                   Fluttertoast.showToast(
                                     msg: "환영합니다!",
