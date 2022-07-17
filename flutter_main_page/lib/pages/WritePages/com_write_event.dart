@@ -78,7 +78,7 @@ class _WriteEventPageState extends State<WriteEventPage> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: const [
-                Text('이벤트를 등록하시겠습니까? 등록된 이벤트는 내정보 페이지에서 관리할 수 있습니다.')
+                Text('이벤트를 등록하시겠습니까? \n등록된 이벤트는 내정보 페이지에서 관리할 수 있습니다.')
               ],
             ),
             actions: [
