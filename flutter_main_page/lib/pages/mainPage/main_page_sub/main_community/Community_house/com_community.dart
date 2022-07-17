@@ -1,25 +1,22 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page.dart';
 
 class Com {
   String title;
   String content;
   String author;
   String time;
-  int isLike;
   int countLike;
+  List likedUsersList;
 
-  Com(this.title, this.author, this.content, this.time, this.isLike,
-      this.countLike);
+  Com(this.title, this.author, this.content, this.time,
+      this.countLike, this.likedUsersList);
 }
 
 class ComPage extends StatefulWidget {
-  const ComPage({Key? key}) : super(key: key);
+  final String userNumber;
+  ComPage(this.userNumber, {Key? key}) : super(key: key);
 
   @override
   State<ComPage> createState() => _ComPageState();
@@ -73,8 +70,8 @@ class _ComPageState extends State<ComPage> {
       document['author'],
       document['content'],
       document['time'],
-      document['isLike'],
       document['countLike'] ?? 0,
+      document['likedUsersList'] ?? [],
     );
     return ListTile(
       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
@@ -99,21 +96,12 @@ class _ComPageState extends State<ComPage> {
         children: [
           Text(com.countLike.toString()),
           IconButton(
-              icon: Icon(Icons.favorite),
+              icon: Icon(Icons.favorite,color: com.likedUsersList.contains(widget.userNumber)? Colors.red: Colors.grey, ),
               onPressed: () {
-                if (com.isLike == 1) {
-                  com.isLike = 0;
-                  setState(() {
-                    --com.countLike;
-                  });
-                } else if (com.isLike == 0) {
-                  com.isLike = 1;
-                  setState(() {
-                    ++com.countLike;
-                  });
-                }
-                _updatecountLike(doc.id, com.countLike);
-                _updateisLike(doc.id, com.isLike);
+                _updatelikedUsersList(
+                    doc.id, widget.userNumber, com.likedUsersList);
+                _updatecountLike(doc.id, com.likedUsersList);
+
               }),
         ],
       ),
@@ -139,17 +127,27 @@ class _ComPageState extends State<ComPage> {
     return Center(child: CircularProgressIndicator());
   }
 
-  void _updateisLike(String docID, int flag) {
+  void _updatecountLike(String docID, List likedUsersList) {
     FirebaseFirestore.instance
         .collection('com')
         .doc(docID)
-        .update({'isLike': flag});
+        .set({'countLike': likedUsersList.length}, SetOptions(merge: true));
   }
 
-  void _updatecountLike(String docID, int count) {
-    FirebaseFirestore.instance
-        .collection('com')
-        .doc(docID)
-        .set({'countLike': count}, SetOptions(merge: true));
+  _updatelikedUsersList(
+      String docID, String userNumber, List usersList) {
+    FirebaseFirestore.instance.collection('com').doc(docID)
+        // .set({'likedUsersMap': userNumber}, SetOptions(merge: true));
+        .set({'likedUsersList': userCheck(usersList, userNumber)},
+            SetOptions(merge: true));
   }
+}
+
+userCheck(List usersList, String userNumber) {
+  if (usersList.contains(userNumber)) {
+    usersList.remove(userNumber);
+  } else {
+    usersList.add(userNumber);
+  }
+  return usersList;
 }

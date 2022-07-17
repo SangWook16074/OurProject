@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
+import 'package:flutter_main_page/pages/loginPage/login_page.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_community.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_event.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_info_job.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_notice.dart';
+import 'package:get/get_connect/http/src/_http/_io/_file_decoder_io.dart';
 
 final items = <Notice>[];
 
@@ -107,7 +109,7 @@ Widget _buildIcon(BuildContext context, String user, bool? isAdmin) {
           GestureDetector(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const EventPage()));
+                  MaterialPageRoute(builder: (context) => EventPage(userNumber)));
             },
             child: Column(
               children: const [
@@ -137,7 +139,7 @@ Widget _buildIcon(BuildContext context, String user, bool? isAdmin) {
           GestureDetector(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const ComPage()));
+                  MaterialPageRoute(builder: (context) => ComPage(userNumber)));
             },
             child: Column(
               children: const [

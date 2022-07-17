@@ -21,7 +21,9 @@ class Content {
 class MainPage2 extends StatefulWidget {
   final String user;
   final bool? isAdmin;
-  const MainPage2(this.user, this.isAdmin, {Key? key}) : super(key: key);
+  final String userNumber;
+  const MainPage2(this.user, this.isAdmin, this.userNumber, {Key? key})
+      : super(key: key);
 
   @override
   State<MainPage2> createState() => _MainPage2State();
@@ -111,7 +113,7 @@ class _MainPage2State extends State<MainPage2> {
               TextButton(
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => EventPage()));
+                      MaterialPageRoute(builder: (context) => EventPage(widget.userNumber)));
                 },
                 child: const Text(
                   '더보기 >',
@@ -286,8 +288,10 @@ class _MainPage2State extends State<MainPage2> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ComPage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ComPage(widget.userNumber)));
                 },
                 child: const Text(
                   '더보기 >',

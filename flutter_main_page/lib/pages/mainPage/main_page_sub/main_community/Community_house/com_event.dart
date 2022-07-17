@@ -7,12 +7,15 @@ class Event {
   String content;
   String author;
   String time;
+  int countLike;
+  List likedUsersList;
 
-  Event(this.title, this.content, this.author, this.time);
+  Event(this.title, this.content, this.author, this.time,this.countLike,this.likedUsersList);
 }
 
 class EventPage extends StatefulWidget {
-  const EventPage({Key? key}) : super(key: key);
+  final String userNumber;
+  EventPage(this.userNumber,{Key? key}) : super(key: key);
 
   @override
   State<EventPage> createState() => _EventPageState();
@@ -61,8 +64,15 @@ class _EventPageState extends State<EventPage> {
   }
 
   Widget _buildItemWidget(DocumentSnapshot doc) {
+    final document = doc.data() as Map<String, dynamic>;
     final event =
-        Event(doc['title'], doc['content'], doc['author'], doc['time']);
+        new Event(
+          document['title'], 
+          document['content'], 
+          document['author'],
+          document['time'],
+          document['countLike'] ?? 0,
+          document['likedUsersList'] ?? []);
     return ListTile(
       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
       onTap: () {
@@ -81,7 +91,20 @@ class _EventPageState extends State<EventPage> {
         "작성자 : ${event.author}",
         style: const TextStyle(fontSize: 10),
       ),
-    );
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(event.countLike.toString()),
+          IconButton(
+              icon: Icon(Icons.favorite,color: event.likedUsersList.contains(widget.userNumber)? Colors.red: Colors.grey),
+              onPressed: () {
+                _updatelikedUsersList(
+                    doc.id, widget.userNumber, event.likedUsersList);
+                _updatecountLike(doc.id, event.likedUsersList);
+
+              }),
+        ]
+    ));
   }
 
   Widget _buildNonEvent() {
@@ -102,4 +125,28 @@ class _EventPageState extends State<EventPage> {
   Widget _loading() {
     return Center(child: CircularProgressIndicator());
   }
+}
+  void _updatecountLike(String docID, List likedUsersList) {
+    FirebaseFirestore.instance
+        .collection('event')
+        .doc(docID)
+        .set({'countLike': likedUsersList.length}, SetOptions(merge: true));
+  }
+
+  _updatelikedUsersList(
+      String docID, String userNumber, List usersList) {
+    FirebaseFirestore.instance.collection('event').doc(docID)
+        // .set({'likedUsersMap': userNumber}, SetOptions(merge: true));
+        .set({'likedUsersList': userCheck(usersList, userNumber)},
+            SetOptions(merge: true));
+  }
+
+
+userCheck(List usersList, String userNumber) {
+  if (usersList.contains(userNumber)) {
+    usersList.remove(userNumber);
+  } else {
+    usersList.add(userNumber);
+  }
+  return usersList;
 }
