@@ -83,10 +83,10 @@ class NotificationController extends GetxController {
       if (message.notification != null) {
         var db = FirebaseFirestore.instance.collection("UserInfo");
 
-        db.doc().collection(prefs.getString('userNumber').toString()).add({
-          "alarm": message.notification!.body
-          
-        });
+        db
+            .doc(prefs.getString('userNumber').toString())
+            .collection('alarmlog')
+            .add({"alarm": message.notification!.body});
 
         print(
             'Message also contained a notofication : ${message.notification!.body}');
