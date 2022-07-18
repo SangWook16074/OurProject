@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/AdminPage/admin_list.dart';
@@ -31,6 +33,111 @@ class MainPage4 extends StatefulWidget {
 }
 
 class _MainPage4State extends State<MainPage4> {
+  void _createItemDialog() {
+    if (prefs.getBool('isSubscribe') == true) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [
+                  Text(
+                      '푸시 알림을 해제하시겠습니까? 알림을 해제하시면 공지, 취업정보, 이벤트 등의 등록사항을 볼 수 없습니다.')
+                ],
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      FirebaseMessaging.instance
+                          .unsubscribeFromTopic("connectTopic");
+                      prefs.setBool('isSubscribe', false);
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("확인")),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("취소")),
+              ],
+            );
+          });
+    } else {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [Text('푸시 알림을 설정하시겠습니까?')],
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      FirebaseMessaging.instance
+                          .subscribeToTopic("connectTopic");
+                      prefs.setBool('isSubscribe', true);
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("확인")),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("취소")),
+              ],
+            );
+          });
+    }
+  }
+
+  void _createDeleteAlarm() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [Text('알림 로그를 지우시겠습니까? 한번 지우면 다시는 볼 수 없습니다.')],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () async {
+                    final instance = FirebaseFirestore.instance;
+                    final batch = instance.batch();
+                    var collection = instance.collection(
+                        'UserInfo/${prefs.getString('userNumber').toString()}/alarmlog');
+                    var snapshots = await collection.get();
+                    for (var doc in snapshots.docs) {
+                      batch.delete(doc.reference);
+                    }
+                    await batch.commit();
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("확인")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("취소")),
+            ],
+          );
+        });
+  }
+
   Future<void> _deleteAutoLoginStatus() async {
     prefs.setBool('autoLoginStatus', false);
     prefs.remove('userNumber');
@@ -71,10 +178,8 @@ class _MainPage4State extends State<MainPage4> {
   }
 
   Widget _buildUserInfo() {
-    return (
-      userInfoBox.set_user_info(
-        widget.user, widget.userGrade, widget.userClass, widget.userNumber)
-        );
+    return (userInfoBox.set_user_info(
+        widget.user, widget.userGrade, widget.userClass, widget.userNumber));
   }
 
   Widget _buildManager() {
@@ -159,6 +264,20 @@ class _MainPage4State extends State<MainPage4> {
             trailing: const Icon(Icons.calculate),
           ),
           ListTile(
+            onTap: () {
+              _createItemDialog();
+            },
+            title: const Text('푸시 알림 설정', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.settings),
+          ),
+          ListTile(
+            onTap: () {
+              _createDeleteAlarm();
+            },
+            title: const Text('알림 기록 지우기', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.content_paste),
+          ),
+          ListTile(
             onTap: () async {
               isChecked = false;
               _deleteAutoLoginStatus();
@@ -227,7 +346,6 @@ class _MainPage4State extends State<MainPage4> {
             onTap: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ComManagePage()));
-            
             },
             title: const Text('커뮤니티 관리', style: TextStyle(fontSize: 20)),
             trailing: const Icon(Icons.reorder),
