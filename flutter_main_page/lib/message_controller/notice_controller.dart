@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:get/get.dart';
 
+var isSubscribe = false;
+
 class NotificationController extends GetxController {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+
   @override
   Future<void> onInit() async {
     NotificationSettings settings = await messaging.requestPermission(
@@ -34,7 +39,13 @@ class NotificationController extends GetxController {
     String? token = await messaging.getToken();
 
     try {
-      FirebaseMessaging.instance.subscribeToTopic("connectTopic");
+      if (prefs.getBool('isSubscribe') == false) {
+        return;
+      } else {
+        FirebaseMessaging.instance.subscribeToTopic("connectTopic");
+        prefs.setBool('isSubscribe', true);
+      }
+
       print(token);
     } catch (e) {}
   }
@@ -86,11 +97,21 @@ class NotificationController extends GetxController {
         db
             .doc(prefs.getString('userNumber').toString())
             .collection('alarmlog')
-            .add({"alarm": message.notification!.body});
+            .add({
+          "alarm": message.notification!.body,
+          "index": prefs.getInt('index')
+        });
+
+        _addIndex();
 
         print(
             'Message also contained a notofication : ${message.notification!.body}');
       }
     });
+  }
+
+  Future<void> _addIndex() async {
+    var number = await prefs.getInt("index")! + 1;
+    await prefs.setInt('index', number);
   }
 }
