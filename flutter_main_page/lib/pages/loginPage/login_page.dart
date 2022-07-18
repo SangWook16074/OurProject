@@ -259,6 +259,8 @@ class _LoginPageState extends State<LoginPage> {
 
                                   prefs.setString(
                                       'userNumber', userInfoData['userNumber']);
+                                  prefs.setInt(
+                                      'index', prefs.getInt('index') ?? 1);
 
                                   Fluttertoast.showToast(
                                     msg: "환영합니다!",

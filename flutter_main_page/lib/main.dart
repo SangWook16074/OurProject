@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/message_controller/notice_controller.dart';
 import 'package:flutter_main_page/pages/loginPage/login_page.dart';
@@ -9,11 +11,38 @@ import 'package:shared_preferences/shared_preferences.dart';
 late SharedPreferences prefs; //안드로이드만 가능함.
 Color myColor = Color(0xFF87C2F3);
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  prefs = await SharedPreferences.getInstance();
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+  print("백그라운드 상황이다");
+  print("Handling a background message: ${message.notification!.body}");
+
+  if (message.notification != null) {
+    var db = FirebaseFirestore.instance.collection("UserInfo");
+
+    db.doc(prefs.getString('userNumber').toString()).collection('alarmlog').add(
+        {"alarm": message.notification!.body, "index": prefs.getInt('index')});
+
+    prefs.setInt("index", prefs.getInt('index')!);
+
+    print(
+        'Message also contained a notofication : ${message.notification!.body}');
+  }
+}
+
+Future<void> _addIndex() async {
+  var number = await prefs.getInt("index")! + 1;
+  await prefs.setInt('index', number);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   prefs = await SharedPreferences.getInstance(); // 안드로이드만 가능함.
 
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
   Fluttertoast.showToast(
       msg: "Hello !",

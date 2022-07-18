@@ -20,6 +20,7 @@ class MainPage3 extends StatelessWidget {
             stream: FirebaseFirestore.instance
                 .collection(
                     'UserInfo/${prefs.getString('userNumber').toString()}/alarmlog')
+                .orderBy('index', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
@@ -44,16 +45,22 @@ class MainPage3 extends StatelessWidget {
     final alarm = Alarm(
       doc['alarm'],
     );
-    return ListTile(
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      
-      leading: Icon(
-        Icons.alarm_on,
-      ),
-      title: Text(
-        alarm.title,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+    return Container(
+      alignment: Alignment.centerLeft,
+      height: 80,
+      child: ListTile(
+        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+        leading: Icon(
+          Icons.alarm_on_rounded,
+          color: Colors.blue,
+        ),
+        title: Text(
+          alarm.title,
+          style: const TextStyle(
+            fontSize: 20,
+            color: Colors.black,
+          ),
+        ),
       ),
     );
   }
