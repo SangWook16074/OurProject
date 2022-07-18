@@ -31,6 +31,9 @@ dependencies:
   flutter_keyboard_size: ^1.0.0+4
   flutter:
     sdk: flutter
+  image_picker: ^0.8.4+4
+  dio: ^4.0.0
+  image_cropper: ^2.0.3
 
 
 
@@ -64,7 +67,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

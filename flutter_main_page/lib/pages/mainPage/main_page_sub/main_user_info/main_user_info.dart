@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/pages/AdminPage/add_photo.dart';
 import 'package:flutter_main_page/pages/AdminPage/admin_list.dart';
 import 'package:flutter_main_page/pages/AdminPage/cmty_manage.dart';
 import 'package:flutter_main_page/pages/AdminPage/job_manage.dart';
@@ -242,8 +243,8 @@ class _MainPage4State extends State<MainPage4> {
           ),
           ListTile(
             onTap: () {
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => AdminPage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddPhoto()));
             },
             title: const Text('이벤트 사진 등록', style: TextStyle(fontSize: 20)),
             trailing: const Icon(Icons.add_a_photo),
