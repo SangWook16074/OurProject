@@ -1,6 +1,5 @@
 // ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously, avoid_unnecessary_containers
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
@@ -25,14 +24,6 @@ class NoticePage extends StatefulWidget {
 }
 
 class _NoticePageState extends State<NoticePage> {
-  var search = TextEditingController();
-
-  @override
-  void dispose() {
-    search.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     if (widget.isAdmin == true) {
@@ -48,7 +39,11 @@ class _NoticePageState extends State<NoticePage> {
           ),
           centerTitle: true,
         ),
-        body: _buildNoticeItemTrue(),
+        body: Column(
+          children: [
+            _buildNoticeItemTrue(),
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
               //글쓰기 페이지 이동
@@ -73,6 +68,7 @@ class _NoticePageState extends State<NoticePage> {
             ),
           ),
           centerTitle: true,
+          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
         ),
         body: _buildNoticeItemFalse(),
       );
@@ -89,13 +85,10 @@ class _NoticePageState extends State<NoticePage> {
                 .orderBy('time', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                    child: Container(
-                        height: 250,
-                        width: 250,
-                        child: const CircularProgressIndicator()));
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
               }
+
               final documents = snapshot.data!.docs;
               if (documents.isEmpty) {
                 return _buildNonItem();
@@ -150,30 +143,37 @@ class _NoticePageState extends State<NoticePage> {
       doc['author'],
       doc['time'],
     );
-    return ListTile(
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => NoticeViewPage(
-                    notice.title, notice.content, notice.author, notice.time)));
-      },
-      leading: const Icon(
-        Icons.notifications,
-        color: Colors.deepPurple,
-      ),
-      title: Text(
-        notice.title,
-        style: const TextStyle(
-            fontSize: 20,
+    return Column(
+      children: [
+        ListTile(
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NoticeViewPage(notice.title,
+                        notice.content, notice.author, notice.time)));
+          },
+          leading: const Icon(
+            Icons.notifications,
             color: Colors.deepPurple,
-            fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(
-        "작성자 : ${notice.author}",
-        style: const TextStyle(fontSize: 10),
-      ),
+          ),
+          title: Text(
+            "[공지사항] ${notice.title}",
+            style: const TextStyle(
+                fontSize: 20,
+                color: Colors.deepPurple,
+                fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            "작성자 : ${notice.author}",
+            style: const TextStyle(fontSize: 10),
+          ),
+        ),
+        Divider(
+          color: Colors.grey,
+        )
+      ],
     );
   }
 

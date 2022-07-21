@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/pages/View_pages/com_view.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_community.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_event.dart';
@@ -31,9 +32,6 @@ class MainPage2 extends StatefulWidget {
 
 class _MainPage2State extends State<MainPage2> {
   final _postingController = TextEditingController();
-
-
-  
 
   @override
   void dispose() {
@@ -115,8 +113,10 @@ class _MainPage2State extends State<MainPage2> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => EventPage(widget.userNumber)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EventPage(widget.userNumber)));
                 },
                 child: const Text(
                   '더보기 >',
@@ -168,7 +168,7 @@ class _MainPage2State extends State<MainPage2> {
                     event.title, event.content, event.author, event.time)));
       },
       title: Text(
-        event.title,
+        "[이벤트] ${event.title}",
         style: const TextStyle(
           color: Colors.black,
           fontSize: 17,
@@ -256,7 +256,7 @@ class _MainPage2State extends State<MainPage2> {
                     job.title, job.content, job.author, job.time)));
       },
       title: Text(
-        job.title,
+        "[취업정보] ${job.title}",
         style: const TextStyle(
           color: Colors.black,
           fontSize: 17,
@@ -342,11 +342,11 @@ class _MainPage2State extends State<MainPage2> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    NoticeViewPage(com.title, com.content, "익명", com.time)));
+                builder: (context) => ComViewPage(
+                    com.title, com.content, "익명", com.time, doc.id)));
       },
       title: Text(
-        com.title,
+        "[익명] ${com.title}",
         style: const TextStyle(
           color: Colors.black,
           fontSize: 17,

@@ -111,11 +111,12 @@ class _MainPage4State extends State<MainPage4> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [Text('알림 로그를 지우시겠습니까? 한번 지우면 다시는 볼 수 없습니다.')],
+              children: const [Text('알림 로그를 지우시겠습니까? 지워진 알림로그는 앞으로 볼 수 없습니다.')],
             ),
             actions: [
               TextButton(
                   onPressed: () async {
+                    prefs.setInt('index', 1);
                     final instance = FirebaseFirestore.instance;
                     final batch = instance.batch();
                     var collection = instance.collection(
@@ -125,6 +126,7 @@ class _MainPage4State extends State<MainPage4> {
                       batch.delete(doc.reference);
                     }
                     await batch.commit();
+
                     Navigator.of(context).pop();
                   },
                   child: const Text("확인")),

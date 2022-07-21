@@ -85,7 +85,7 @@ class _WriteEventPageState extends State<WriteEventPage> {
               TextButton(
                   onPressed: () {
                     callOnFcmApiSendPushNotifications(
-                        title: '새 이벤트가 등록되었습니다.', body: event.title);
+                        title: '새 이벤트가 등록되었습니다.', body: '[이벤트] ${event.title}');
                     _addNotice(event, user);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
@@ -103,7 +103,7 @@ class _WriteEventPageState extends State<WriteEventPage> {
 
   void _addNotice(Write event, String user) {
     FirebaseFirestore.instance.collection('event').add({
-      'title': "[이벤트] ${event.title}",
+      'title': event.title,
       'content': event.content,
       'author': user,
       'time': event.time,
