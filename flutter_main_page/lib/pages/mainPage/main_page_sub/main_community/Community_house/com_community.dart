@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
+import 'package:flutter_main_page/pages/View_pages/com_view.dart';
 
 class Com {
   String title;
@@ -10,8 +10,8 @@ class Com {
   int countLike;
   List likedUsersList;
 
-  Com(this.title, this.author, this.content, this.time,
-      this.countLike, this.likedUsersList);
+  Com(this.title, this.author, this.content, this.time, this.countLike,
+      this.likedUsersList);
 }
 
 class ComPage extends StatefulWidget {
@@ -23,15 +23,12 @@ class ComPage extends StatefulWidget {
 }
 
 class _ComPageState extends State<ComPage> {
-
-
   // void _updateContent(String docID, int num) {
   //   FirebaseFirestore.instance
   //       .collection('com')
   //       .doc(docID)
   //       .update({"isLike" : num});
   // }
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,38 +80,49 @@ class _ComPageState extends State<ComPage> {
       document['countLike'] ?? 0,
       document['likedUsersList'] ?? [],
     );
-    return ListTile(
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    NoticeViewPage(com.title, com.content, '익명', com.time)));
-      },
-      title: Text(
-        com.title,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(
-        "익명",
-        style: const TextStyle(fontSize: 10),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(com.countLike.toString()),
-          IconButton(
-              icon: Icon(Icons.favorite,color: com.likedUsersList.contains(widget.userNumber)? Colors.red: Colors.grey, ),
-              onPressed: () {
-                _updatelikedUsersList(
-                    doc.id, widget.userNumber, com.likedUsersList);
-                _updatecountLike(doc.id, com.likedUsersList);
-
-              }),
-        ],
-      ),
+    return Column(
+      children: [
+        ListTile(
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ComViewPage(
+                        com.title, com.content, '익명', com.time, doc.id)));
+          },
+          title: Text(
+            "[익명] ${com.title}",
+            style: const TextStyle(
+                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            "익명",
+            style: const TextStyle(fontSize: 10),
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(com.countLike.toString()),
+              IconButton(
+                  icon: Icon(
+                    Icons.favorite,
+                    color: com.likedUsersList.contains(widget.userNumber)
+                        ? Colors.red
+                        : Colors.grey,
+                  ),
+                  onPressed: () {
+                    _updatelikedUsersList(
+                        doc.id, widget.userNumber, com.likedUsersList);
+                    _updatecountLike(doc.id, com.likedUsersList);
+                  }),
+            ],
+          ),
+        ),
+        Divider(
+          color: Colors.grey,
+        )
+      ],
     );
   }
 
@@ -144,8 +152,7 @@ class _ComPageState extends State<ComPage> {
         .set({'countLike': likedUsersList.length}, SetOptions(merge: true));
   }
 
-  _updatelikedUsersList(
-      String docID, String userNumber, List usersList) {
+  _updatelikedUsersList(String docID, String userNumber, List usersList) {
     FirebaseFirestore.instance.collection('com').doc(docID)
         // .set({'likedUsersMap': userNumber}, SetOptions(merge: true));
         .set({'likedUsersList': userCheck(usersList, userNumber)},

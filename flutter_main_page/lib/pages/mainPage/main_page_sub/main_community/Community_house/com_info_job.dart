@@ -65,24 +65,31 @@ class _InfoJobPageState extends State<InfoJobPage> {
 
   Widget _buildItemWidget(DocumentSnapshot doc) {
     final job = Job(doc['title'], doc['content'], doc['author'], doc['time']);
-    return ListTile(
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => NoticeViewPage(
-                    job.title, job.content, job.author, job.time)));
-      },
-      title: Text(
-        job.title,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(
-        "작성자 : ${job.author}",
-        style: const TextStyle(fontSize: 10),
-      ),
+    return Column(
+      children: [
+        ListTile(
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NoticeViewPage(
+                        job.title, job.content, job.author, job.time)));
+          },
+          title: Text(
+            "[취업정보] ${job.title}",
+            style: const TextStyle(
+                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            "작성자 : ${job.author}",
+            style: const TextStyle(fontSize: 10),
+          ),
+        ),
+        Divider(
+          color: Colors.grey,
+        )
+      ],
     );
   }
 

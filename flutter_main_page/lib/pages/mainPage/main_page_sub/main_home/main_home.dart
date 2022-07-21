@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_main_page/main.dart';
 
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/pages/loginPage/login_page.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Co
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_event.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_info_job.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_notice.dart';
-import 'package:get/get_connect/http/src/_http/_io/_file_decoder_io.dart';
 
 final items = <Notice>[];
 
@@ -43,39 +43,75 @@ class _MainPage1State extends State<MainPage1> {
           height: 20,
         ),
         _buildTop(),
-        const Center(
-          child: Text(
-            '공지사항',
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-        ),
-        StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('notice')
-                .orderBy('time', descending: true)
-                .limit(5)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const Align(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator());
-              }
-              final documents = snapshot.data!.docs;
-              if (documents.isEmpty) {
-                return _buildNonItem();
-              } else {
-                return ListView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  children: documents
-                      .map((doc) => _buildBottom(doc, context))
-                      .toList(),
-                );
-              }
-            }),
+        Container(
+            padding: const EdgeInsets.all(8.0),
+            margin: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(color: myColor, width: 3)),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          '공지사항',
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      NoticePage(widget.user, widget.isAdmin)));
+                        },
+                        child: const Text(
+                          '더보기 >',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                _buildBottom(),
+              ],
+            )),
       ],
     ));
+  }
+
+  Widget _buildBottom() {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('notice')
+            .orderBy('time', descending: true)
+            .limit(5)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Align(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator());
+          }
+          final documents = snapshot.data!.docs;
+          if (documents.isEmpty) {
+            return _buildNonItem();
+          } else {
+            return ListView(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              children: documents
+                  .map((doc) => _buildItemNotice(doc, context))
+                  .toList(),
+            );
+          }
+        });
   }
 }
 
@@ -108,8 +144,10 @@ Widget _buildIcon(BuildContext context, String user, bool? isAdmin) {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EventPage(userNumber)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EventPage(userNumber)));
             },
             child: Column(
               children: const [
@@ -180,31 +218,37 @@ Widget _buildTop() {
   );
 }
 
-Widget _buildBottom(DocumentSnapshot doc, BuildContext context) {
+Widget _buildItemNotice(DocumentSnapshot doc, BuildContext context) {
   final notice =
       Notice(doc['title'], doc['content'], doc['author'], doc['time']);
-  return ListTile(
-    visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-    onTap: () {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => NoticeViewPage(
-                  notice.title, notice.content, notice.author, notice.time)));
-    },
-    leading: const Icon(
-      Icons.notifications,
-      color: Colors.deepPurple,
-    ),
-    title: Text(
-      notice.title,
-      style: const TextStyle(
-          color: Colors.deepPurple, fontSize: 17, fontWeight: FontWeight.bold),
-    ),
-    subtitle: Text(
-      "작성자 : ${notice.author}",
-      style: const TextStyle(fontSize: 12),
-    ),
+  return Column(
+    children: [
+      ListTile(
+        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => NoticeViewPage(notice.title,
+                      notice.content, notice.author, notice.time)));
+        },
+        // leading: const Icon(
+        //   Icons.notifications,
+        //   color: Colors.red,
+        // ),
+        title: Text(
+          "[공지사항] ${notice.title}",
+          style: const TextStyle(
+              color: Colors.deepPurple,
+              fontSize: 17,
+              fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          "작성자 : ${notice.author}",
+          style: const TextStyle(fontSize: 12),
+        ),
+      ),
+    ],
   );
 }
 

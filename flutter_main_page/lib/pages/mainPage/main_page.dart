@@ -34,7 +34,7 @@ class _MainPageState extends State<MainPage> {
       MainPage4(widget.userNumber, widget.user, widget.userGrade,
           widget.userClass, widget.isAdmin),
       ComPage(widget.userNumber),
-      EventPage(widget.userNumber),    
+      EventPage(widget.userNumber),
     ];
     return Scaffold(
       appBar: AppBar(

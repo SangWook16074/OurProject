@@ -61,7 +61,7 @@ class _WriteComPageState extends State<WriteComPage> {
 
   void _addNotice(Write com, String user) {
     FirebaseFirestore.instance.collection('com').add({
-      'title': "[익명] ${com.title}",
+      'title': com.title,
       'content': com.content,
       'author': user,
       'time': com.time,

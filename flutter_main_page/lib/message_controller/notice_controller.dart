@@ -99,7 +99,8 @@ class NotificationController extends GetxController {
             .collection('alarmlog')
             .add({
           "alarm": message.notification!.body,
-          "index": prefs.getInt('index')
+          "index": prefs.getInt('index'),
+          "status": false,
         });
 
         _addIndex();
@@ -111,7 +112,7 @@ class NotificationController extends GetxController {
   }
 
   Future<void> _addIndex() async {
-    var number = await prefs.getInt("index")! + 1;
+    var number = await prefs.getInt('index')! + 1;
     await prefs.setInt('index', number);
   }
 }
