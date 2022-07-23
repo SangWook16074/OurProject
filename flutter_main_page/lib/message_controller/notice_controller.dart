@@ -87,10 +87,6 @@ class NotificationController extends GetxController {
         );
       }
 
-      print('foreground 상황에서 메시지를 받았다.');
-
-      print('Message Data : ${message.data}');
-
       if (message.notification != null) {
         var db = FirebaseFirestore.instance.collection("UserInfo");
 
@@ -104,9 +100,6 @@ class NotificationController extends GetxController {
         });
 
         _addIndex();
-
-        print(
-            'Message also contained a notofication : ${message.notification!.body}');
       }
     });
   }

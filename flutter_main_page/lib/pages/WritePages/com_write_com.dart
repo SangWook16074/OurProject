@@ -65,8 +65,8 @@ class _WriteComPageState extends State<WriteComPage> {
       'content': com.content,
       'author': user,
       'time': com.time,
-      'isLike': 0,
-      'countLike': 0
+      'countLike': 0,
+      'likedUsersList': [],
     });
     Fluttertoast.showToast(
       msg: "새 글이 등록되었습니다.",

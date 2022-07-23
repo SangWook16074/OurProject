@@ -12,7 +12,11 @@ class Write {
   String content;
   String time;
 
-  Write(this.title, this.content, this.time);
+  Write(
+    this.title,
+    this.content,
+    this.time,
+  );
 }
 
 class WriteEventPage extends StatefulWidget {
@@ -107,6 +111,8 @@ class _WriteEventPageState extends State<WriteEventPage> {
       'content': event.content,
       'author': user,
       'time': event.time,
+      'countLike': 0,
+      'likedUsersList': [],
     });
     _title.text = '';
     _content.text = '';

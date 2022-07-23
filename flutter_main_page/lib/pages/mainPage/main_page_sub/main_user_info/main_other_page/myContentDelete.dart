@@ -112,7 +112,7 @@ class _MyContentDeletePageState extends State<MyContentDeletePage> {
             context,
             MaterialPageRoute(
                 builder: (context) => ComViewPage(
-                    com.title, com.content, com.author, com.time, doc.id)));
+                    com.title, com.content, com.author, com.time, doc.id, widget.user)));
       },
       title: Text(
         com.title,

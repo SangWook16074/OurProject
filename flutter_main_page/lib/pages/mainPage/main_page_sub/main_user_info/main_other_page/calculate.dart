@@ -1,4 +1,6 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/main.dart';
 
 class CalculatePage extends StatefulWidget {
   const CalculatePage({Key? key}) : super(key: key);
@@ -7,171 +9,116 @@ class CalculatePage extends StatefulWidget {
   State<CalculatePage> createState() => _CalculatePageState();
 }
 
+class _GroupControllers {
+  TextEditingController subject = TextEditingController();
+  TextEditingController point = TextEditingController();
+  TextEditingController getPoint = TextEditingController();
+  void dispose() {
+    subject.dispose();
+    point.dispose();
+    getPoint.dispose();
+  }
+}
+
 class _CalculatePageState extends State<CalculatePage> {
-  final _gradeList1 = ['A+', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F', 'P'];
-  final _gradeList2 = ['A+', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F', 'P'];
-  final _gradeList3 = [
-    '등급',
-    'A+',
-    'A',
-    'B+',
-    'B',
-    'C+',
-    'C',
-    'D+',
-    'D',
-    'F',
-    'P'
-  ];
-  final _gradeList4 = [
-    '등급',
-    'A+',
-    'A',
-    'B+',
-    'B',
-    'C+',
-    'C',
-    'D+',
-    'D',
-    'F',
-    'P'
-  ];
-  final _gradeList5 = [
-    '등급',
-    'A+',
-    'A',
-    'B+',
-    'B',
-    'C+',
-    'C',
-    'D+',
-    'D',
-    'F',
-    'P'
-  ];
-  final _gradeList6 = [
-    '등급',
-    'A+',
-    'A',
-    'B+',
-    'B',
-    'C+',
-    'C',
-    'D+',
-    'D',
-    'F',
-    'P'
-  ];
-  final _gradeList7 = [
-    '등급',
-    'A+',
-    'A',
-    'B+',
-    'B',
-    'C+',
-    'C',
-    'D+',
-    'D',
-    'F',
-    'P'
-  ];
-  final _gradeList8 = [
-    '등급',
-    'A+',
-    'A',
-    'B+',
-    'B',
-    'C+',
-    'C',
-    'D+',
-    'D',
-    'F',
-    'P'
-  ];
-  final _gradeList9 = [
-    '등급',
-    'A+',
-    'A',
-    'B+',
-    'B',
-    'C+',
-    'C',
-    'D+',
-    'D',
-    'F',
-    'P'
-  ];
-  final _gradeList10 = [
-    '등급',
-    'A+',
-    'A',
-    'B+',
-    'B',
-    'C+',
-    'C',
-    'D+',
-    'D',
-    'F',
-    'P'
-  ];
-  final _pointList1 = ['학점', '1', '2', '3', '4'];
-  final _pointList2 = ['학점', '1', '2', '3', '4'];
-  final _pointList3 = ['학점', '1', '2', '3', '4'];
-  final _pointList4 = ['학점', '1', '2', '3', '4'];
-  final _pointList5 = ['학점', '1', '2', '3', '4'];
-  final _pointList6 = ['학점', '1', '2', '3', '4'];
-  final _pointList7 = ['학점', '1', '2', '3', '4'];
-  final _pointList8 = ['학점', '1', '2', '3', '4'];
-  final _pointList9 = ['학점', '1', '2', '3', '4'];
-  final _pointList10 = ['학점', '1', '2', '3', '4'];
+  double resultGrade = 0;
+  double resultPoint = 0;
+  var _inputField = [];
 
-  var _selectedGrade1 = '등급';
-  var _selectedPoint1 = '학점';
-  var _selectedGrade2 = '등급';
-  var _selectedPoint2 = '학점';
-  var _selectedGrade3 = '등급';
-  var _selectedPoint3 = '학점';
-  var _selectedGrade4 = '등급';
-  var _selectedPoint4 = '학점';
-  var _selectedGrade5 = '등급';
-  var _selectedPoint5 = '학점';
-  var _selectedGrade6 = '등급';
-  var _selectedPoint6 = '학점';
-  var _selectedGrade7 = '등급';
-  var _selectedPoint7 = '학점';
-  var _selectedGrade8 = '등급';
-  var _selectedPoint8 = '학점';
-  var _selectedGrade9 = '등급';
-  var _selectedPoint9 = '학점';
-  var _selectedGrade10 = '등급';
-  var _selectedPoint10 = '학점';
-
-  final myPoint_subject1 = TextEditingController();
-  final myPoint_subject2 = TextEditingController();
-  final myPoint_subject3 = TextEditingController();
-  final myPoint_subject4 = TextEditingController();
-  final myPoint_subject5 = TextEditingController();
-  final myPoint_subject6 = TextEditingController();
-  final myPoint_subject7 = TextEditingController();
-  final myPoint_subject8 = TextEditingController();
-  final myPoint_subject9 = TextEditingController();
-  final myPoint_subject10 = TextEditingController();
-
-//받은 학점
+  List<_GroupControllers> _groupControllers = [];
 
   @override
   void dispose() {
-    myPoint_subject1.dispose();
-    myPoint_subject2.dispose();
-    myPoint_subject3.dispose();
-    myPoint_subject4.dispose();
-    myPoint_subject5.dispose();
-    myPoint_subject6.dispose();
-    myPoint_subject7.dispose();
-    myPoint_subject8.dispose();
-    myPoint_subject9.dispose();
-    myPoint_subject10.dispose();
+    for (final controller in _groupControllers) {
+      controller.dispose();
+    }
     super.dispose();
+  }
+
+  var idx = 0;
+
+  _refresh() {
+    setState(() {
+      resultGrade = 0;
+      resultPoint = 0;
+      _groupControllers.clear();
+      _inputField.clear();
+    });
+  }
+
+  _addInputField(context) {
+    final group = _GroupControllers();
+    final inputField =
+        _generateInputField(group.subject, group.point, group.getPoint);
+
+    setState(() {
+      _groupControllers.add(group);
+      _inputField.add(inputField);
+    });
+  }
+
+  _generateInputField(subject, point, getPoint) {
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      margin: EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        border: Border.all(color: myColor, width: 3),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: TextField(
+              controller: subject,
+              decoration: InputDecoration(
+                hintText: "과목",
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 30,
+          ),
+          Expanded(
+            child: TextField(
+              maxLength: 1,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp('[2-4]'))
+              ],
+              controller: point,
+              onChanged: (point) {
+                setState(() {});
+              },
+              decoration: InputDecoration(
+                hintText: "학점",
+                counterText: "",
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 30,
+          ),
+          Expanded(
+            child: TextField(
+              maxLength: 3,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp('[0-9]'))
+              ],
+              controller: getPoint,
+              onChanged: (getPit) {
+                setState(() {});
+              },
+              decoration: InputDecoration(
+                hintText: "받은 점수",
+                counterText: "",
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -180,10 +127,11 @@ class _CalculatePageState extends State<CalculatePage> {
         appBar: AppBar(
           actions: [
             IconButton(
-                onPressed: () {
-                  setState(() {});
-                },
-                icon: Icon(Icons.check))
+              onPressed: () {
+                _refresh();
+              },
+              icon: Icon(Icons.refresh),
+            ),
           ],
           backgroundColor: Colors.blue,
           title: const Text(
@@ -197,134 +145,163 @@ class _CalculatePageState extends State<CalculatePage> {
         ),
         body: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
-            child: _buildCalculate()));
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                _buildResult(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                      child: Text(
+                          "Pass/Fail 교과목은 성적 산출에서 제외됩니다. 따라서 학점계산기에 기재하면 잘못된 성적이 산출됩니다.")),
+                ),
+                _buildCalculate(),
+                _buildBottons(),
+              ],
+            )));
+  }
+
+  _calculate() {
+    double resultP = 0;
+    double resultG = 0;
+    var sumP = 0;
+    double sumG = 0;
+    var div = 0;
+    for (var i = 0; i < _inputField.length; i++) {
+      sumP += int.parse(_groupControllers[i].getPoint.text) *
+          int.parse(_groupControllers[i].point.text);
+
+      sumG += _invert(int.parse(_groupControllers[i].getPoint.text)) *
+          int.parse(_groupControllers[i].point.text);
+
+      div += int.parse(_groupControllers[i].point.text);
+      print("$sumP, $sumG, $div");
+    }
+    resultP = (sumP / div).toDouble();
+    resultG = (sumG / div).toDouble();
+    resultPoint = resultP;
+    resultGrade = resultG;
+  }
+
+  _invert(int num) {
+    if (num >= 95 && num <= 100) {
+      return 4.5;
+    } else if (num >= 90 && num < 95) {
+      return 4.0;
+    } else if (num >= 85 && num < 90) {
+      return 3.5;
+    } else if (num >= 80 && num < 85) {
+      return 3.0;
+    } else if (num >= 75 && num < 80) {
+      return 2.5;
+    } else if (num >= 70 && num < 75) {
+      return 2.0;
+    } else if (num >= 65 && num < 70) {
+      return 1.5;
+    } else if (num >= 60 && num < 65) {
+      return 1.0;
+    } else {
+      return 0.0;
+    }
   }
 
   Widget _buildCalculate() {
-    return ListView(
-      children: [
-        Container(
-            padding: const EdgeInsets.all(8.0),
-            margin: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                border: Border.all(color: Colors.black, width: 3)),
-            child: Column(
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          itemCount: _inputField.length,
+          itemBuilder: (context, index) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  '학점계산기',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                Expanded(
+                  child: Container(
+                    child: _inputField.elementAt(index),
+                  ),
                 ),
-                _listIndex1(1, _pointList1, _gradeList1, myPoint_subject1),
-                
-                _buildResult(),
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _inputField.removeAt(index);
+                        _groupControllers.removeAt(index);
+                      });
+                    },
+                    icon: Icon(Icons.remove_circle,
+                        color: Colors.lightBlueAccent, size: 35)),
               ],
-            )),
-      ],
-    );
-  }
-
-  Widget _listIndex1(
-    int number,
-    List point,
-    List grade,
-    TextEditingController controller,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '과목$number :',
-            style: TextStyle(
-              fontSize: 18,
-            ),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DropdownButton(
-                  value: _selectedPoint1,
-                  items: point.map((value) {
-                    return DropdownMenuItem(
-                      child: Text(value.toString()),
-                      value: value,
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedPoint1 = value.toString();
-                    });
-                  },
-                )),
-          ),
-          Expanded(
-            child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DropdownButton(
-                  value: _selectedGrade1,
-                  items: grade.map((value) {
-                    return DropdownMenuItem(
-                      child: Text(value),
-                      value: value,
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedGrade1 = value.toString();
-                    });
-                  },
-                )),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                controller: controller,
-                onChanged: (text) {
-                  setState(() {});
-                },
-                decoration: const InputDecoration(
-                    border: const OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.blueAccent, width: 1.0),
-                        borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                    hintText: "점수",
-                    hintStyle:
-                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                    filled: true,
-                    fillColor: Colors.white),
-              ),
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
 
   Widget _buildResult() {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          '백분위 : ',
-          style: TextStyle(fontSize: 20),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        color: myColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              "평점 : ${resultGrade.toStringAsFixed(4)}",
+              style: TextStyle(fontSize: 25),
+            ),
+            SizedBox(
+              width: 30,
+            ),
+            Text(
+              "백분위 : ${resultPoint.toStringAsFixed(4)}",
+              style: TextStyle(fontSize: 25),
+            ),
+          ],
         ),
-        Text(
-          '평점평균 : ',
-          style: TextStyle(fontSize: 20),
-        )
-      ],
+      ),
+    );
+  }
+
+  Widget _buildBottons() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          SizedBox(
+            height: 50,
+            width: 130,
+            child: ElevatedButton(
+                onPressed: () {
+                  _addInputField(context);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.add),
+                    Text("과목추가"),
+                  ],
+                )),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          SizedBox(
+            height: 50,
+            width: 130,
+            child: ElevatedButton(
+                onPressed: () async {
+                  setState(() {
+                    _calculate();
+                  });
+                },
+                child: Text("계산하기")),
+          ),
+        ],
+      ),
     );
   }
 }

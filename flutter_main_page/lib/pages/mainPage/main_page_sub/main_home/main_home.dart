@@ -6,7 +6,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_main_page/main.dart';
 
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
-import 'package:flutter_main_page/pages/loginPage/login_page.dart';
+
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_community.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_event.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_info_job.dart';
@@ -40,9 +40,12 @@ class _MainPage1State extends State<MainPage1> {
       children: [
         _buildIcon(context, widget.user, widget.isAdmin),
         const SizedBox(
-          height: 20,
+          height: 30,
         ),
         _buildTop(),
+        const SizedBox(
+          height: 30,
+        ),
         Container(
             padding: const EdgeInsets.all(8.0),
             margin: const EdgeInsets.all(8.0),
@@ -144,10 +147,8 @@ Widget _buildIcon(BuildContext context, String user, bool? isAdmin) {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => EventPage(userNumber)));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EventPage(user)));
             },
             child: Column(
               children: const [
@@ -177,7 +178,7 @@ Widget _buildIcon(BuildContext context, String user, bool? isAdmin) {
           GestureDetector(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ComPage(userNumber)));
+                  MaterialPageRoute(builder: (context) => ComPage(user)));
             },
             child: Column(
               children: const [
