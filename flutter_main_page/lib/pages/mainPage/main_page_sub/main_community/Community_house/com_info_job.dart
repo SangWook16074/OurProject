@@ -19,6 +19,15 @@ class InfoJobPage extends StatefulWidget {
 }
 
 class _InfoJobPageState extends State<InfoJobPage> {
+  var _search = TextEditingController();
+  String _searchContent = '';
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,38 +42,52 @@ class _InfoJobPageState extends State<InfoJobPage> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+      body: Column(
+        children: [
+          _buildSearch(),
+          _buildItem(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItem() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('job')
                 .orderBy('time', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                    child: Container(
-                        height: 250,
-                        width: 250,
-                        child: const CircularProgressIndicator()));
-              }
-              final documents = snapshot.data!.docs;
-              if (documents.isEmpty) {
-                return _buildNonJob();
-              } else {
-                return ListView(
-                  shrinkWrap: true,
-                  children:
-                      documents.map((doc) => _buildItemWidget(doc)).toList(),
-                );
-              }
+              return (snapshot.connectionState == ConnectionState.waiting)
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        var data = snapshot.data!.docs[index].data()
+                            as Map<String, dynamic>;
+
+                        if (_searchContent.isEmpty) {
+                          return _buildItemWidget(data['title'],
+                              data['content'], data['author'], data['time']);
+                        }
+                        if (data['title'].toString().contains(_searchContent)) {
+                          return _buildItemWidget(data['title'],
+                              data['content'], data['author'], data['time']);
+                        }
+                        return Container();
+                      });
             }),
       ),
     );
   }
 
-  Widget _buildItemWidget(DocumentSnapshot doc) {
-    final job = Job(doc['title'], doc['content'], doc['author'], doc['time']);
+  Widget _buildItemWidget(
+      String title, String content, String author, String time) {
     return Column(
       children: [
         ListTile(
@@ -73,16 +96,16 @@ class _InfoJobPageState extends State<InfoJobPage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => NoticeViewPage(
-                        job.title, job.content, job.author, job.time)));
+                    builder: (context) =>
+                        NoticeViewPage(title, content, author, time)));
           },
           title: Text(
-            "[취업정보] ${job.title}",
+            "[취업정보] $title",
             style: const TextStyle(
                 fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
-            "작성자 : ${job.author}",
+            "작성자 : $author",
             style: const TextStyle(fontSize: 10),
           ),
         ),
@@ -93,16 +116,19 @@ class _InfoJobPageState extends State<InfoJobPage> {
     );
   }
 
-  Widget _buildNonJob() {
-    return Center(
-      child: Container(
-        height: 500,
-        child: const Center(
-          child: Text(
-            '아직 등록된 취업정보가 없습니다.',
-            style: TextStyle(
-                color: Colors.grey, fontSize: 15, fontWeight: FontWeight.bold),
-          ),
+  Widget _buildSearch() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: _search,
+        onChanged: (text) {
+          setState(() {
+            _searchContent = text;
+          });
+        },
+        decoration: InputDecoration(
+          hintText: "제목을 입력하세요.",
+          prefixIcon: Icon(Icons.search),
         ),
       ),
     );

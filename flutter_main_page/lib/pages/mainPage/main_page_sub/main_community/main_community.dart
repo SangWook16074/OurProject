@@ -343,7 +343,7 @@ class _MainPage2State extends State<MainPage2> {
             context,
             MaterialPageRoute(
                 builder: (context) => ComViewPage(
-                    com.title, com.content, "익명", com.time, doc.id)));
+                    com.title, com.content, "익명", com.time, doc.id, widget.userNumber)));
       },
       title: Text(
         "[익명] ${com.title}",

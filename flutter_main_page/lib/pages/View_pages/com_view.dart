@@ -8,8 +8,9 @@ import 'package:intl/intl.dart';
 class Chat {
   String chat;
   String time;
+  String author;
 
-  Chat(this.chat, this.time);
+  Chat(this.chat, this.time, this.author);
 }
 
 class ComViewPage extends StatefulWidget {
@@ -18,7 +19,9 @@ class ComViewPage extends StatefulWidget {
   final String author;
   final String time;
   final String id;
-  const ComViewPage(this.title, this.content, this.author, this.time, this.id,
+  final String user;
+  const ComViewPage(
+      this.title, this.content, this.author, this.time, this.id, this.user,
       {Key? key})
       : super(key: key);
 
@@ -30,12 +33,13 @@ class _ComViewPageState extends State<ComViewPage> {
   var _now;
   final _chat = TextEditingController();
 
-  void _addChat(String chat, String time) {
+  void _addChat(String chat, String time, String author) {
     var db = FirebaseFirestore.instance.collection("com");
 
     db.doc(widget.id).collection('chat').add({
       "chat": chat,
       "time": time,
+      "author": author,
     });
     Fluttertoast.showToast(
       msg: "새 댓글이 등록되었습니다.",
@@ -44,6 +48,48 @@ class _ComViewPageState extends State<ComViewPage> {
       fontSize: 16,
     );
     _chat.text = '';
+  }
+
+  void _deleteChatDialog(DocumentSnapshot doc) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [Text('정말로 삭제하시겠습니까?')],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    _deleteChat(doc.id);
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("확인")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("취소")),
+            ],
+          );
+        });
+  }
+
+  void _deleteChat(String id) {
+    var db = FirebaseFirestore.instance.collection("com");
+
+    db.doc(widget.id).collection('chat').doc(id).delete();
+    Fluttertoast.showToast(
+      msg: "댓글이 삭제되었습니다.",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      fontSize: 16,
+    );
   }
 
   @override
@@ -167,7 +213,7 @@ class _ComViewPageState extends State<ComViewPage> {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('com/${widget.id}/chat')
-            .orderBy('time', descending: true)
+            .orderBy('time')
             .limit(5)
             .snapshots(),
         builder: (context, snapshot) {
@@ -191,45 +237,94 @@ class _ComViewPageState extends State<ComViewPage> {
   }
 
   Widget _buildChat(DocumentSnapshot doc) {
-    final chat = Chat(doc['chat'], doc['time']);
+    final chat = Chat(doc['chat'], doc['time'], doc['author']);
 
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
-      ),
-      child: ListTile(
-        title: Column(
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.account_box_rounded,
-                  size: 30,
-                  color: Colors.blueAccent,
-                ),
-                Text(
-                  widget.author,
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  chat.chat,
-                  style: TextStyle(fontSize: 15, color: Colors.black),
-                ),
-              ],
-            ),
-          ],
+    if (doc['author'] == widget.user) {
+      return Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
         ),
-        subtitle: Text(chat.time),
-      ),
-    );
+        child: ListTile(
+          title: Column(
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.account_box_rounded,
+                    size: 30,
+                    color: Colors.blueAccent,
+                  ),
+                  Text(
+                    chat.author.contains(widget.user) ? "나" : "익명",
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    chat.chat,
+                    style: TextStyle(fontSize: 15, color: Colors.black),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          subtitle: Text(chat.time),
+          trailing: IconButton(
+            icon: Icon(
+              Icons.highlight_off,
+              color: Colors.red,
+            ),
+            onPressed: () {
+              _deleteChatDialog(doc);
+            },
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
+        ),
+        child: ListTile(
+          title: Column(
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.account_box_rounded,
+                    size: 30,
+                    color: Colors.blueAccent,
+                  ),
+                  Text(
+                    chat.author.contains(widget.user) ? "나" : "익명",
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    chat.chat,
+                    style: TextStyle(fontSize: 15, color: Colors.black),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          subtitle: Text(chat.time),
+        ),
+      );
+    }
   }
 
   Widget _buildNonChat() {
@@ -269,7 +364,7 @@ class _ComViewPageState extends State<ComViewPage> {
                   fontSize: 16,
                 );
               } else {
-                _addChat(_chat.text, _now.toString());
+                _addChat(_chat.text, _now.toString(), widget.user);
               }
             },
             style: TextButton.styleFrom(
