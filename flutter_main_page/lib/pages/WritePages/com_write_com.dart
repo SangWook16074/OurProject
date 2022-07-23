@@ -61,12 +61,12 @@ class _WriteComPageState extends State<WriteComPage> {
 
   void _addNotice(Write com, String user) {
     FirebaseFirestore.instance.collection('com').add({
-      'title': "[익명] ${com.title}",
+      'title': com.title,
       'content': com.content,
       'author': user,
       'time': com.time,
-      'isLike': 0,
-      'countLike': 0
+      'countLike': 0,
+      'likedUsersList': [],
     });
     Fluttertoast.showToast(
       msg: "새 글이 등록되었습니다.",

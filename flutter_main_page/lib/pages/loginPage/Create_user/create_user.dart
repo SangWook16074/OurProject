@@ -311,9 +311,11 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         height: 30,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
                         children: [
-                          const SizedBox(
-                            width: 30,
+                          SizedBox(
+                            height: 30,
                           ),
                           ElevatedButton(
                               //회원가입 버튼
@@ -393,7 +395,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                       'userClass': _userClass.text,
                                       'isAdmin': isAdmin,
                                     });
-                                    
+
                                     Fluttertoast.showToast(
                                       msg: "생성 완료!",
                                       toastLength: Toast.LENGTH_SHORT,
@@ -413,8 +415,8 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                 style:
                                     TextStyle(fontSize: 15, letterSpacing: 4.0),
                               )),
-                          const SizedBox(
-                            width: 20,
+                          SizedBox(
+                            height: 30,
                           ),
                           ElevatedButton(
                               //취소 버튼
@@ -431,6 +433,9 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                 style:
                                     TextStyle(fontSize: 15, letterSpacing: 4.0),
                               )),
+                          SizedBox(
+                            height: 30,
+                          ),
                         ],
                       )
                     ],

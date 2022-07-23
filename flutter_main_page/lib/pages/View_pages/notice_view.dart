@@ -54,6 +54,9 @@ class _NoticeViewPageState extends State<NoticeViewPage> {
                   widget.time,
                   style: const TextStyle(fontSize: 20, color: Colors.grey),
                 ),
+                Divider(
+                  color: Colors.grey,
+                ),
                 const SizedBox(
                   height: 40,
                 ),
@@ -63,6 +66,33 @@ class _NoticeViewPageState extends State<NoticeViewPage> {
                     fontSize: 20,
                   ),
                 ),
+                SizedBox(
+                  height: 40,
+                ),
+                Divider(
+                  color: Colors.grey,
+                ),
+                ElevatedButton(
+                    //취소 버튼
+
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.all(16.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "목록",
+                          style: TextStyle(fontSize: 15, letterSpacing: 4.0),
+                        ),
+                        Icon(Icons.reorder),
+                      ],
+                    )),
               ],
             ),
           )

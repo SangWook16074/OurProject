@@ -85,7 +85,7 @@ class _WriteJobPageState extends State<WriteJobPage> {
               TextButton(
                   onPressed: () {
                     callOnFcmApiSendPushNotifications(
-                        title: '새 취업정보가 등록되었습니다.', body: job.title);
+                        title: '새 취업정보가 등록되었습니다.', body: '[취업정보] ${job.title}');
                     _addNotice(job, user);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
@@ -103,7 +103,7 @@ class _WriteJobPageState extends State<WriteJobPage> {
 
   void _addNotice(Write job, String user) {
     FirebaseFirestore.instance.collection('job').add({
-      'title': "[취업정보] ${job.title}",
+      'title': job.title,
       'content': job.content,
       'author': user,
       'time': job.time,

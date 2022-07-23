@@ -87,10 +87,6 @@ class NotificationController extends GetxController {
         );
       }
 
-      print('foreground 상황에서 메시지를 받았다.');
-
-      print('Message Data : ${message.data}');
-
       if (message.notification != null) {
         var db = FirebaseFirestore.instance.collection("UserInfo");
 
@@ -99,19 +95,17 @@ class NotificationController extends GetxController {
             .collection('alarmlog')
             .add({
           "alarm": message.notification!.body,
-          "index": prefs.getInt('index')
+          "index": prefs.getInt('index'),
+          "status": false,
         });
 
         _addIndex();
-
-        print(
-            'Message also contained a notofication : ${message.notification!.body}');
       }
     });
   }
 
   Future<void> _addIndex() async {
-    var number = await prefs.getInt("index")! + 1;
+    var number = await prefs.getInt('index')! + 1;
     await prefs.setInt('index', number);
   }
 }
