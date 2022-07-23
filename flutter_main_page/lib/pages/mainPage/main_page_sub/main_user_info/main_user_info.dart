@@ -47,7 +47,7 @@ class _MainPage4State extends State<MainPage4> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
                   Text(
-                      '푸시 알림을 해제하시겠습니까? 알림을 해제하시면 공지, 취업정보, 이벤트 등의 등록사항을 볼 수 없습니다.')
+                      '푸시 알림을 해제하시겠습니까?\n알림을 해제하시면 공지, 취업정보, 이벤트 등의 등록사항을 볼 수 없습니다.')
                 ],
               ),
               actions: [
@@ -111,7 +111,9 @@ class _MainPage4State extends State<MainPage4> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [Text('알림 로그를 지우시겠습니까? 지워진 알림로그는 앞으로 볼 수 없습니다.')],
+              children: const [
+                Text('알림 로그를 지우시겠습니까? \n지워진 알림로그는 앞으로 볼 수 없습니다.')
+              ],
             ),
             actions: [
               TextButton(
