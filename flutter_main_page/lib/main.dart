@@ -33,8 +33,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
     _addIndex();
 
-    print(
-        'Message also contained a notofication : ${message.notification!.body}');
+    
   }
 }
 
