@@ -377,8 +377,8 @@ class _MainPage4State extends State<MainPage4> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => DeletePhotoPage()));
             },
-            title: const Text('이벤트 사진 제거', style: TextStyle(fontSize: 20)),
-            trailing: const Icon(Icons.add_a_photo),
+            title: const Text('이벤트 사진 관리', style: TextStyle(fontSize: 20)),
+            trailing: const Icon(Icons.folder_delete),
           ),
         ]);
   }

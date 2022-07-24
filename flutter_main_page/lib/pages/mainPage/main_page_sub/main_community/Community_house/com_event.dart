@@ -153,16 +153,19 @@ class _EventPageState extends State<EventPage> {
   }
 
   Widget _buildSearch() {
-    return TextField(
-      controller: _search,
-      onChanged: (text) {
-        setState(() {
-          _searchContent = text;
-        });
-      },
-      decoration: InputDecoration(
-        hintText: "제목을 입력하세요.",
-        prefixIcon: Icon(Icons.search),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: _search,
+        onChanged: (text) {
+          setState(() {
+            _searchContent = text;
+          });
+        },
+        decoration: InputDecoration(
+          hintText: "제목을 입력하세요.",
+          prefixIcon: Icon(Icons.search),
+        ),
       ),
     );
   }

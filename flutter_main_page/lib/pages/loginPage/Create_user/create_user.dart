@@ -89,6 +89,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         height: 10,
                       ),
                       TextField(
+                        keyboardType: TextInputType.number,
                         controller: _userNumber,
                         onChanged: (text) {},
                         decoration: InputDecoration(
@@ -374,35 +375,40 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                           .get();
 
                                   try {
-                                    if (userinfoData['userName'] ==
-                                        _userName.text) {
+                                    if (userinfoData.exists) {
                                       Fluttertoast.showToast(
                                         msg: "이미 계정이 있어요.",
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.BOTTOM,
                                         fontSize: 16,
                                       );
+                                    } else {
+                                      await firestore
+                                          .collection('UserInfo')
+                                          .doc(_userNumber.text)
+                                          .set({
+                                        'userName': _userName.text,
+                                        'userNumber': _userNumber.text,
+                                        'userPass': _userPass.text,
+                                        'userGrade': _userGrade.text,
+                                        'userClass': _userClass.text,
+                                        'isAdmin': isAdmin,
+                                      });
+                                      Fluttertoast.showToast(
+                                        msg: "생성 완료!",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        fontSize: 16,
+                                      );
+                                      Navigator.pop(context);
                                     }
                                   } catch (err) {
-                                    await firestore
-                                        .collection('UserInfo')
-                                        .doc(_userNumber.text)
-                                        .set({
-                                      'userName': _userName.text,
-                                      'userNumber': _userNumber.text,
-                                      'userPass': _userPass.text,
-                                      'userGrade': _userGrade.text,
-                                      'userClass': _userClass.text,
-                                      'isAdmin': isAdmin,
-                                    });
-
                                     Fluttertoast.showToast(
-                                      msg: "생성 완료!",
+                                      msg: "에러 타입 : $err",
                                       toastLength: Toast.LENGTH_SHORT,
                                       gravity: ToastGravity.BOTTOM,
                                       fontSize: 16,
                                     );
-                                    Navigator.pop(context);
                                   }
                                 }
                               },
