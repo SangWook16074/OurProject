@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 
 class Event {
+  String id;
   String title;
   String content;
   String author;
@@ -10,137 +11,179 @@ class Event {
   int countLike;
   List likedUsersList;
 
-  Event(this.title, this.content, this.author, this.time,this.countLike,this.likedUsersList);
+  Event(this.id, this.title, this.content, this.author, this.time,
+      this.countLike, this.likedUsersList);
 }
 
 class EventPage extends StatefulWidget {
   final String userNumber;
-  EventPage(this.userNumber,{Key? key}) : super(key: key);
+  EventPage(this.userNumber, {Key? key}) : super(key: key);
 
   @override
   State<EventPage> createState() => _EventPageState();
 }
 
 class _EventPageState extends State<EventPage> {
+  var _search = TextEditingController();
+  String _searchContent = '';
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          "EVENT",
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: const Text(
+            "EVENT",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pacifico',
+            ),
           ),
+          centerTitle: true,
         ),
-        centerTitle: true,
+        resizeToAvoidBottomInset: true,
+        body: Column(
+          children: [
+            _buildSearch(),
+            _buildItem(),
+          ],
+        ),
       ),
-      resizeToAvoidBottomInset: true,
-      body: Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+    );
+  }
+
+  Widget _buildItem() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('event')
                 .orderBy('time', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return _loading();
-              }
-              final documents = snapshot.data!.docs;
-              if (documents.isEmpty) {
-                return _buildNonEvent();
-              } else {
-                return ListView(
-                  shrinkWrap: true,
-                  children:
-                      documents.map((doc) => _buildItemWidget(doc)).toList(),
-                );
-              }
+              return (snapshot.connectionState == ConnectionState.waiting)
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        var data = snapshot.data!.docs[index].data()
+                            as Map<String, dynamic>;
+                        var id = snapshot.data!.docs[index].id;
+
+                        if (_searchContent.isEmpty) {
+                          return _buildItemWidget(
+                              id,
+                              data['title'],
+                              data['content'],
+                              data['author'],
+                              data['time'],
+                              data['countLike'],
+                              data['likedUsersList']);
+                        }
+                        if (data['title'].toString().contains(_searchContent)) {
+                          return _buildItemWidget(
+                              id,
+                              data['title'],
+                              data['content'],
+                              data['author'],
+                              data['time'],
+                              data['countLike'],
+                              data['likedUsersList']);
+                        }
+                        return Container();
+                      });
             }),
       ),
     );
   }
 
-  Widget _buildItemWidget(DocumentSnapshot doc) {
-    final document = doc.data() as Map<String, dynamic>;
-    final event =
-        new Event(
-          document['title'], 
-          document['content'], 
-          document['author'],
-          document['time'],
-          document['countLike'] ?? 0,
-          document['likedUsersList'] ?? []);
-    return ListTile(
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => NoticeViewPage(
-                    event.title, event.content, event.author, event.time)));
-      },
-      title: Text(
-        event.title,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(
-        "작성자 : ${event.author}",
-        style: const TextStyle(fontSize: 10),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(event.countLike.toString()),
-          IconButton(
-              icon: Icon(Icons.favorite,color: event.likedUsersList.contains(widget.userNumber)? Colors.red: Colors.grey),
-              onPressed: () {
-                _updatelikedUsersList(
-                    doc.id, widget.userNumber, event.likedUsersList);
-                _updatecountLike(doc.id, event.likedUsersList);
-
-              }),
-        ]
-    ));
+  Widget _buildItemWidget(String id, String title, String content,
+      String author, String time, int countLike, List likedUsersList) {
+    return Column(
+      children: [
+        ListTile(
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          NoticeViewPage(title, content, author, time)));
+            },
+            title: Text(
+              "[이벤트] $title",
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              "작성자 : $author",
+              style: const TextStyle(fontSize: 10),
+            ),
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+              Text(countLike.toString()),
+              IconButton(
+                  icon: Icon(Icons.favorite,
+                      color: likedUsersList.contains(widget.userNumber)
+                          ? Colors.red
+                          : Colors.grey),
+                  onPressed: () {
+                    _updatelikedUsersList(
+                        id, widget.userNumber, likedUsersList);
+                    _updatecountLike(id, likedUsersList);
+                  }),
+            ])),
+        Divider(
+          color: Colors.grey,
+        )
+      ],
+    );
   }
 
-  Widget _buildNonEvent() {
-    return Center(
-      child: Container(
-        height: 500,
-        child: const Center(
-          child: Text(
-            '아직 등록된 이벤트가 없습니다.',
-            style: TextStyle(
-                color: Colors.grey, fontSize: 15, fontWeight: FontWeight.bold),
-          ),
+  Widget _buildSearch() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: _search,
+        onChanged: (text) {
+          setState(() {
+            _searchContent = text;
+          });
+        },
+        decoration: InputDecoration(
+          hintText: "제목을 입력하세요.",
+          prefixIcon: Icon(Icons.search),
         ),
       ),
     );
   }
-
-  Widget _loading() {
-    return Center(child: CircularProgressIndicator());
-  }
 }
-  void _updatecountLike(String docID, List likedUsersList) {
-    FirebaseFirestore.instance
-        .collection('event')
-        .doc(docID)
-        .set({'countLike': likedUsersList.length}, SetOptions(merge: true));
-  }
 
-  _updatelikedUsersList(
-      String docID, String userNumber, List usersList) {
-    FirebaseFirestore.instance.collection('event').doc(docID)
-        // .set({'likedUsersMap': userNumber}, SetOptions(merge: true));
-        .set({'likedUsersList': userCheck(usersList, userNumber)},
-            SetOptions(merge: true));
-  }
+void _updatecountLike(String docID, List likedUsersList) {
+  FirebaseFirestore.instance
+      .collection('event')
+      .doc(docID)
+      .set({'countLike': likedUsersList.length}, SetOptions(merge: true));
+}
 
+_updatelikedUsersList(String docID, String userNumber, List usersList) {
+  FirebaseFirestore.instance.collection('event').doc(docID)
+      // .set({'likedUsersMap': userNumber}, SetOptions(merge: true));
+      .set({'likedUsersList': userCheck(usersList, userNumber)},
+          SetOptions(merge: true));
+}
 
 userCheck(List usersList, String userNumber) {
   if (usersList.contains(userNumber)) {

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
+import 'package:flutter_main_page/pages/View_pages/com_view.dart';
 
 class Com {
   String title;
@@ -50,8 +50,16 @@ class _MyContentDeletePageState extends State<MyContentDeletePage> {
         });
   }
 
-  void _deleteItem(DocumentSnapshot doc) {
+  void _deleteItem(DocumentSnapshot doc) async {
     FirebaseFirestore.instance.collection('com').doc(doc.id).delete();
+    final instance = FirebaseFirestore.instance;
+    final batch = instance.batch();
+    var collection = instance.collection('com/${doc.id}/chat');
+    var snapshots = await collection.get();
+    for (var doc in snapshots.docs) {
+      batch.delete(doc.reference);
+    }
+    await batch.commit();
   }
 
   @override
@@ -103,8 +111,8 @@ class _MyContentDeletePageState extends State<MyContentDeletePage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => NoticeViewPage(
-                    com.title, com.content, com.author, com.time)));
+                builder: (context) => ComViewPage(
+                    com.title, com.content, com.author, com.time, doc.id, widget.user)));
       },
       title: Text(
         com.title,

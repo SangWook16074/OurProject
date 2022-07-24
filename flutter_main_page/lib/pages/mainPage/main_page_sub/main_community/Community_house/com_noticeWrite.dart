@@ -41,7 +41,6 @@ class _WriteNoticeState extends State<WriteNotice> {
         "body": body,
       },
       "data": {
-        
         "type": '0rder',
         "id": '28',
         "click_action": 'FLUTTER_NOTIFICATION_CLICK',
@@ -89,7 +88,8 @@ class _WriteNoticeState extends State<WriteNotice> {
               TextButton(
                   onPressed: () {
                     callOnFcmApiSendPushNotifications(
-                          title: '새 공지사항이 등록되었습니다.', body: notice.title);
+                        title: '새 공지사항이 등록되었습니다.',
+                        body: "[공지사항] ${notice.title}");
 
                     _addNotice(notice, user);
                     Navigator.of(context).pop();
@@ -108,7 +108,7 @@ class _WriteNoticeState extends State<WriteNotice> {
 
   void _addNotice(NoticeWrite notice, String user) {
     FirebaseFirestore.instance.collection('notice').add({
-      'title': "[공지사항] ${notice.title}",
+      'title': notice.title,
       'content': notice.content,
       'author': user,
       'time': notice.time,

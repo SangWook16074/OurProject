@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:get/get.dart';
 
+var isSubscribe = false;
+
 class NotificationController extends GetxController {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+
   @override
   Future<void> onInit() async {
     NotificationSettings settings = await messaging.requestPermission(
@@ -34,7 +39,13 @@ class NotificationController extends GetxController {
     String? token = await messaging.getToken();
 
     try {
-      FirebaseMessaging.instance.subscribeToTopic("connectTopic");
+      if (prefs.getBool('isSubscribe') == false) {
+        return;
+      } else {
+        FirebaseMessaging.instance.subscribeToTopic("connectTopic");
+        prefs.setBool('isSubscribe', true);
+      }
+
       print(token);
     } catch (e) {}
   }
@@ -76,21 +87,25 @@ class NotificationController extends GetxController {
         );
       }
 
-      print('foreground 상황에서 메시지를 받았다.');
-
-      print('Message Data : ${message.data}');
-
       if (message.notification != null) {
         var db = FirebaseFirestore.instance.collection("UserInfo");
 
         db
             .doc(prefs.getString('userNumber').toString())
             .collection('alarmlog')
-            .add({"alarm": message.notification!.body});
+            .add({
+          "alarm": message.notification!.body,
+          "index": prefs.getInt('index'),
+          "status": false,
+        });
 
-        print(
-            'Message also contained a notofication : ${message.notification!.body}');
+        _addIndex();
       }
     });
+  }
+
+  Future<void> _addIndex() async {
+    var number = await prefs.getInt('index')! + 1;
+    await prefs.setInt('index', number);
   }
 }

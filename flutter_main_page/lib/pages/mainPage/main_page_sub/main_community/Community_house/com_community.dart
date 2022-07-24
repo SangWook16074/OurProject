@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
+import 'package:flutter_main_page/pages/View_pages/com_view.dart';
 
 class Com {
   String title;
@@ -10,8 +10,8 @@ class Com {
   int countLike;
   List likedUsersList;
 
-  Com(this.title, this.author, this.content, this.time,
-      this.countLike, this.likedUsersList);
+  Com(this.title, this.author, this.content, this.time, this.countLike,
+      this.likedUsersList);
 }
 
 class ComPage extends StatefulWidget {
@@ -23,118 +23,149 @@ class ComPage extends StatefulWidget {
 }
 
 class _ComPageState extends State<ComPage> {
+  var _search = TextEditingController();
+  String _searchContent = '';
 
-
-  // void _updateContent(String docID, int num) {
-  //   FirebaseFirestore.instance
-  //       .collection('com')
-  //       .doc(docID)
-  //       .update({"isLike" : num});
-  // }
-
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          "Community",
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: const Text(
+            "Community",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Pacifico',
+            ),
           ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+        body: Column(
+          children: [
+            _buildSearch(),
+            _buildItem(),
+          ],
+        ));
+  }
+
+  Widget _buildItem() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('com')
                 .orderBy('time', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return _loading();
-              }
-              final documents = snapshot.data!.docs;
-              if (documents.isEmpty) {
-                return _buildNonEvent();
-              } else {
-                return ListView(
-                  shrinkWrap: true,
-                  children:
-                      documents.map((doc) => _buildItemWidget(doc)).toList(),
-                );
-              }
+              return (snapshot.connectionState == ConnectionState.waiting)
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        var data = snapshot.data!.docs[index].data()
+                            as Map<String, dynamic>;
+                        var id = snapshot.data!.docs[index].id;
+
+                        if (_searchContent.isEmpty) {
+                          return _buildItemWidget(
+                              id,
+                              data['title'],
+                              data['content'],
+                              data['author'],
+                              data['time'],
+                              data['countLike'],
+                              data['likedUsersList']);
+                        }
+                        if (data['title'].toString().contains(_searchContent)) {
+                          return _buildItemWidget(
+                              id,
+                              data['title'],
+                              data['content'],
+                              data['author'],
+                              data['time'],
+                              data['countLike'],
+                              data['likedUsersList']);
+                        }
+                        return Container();
+                      });
             }),
       ),
     );
   }
 
-  Widget _buildItemWidget(DocumentSnapshot doc) {
-    final document = doc.data() as Map<String, dynamic>;
-    final com = new Com(
-      document['title'],
-      document['author'],
-      document['content'],
-      document['time'],
-      document['countLike'] ?? 0,
-      document['likedUsersList'] ?? [],
-    );
-    return ListTile(
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    NoticeViewPage(com.title, com.content, '익명', com.time)));
-      },
-      title: Text(
-        com.title,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(
-        "익명",
-        style: const TextStyle(fontSize: 10),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(com.countLike.toString()),
-          IconButton(
-              icon: Icon(Icons.favorite,color: com.likedUsersList.contains(widget.userNumber)? Colors.red: Colors.grey, ),
-              onPressed: () {
-                _updatelikedUsersList(
-                    doc.id, widget.userNumber, com.likedUsersList);
-                _updatecountLike(doc.id, com.likedUsersList);
-
-              }),
-        ],
-      ),
+  Widget _buildItemWidget(String id, String title, String content,
+      String author, String time, int countLike, List likedUsersList) {
+    return Column(
+      children: [
+        ListTile(
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ComViewPage(
+                        title, content, '익명', time, id, widget.userNumber)));
+          },
+          title: Text(
+            "[익명] $title",
+            style: const TextStyle(
+                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            "익명",
+            style: const TextStyle(fontSize: 10),
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(countLike.toString()),
+              IconButton(
+                  icon: Icon(
+                    Icons.favorite,
+                    color: likedUsersList.contains(widget.userNumber)
+                        ? Colors.red
+                        : Colors.grey,
+                  ),
+                  onPressed: () {
+                    _updatelikedUsersList(
+                        id, widget.userNumber, likedUsersList);
+                    _updatecountLike(id, likedUsersList);
+                  }),
+            ],
+          ),
+        ),
+        Divider(
+          color: Colors.grey,
+        )
+      ],
     );
   }
 
-  Widget _buildNonEvent() {
-    return Center(
-      child: Container(
-        height: 500,
-        child: const Center(
-          child: Text(
-            '아직 등록된 이벤트가 없습니다.',
-            style: TextStyle(
-                color: Colors.grey, fontSize: 15, fontWeight: FontWeight.bold),
-          ),
+  Widget _buildSearch() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: _search,
+        onChanged: (text) {
+          setState(() {
+            _searchContent = text;
+          });
+        },
+        decoration: InputDecoration(
+          hintText: "제목을 입력하세요.",
+          prefixIcon: Icon(Icons.search),
         ),
       ),
     );
-  }
-
-  Widget _loading() {
-    return Center(child: CircularProgressIndicator());
   }
 
   void _updatecountLike(String docID, List likedUsersList) {
@@ -144,8 +175,7 @@ class _ComPageState extends State<ComPage> {
         .set({'countLike': likedUsersList.length}, SetOptions(merge: true));
   }
 
-  _updatelikedUsersList(
-      String docID, String userNumber, List usersList) {
+  _updatelikedUsersList(String docID, String userNumber, List usersList) {
     FirebaseFirestore.instance.collection('com').doc(docID)
         // .set({'likedUsersMap': userNumber}, SetOptions(merge: true));
         .set({'likedUsersList': userCheck(usersList, userNumber)},

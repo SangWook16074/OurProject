@@ -29,18 +29,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _loadAutoLoginStatus();
-  }
-
-  Future<void> _loadAutoLoginStatus() async {
-    setState(() {
-      autoLoginStatus = (prefs.getBool('autoLoginStatus') ?? false);
-      userNumber = (prefs.getString('userNumber') ?? '');
-      user = (prefs.getString('user') ?? '');
-      userGrade = (prefs.getString('userGrade') ?? '');
-      userClass = (prefs.getString('Class') ?? '');
-      isAdmin = (prefs.getBool('isAdmin') ?? false);
-    });
   }
 
   Future<void> _updateAutoLoginStatus(bool boolean) async {
@@ -51,15 +39,13 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> _saveUserData(bool condtion, String number, String name,
-      String grade, String classify, bool boolean) async {
-    if (condtion == true) {
-      prefs.setString('userNumber', number);
-      prefs.setString('user', name);
-      prefs.setString('userGrade', grade);
-      prefs.setString('Class', classify);
-      prefs.setBool('isAdmin', boolean);
-    }
+  Future<void> _saveUserData(String number, String name, String grade,
+      String classify, bool boolean) async {
+    prefs.setString('userNumber', number);
+    prefs.setString('user', name);
+    prefs.setString('userGrade', grade);
+    prefs.setString('Class', classify);
+    prefs.setBool('isAdmin', boolean);
   }
 
   @override
@@ -115,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               TextField(
                                 controller: _textEditingControllerUser,
+                                keyboardType: TextInputType.number,
                                 onChanged: (text) {
                                   setState(() {});
                                 },
@@ -255,10 +242,18 @@ class _LoginPageState extends State<LoginPage> {
                                 } else {
                                   if (isChecked == true) {
                                     _updateAutoLoginStatus(isChecked);
+                                    _saveUserData(
+                                        userInfoData['userNumber'],
+                                        userInfoData['userName'],
+                                        userInfoData['userGrade'],
+                                        userInfoData['userClass'],
+                                        userInfoData['isAdmin']);
                                   }
 
                                   prefs.setString(
                                       'userNumber', userInfoData['userNumber']);
+                                  prefs.setInt(
+                                      'index', prefs.getInt('index') ?? 1);
 
                                   Fluttertoast.showToast(
                                     msg: "환영합니다!",
