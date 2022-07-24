@@ -101,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               TextField(
                                 controller: _textEditingControllerUser,
+                                keyboardType: TextInputType.number,
                                 onChanged: (text) {
                                   setState(() {});
                                 },
