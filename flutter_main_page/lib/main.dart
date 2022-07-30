@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'firebase_options.dart';
 
 late SharedPreferences prefs; //안드로이드만 가능함.
 Color myColor = Color(0xFF87C2F3);
@@ -32,8 +33,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     });
 
     _addIndex();
-
-    
   }
 }
 
@@ -44,7 +43,10 @@ Future<void> _addIndex() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   prefs = await SharedPreferences.getInstance(); // 안드로이드만 가능함.
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
