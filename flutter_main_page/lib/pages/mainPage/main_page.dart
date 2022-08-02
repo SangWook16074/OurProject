@@ -9,12 +9,8 @@ import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/ma
 class MainPage extends StatefulWidget {
   final String userNumber;
   final String user;
-  final String userGrade;
-  final String userClass;
   final bool? isAdmin;
-  const MainPage(
-      this.userNumber, this.user, this.userGrade, this.userClass, this.isAdmin,
-      {Key? key})
+  const MainPage(this.userNumber, this.user, this.isAdmin, {Key? key})
       : super(key: key);
 
   @override
@@ -31,8 +27,7 @@ class _MainPageState extends State<MainPage> {
       MainPage1(widget.user, widget.isAdmin),
       MainPage2(widget.user, widget.isAdmin, widget.userNumber),
       const MainPage3(),
-      MainPage4(widget.userNumber, widget.user, widget.userGrade,
-          widget.userClass, widget.isAdmin),
+      MainPage4(widget.userNumber, widget.user, widget.isAdmin),
       ComPage(widget.userNumber),
       EventPage(widget.userNumber),
     ];

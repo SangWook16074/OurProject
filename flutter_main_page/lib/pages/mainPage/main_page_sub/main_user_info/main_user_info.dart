@@ -22,11 +22,9 @@ import 'package:flutter_main_page/pages/mainPage/main_page_sub/user_info_templat
 class MainPage4 extends StatefulWidget {
   final String userNumber;
   final String user;
-  final String userGrade;
-  final String userClass;
   final bool? isAdmin;
   const MainPage4(
-      this.userNumber, this.user, this.userGrade, this.userClass, this.isAdmin,
+      this.userNumber, this.user, this.isAdmin,
       {Key? key})
       : super(key: key);
 
@@ -148,8 +146,6 @@ class _MainPage4State extends State<MainPage4> {
     prefs.setBool('autoLoginStatus', false);
     prefs.remove('userNumber');
     prefs.remove('user');
-    prefs.remove('userGrade');
-    prefs.remove('Class');
     prefs.remove('isAdmin');
   }
 
@@ -185,7 +181,7 @@ class _MainPage4State extends State<MainPage4> {
 
   Widget _buildUserInfo() {
     return (userInfoBox.set_user_info(
-        widget.user, widget.userGrade, widget.userClass, widget.userNumber));
+        widget.user, widget.userNumber));
   }
 
   Widget _buildManager() {

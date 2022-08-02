@@ -5,15 +5,8 @@ import 'package:flutter_main_page/pages/loginPage/Create_user/create_user.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-// import 'package:flutter_main_page/main_page.dart';
-
 bool isChecked = false;
-late bool autoLoginStatus;
-late String userNumber;
-late String user;
-late String userGrade;
-late String userClass;
-late bool isAdmin;
+// import 'package:flutter_main_page/main_page.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -23,6 +16,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late bool autoLoginStatus;
+  late String userNumber;
+  late String user;
+  late bool isAdmin;
   final _textEditingControllerUser = TextEditingController();
   final _textEditingControllerPassWd = TextEditingController();
 
@@ -39,12 +36,10 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> _saveUserData(String number, String name, String grade,
-      String classify, bool boolean) async {
+  Future<void> _saveUserData(String number, String name, bool boolean) async {
     prefs.setString('userNumber', number);
     prefs.setString('user', name);
-    prefs.setString('userGrade', grade);
-    prefs.setString('Class', classify);
+
     prefs.setBool('isAdmin', boolean);
   }
 
@@ -59,12 +54,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     if (prefs.getBool('autoLoginStatus') == true) {
-      return MainPage(
-          prefs.getString('userNumber').toString(),
-          prefs.getString('user').toString(),
-          prefs.getString('userGrade').toString(),
-          prefs.getString('Class').toString(),
-          prefs.getBool('isAdmin'));
+      return MainPage(prefs.getString('userNumber').toString(),
+          prefs.getString('user').toString(), prefs.getBool('isAdmin'));
     } else {
       return Scaffold(
           resizeToAvoidBottomInset: true,
@@ -245,8 +236,6 @@ class _LoginPageState extends State<LoginPage> {
                                     _saveUserData(
                                         userInfoData['userNumber'],
                                         userInfoData['userName'],
-                                        userInfoData['userGrade'],
-                                        userInfoData['userClass'],
                                         userInfoData['isAdmin']);
                                   }
 
@@ -268,8 +257,6 @@ class _LoginPageState extends State<LoginPage> {
                                           builder: (context) => MainPage(
                                               userInfoData.id,
                                               userInfoData['userName'],
-                                              userInfoData['userGrade'],
-                                              userInfoData['userClass'],
                                               userInfoData['isAdmin'])));
 
                                   _textEditingControllerUser.clear();

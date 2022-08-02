@@ -29,6 +29,13 @@
             {
               "client_id": "974035462798-696ihbmahcp24n012i96odofmnmi1p5e.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "974035462798-46jb889vk5gf6clf9lome5h0f3df0706.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ourproject-fa19a"
+              }
             }
           ]
         }
