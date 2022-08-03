@@ -22,12 +22,9 @@ import 'package:flutter_main_page/pages/mainPage/main_page_sub/user_info_templat
 class MainPage4 extends StatefulWidget {
   final String userNumber;
   final String user;
-  final String userGrade;
-  final String userClass;
+
   final bool? isAdmin;
-  const MainPage4(
-      this.userNumber, this.user, this.userGrade, this.userClass, this.isAdmin,
-      {Key? key})
+  const MainPage4(this.userNumber, this.user, this.isAdmin, {Key? key})
       : super(key: key);
 
   @override
@@ -184,8 +181,7 @@ class _MainPage4State extends State<MainPage4> {
   }
 
   Widget _buildUserInfo() {
-    return (userInfoBox.set_user_info(
-        widget.user, widget.userGrade, widget.userClass, widget.userNumber));
+    return (userInfoBox.set_user_info(widget.user, widget.userNumber));
   }
 
   Widget _buildManager() {

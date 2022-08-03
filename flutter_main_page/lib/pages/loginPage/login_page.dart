@@ -11,8 +11,6 @@ bool isChecked = false;
 late bool autoLoginStatus;
 late String userNumber;
 late String user;
-late String userGrade;
-late String userClass;
 late bool isAdmin;
 
 class LoginPage extends StatefulWidget {
@@ -39,12 +37,9 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> _saveUserData(String number, String name, String grade,
-      String classify, bool boolean) async {
+  Future<void> _saveUserData(String number, String name, bool boolean) async {
     prefs.setString('userNumber', number);
     prefs.setString('user', name);
-    prefs.setString('userGrade', grade);
-    prefs.setString('Class', classify);
     prefs.setBool('isAdmin', boolean);
   }
 
@@ -59,16 +54,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     if (prefs.getBool('autoLoginStatus') == true) {
-      return MainPage(
-          prefs.getString('userNumber').toString(),
-          prefs.getString('user').toString(),
-          prefs.getString('userGrade').toString(),
-          prefs.getString('Class').toString(),
-          prefs.getBool('isAdmin'));
+      return MainPage(prefs.getString('userNumber').toString(),
+          prefs.getString('user').toString(), prefs.getBool('isAdmin'));
     } else {
       return Scaffold(
           resizeToAvoidBottomInset: true,
-          backgroundColor: Colors.blue[400],
+          backgroundColor: Colors.white,
           body: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
             child: SingleChildScrollView(
@@ -79,19 +70,19 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 250),
                       //로고 넣을 것임.
                       const Text(
-                        "Induk Univ.",
+                        "인덕대학교",
                         style: TextStyle(
-                            fontSize: 40,
-                            fontFamily: 'Pacifico',
+                            fontSize: 60,
+                            fontFamily: 'Dokdo',
                             fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                            color: Colors.black),
                       ),
                       const Text(
                         "Information and Communication",
                         style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 20,
                             fontFamily: 'Pacifico',
-                            color: Colors.white),
+                            color: Colors.black),
                       ),
                       const SizedBox(height: 50),
                       Padding(
@@ -116,20 +107,19 @@ class _LoginPageState extends State<LoginPage> {
                                             Radius.circular(4.0))),
                                     enabledBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: Colors.blueAccent, width: 1.0),
+                                          color: Colors.black, width: 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(4.0)),
                                     ),
                                     focusedBorder: const OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.blueAccent,
-                                            width: 2.0),
+                                            color: Colors.black, width: 2.0),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(4.0))),
                                     suffixIcon: GestureDetector(
                                       child: const Icon(
                                         Icons.clear,
-                                        color: Colors.blueAccent,
+                                        color: Colors.black,
                                         size: 20,
                                       ),
                                       onTap: () =>
@@ -157,20 +147,19 @@ class _LoginPageState extends State<LoginPage> {
                                             Radius.circular(4.0))),
                                     enabledBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: Colors.blueAccent, width: 1.0),
+                                          color: Colors.black, width: 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(4.0)),
                                     ),
                                     focusedBorder: const OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.blueAccent,
-                                            width: 2.0),
+                                            color: Colors.black, width: 2.0),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(4.0))),
                                     suffixIcon: GestureDetector(
                                       child: const Icon(
                                         Icons.clear,
-                                        color: Colors.blueAccent,
+                                        color: Colors.black,
                                         size: 20,
                                       ),
                                       onTap: () =>
@@ -193,8 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                                   const Text(
                                     "자동로그인",
                                     style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                        color: Colors.black,
                                         letterSpacing: (4.0)),
                                   )
                                 ],
@@ -245,8 +233,6 @@ class _LoginPageState extends State<LoginPage> {
                                     _saveUserData(
                                         userInfoData['userNumber'],
                                         userInfoData['userName'],
-                                        userInfoData['userGrade'],
-                                        userInfoData['userClass'],
                                         userInfoData['isAdmin']);
                                   }
 
@@ -268,8 +254,6 @@ class _LoginPageState extends State<LoginPage> {
                                           builder: (context) => MainPage(
                                               userInfoData.id,
                                               userInfoData['userName'],
-                                              userInfoData['userGrade'],
-                                              userInfoData['userClass'],
                                               userInfoData['isAdmin'])));
 
                                   _textEditingControllerUser.clear();
@@ -287,12 +271,15 @@ class _LoginPageState extends State<LoginPage> {
                             }
                           },
                           style: TextButton.styleFrom(
-                              backgroundColor: Colors.blue[700],
+                              backgroundColor: Colors.blueGrey,
                               padding: const EdgeInsets.all(16.0),
                               minimumSize: const Size(355, 25)),
                           child: const Text(
                             "로그인",
-                            style: TextStyle(fontSize: 15, letterSpacing: 4.0),
+                            style: TextStyle(
+                                fontSize: 15,
+                                letterSpacing: 4.0,
+                                color: Colors.black),
                           )),
                       TextButton(
                         //회원가입 버튼
@@ -306,7 +293,7 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextButton.styleFrom(),
                         child: const Text(
                           "회원가입",
-                          style: TextStyle(fontSize: 15, color: Colors.white),
+                          style: TextStyle(fontSize: 15, color: Colors.black),
                         ),
                       )
                     ],

@@ -106,6 +106,18 @@ flutter:
     - family: Pacifico
       fonts:
         - asset: assets/Fonts/Pacifico-Regular.ttf
+
+    - family: Dokdo
+      fonts:
+        - asset: assets\Fonts\EastSeaDokdo-Regular.ttf
+
+    - family: nexon
+      fonts:
+        - asset: assets\Fonts\NEXONLv1GothicRegular.ttf
+
+    - family: hoon
+      fonts:
+        - asset: assets\Fonts\DoHyeon-Regular.ttf
   #         
   #
   # For details regarding fonts from package dependencies,

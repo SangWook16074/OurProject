@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialBinding:
@@ -80,11 +80,11 @@ class MyApp extends StatelessWidget {
                 fontSize: 40,
                 fontFamily: 'Pacifico',
                 fontWeight: FontWeight.bold,
-                color: Colors.white),
+                color: Colors.black),
           ),
           splashTransition: SplashTransition.fadeTransition,
           pageTransitionType: PageTransitionType.fade,
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.white,
           nextScreen: LoginPage()),
     );
   }
