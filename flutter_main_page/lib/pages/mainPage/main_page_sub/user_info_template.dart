@@ -14,12 +14,9 @@ Future<void> _deleteAutoLoginStatus() async {
 class userInfoBox extends StatelessWidget {
   String userNumber = '';
   String user = '';
-  String userGrade = '';
-  String userClass = '';
 
   userInfoBox({Key? key}) : super(key: key);
-  userInfoBox.set_user_info(
-      this.user, this.userGrade, this.userClass, this.userNumber);
+  userInfoBox.set_user_info(this.user, this.userNumber);
 
   @override
   Widget build(BuildContext context) {
