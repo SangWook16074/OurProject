@@ -8,14 +8,14 @@ class Alarm {
   Alarm(this.title, this.status);
 }
 
-class MainPage3 extends StatefulWidget {
-  const MainPage3({Key? key}) : super(key: key);
+class MainAlarm extends StatefulWidget {
+  const MainAlarm({Key? key}) : super(key: key);
 
   @override
-  State<MainPage3> createState() => _MainPage3State();
+  State<MainAlarm> createState() => _MainAlarmState();
 }
 
-class _MainPage3State extends State<MainPage3> {
+class _MainAlarmState extends State<MainAlarm> {
   void _updateStatus(String docId, bool status) {
     FirebaseFirestore.instance
         .collection(
@@ -69,12 +69,11 @@ class _MainPage3State extends State<MainPage3> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-        child: Column(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
               children: [
                 Row(
                   children: [
@@ -84,8 +83,7 @@ class _MainPage3State extends State<MainPage3> {
                     ),
                     Text(
                       '알림',
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 30, fontFamily: 'hoon'),
                     ),
                   ],
                 ),

@@ -2,7 +2,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_main_page/main.dart';
+
 // import '../database_sub/user_info.dart';
 
 class CreateUserPage extends StatefulWidget {
@@ -19,435 +20,450 @@ class _CreateUserPageState extends State<CreateUserPage> {
   final _userNumber = TextEditingController();
   final _userPass = TextEditingController();
   final _userPassAgain = TextEditingController();
-  final _userGrade = TextEditingController();
-  final _userClass = TextEditingController();
+  final _authCode = TextEditingController();
+
+  int currentStep = 0;
+
+  _onNext() {
+    if (currentStep == 0) {
+      if (_userName.text.isEmpty) {
+        toastMessage("이름을 입력하세요.");
+        return;
+      }
+      if (_userNumber.text.isEmpty) {
+        toastMessage("학번을 입력하세요.");
+        return;
+      }
+
+      setState(() {
+        currentStep++;
+      });
+
+      return;
+    }
+    if (currentStep == 1) {
+      if (_userPass.text.isEmpty) {
+        toastMessage("비밀번호를 입력하세요.");
+        return;
+      }
+      if (_userPassAgain.text.isEmpty) {
+        toastMessage("비밀번호 확인을 입력하세요.");
+        return;
+      }
+
+      if (_userPass.text != _userPassAgain.text) {
+        toastMessage("비밀번호가 서로 다릅니다.");
+        return;
+      }
+
+      setState(() {
+        currentStep++;
+      });
+
+      return;
+    }
+  }
+
+  _onCancel() {
+    if (currentStep == 0) {
+      Navigator.of(context).pop();
+      return;
+    }
+    setState(() {
+      currentStep--;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        backgroundColor: Colors.blue[400],
+        backgroundColor: Color.fromARGB(255, 242, 239, 239),
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: SingleChildScrollView(
-            child: Column(children: [
-              Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 50.0, 20.0, 10.0),
-                  child: Column(
-                    children: [
-                      const Text(
-                        "본인의 이름을 입력하세요.",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        controller: _userName,
-                        onChanged: (text) {},
-                        decoration: InputDecoration(
-                            hintText: "이름 ex.홍길동",
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 20.0),
-                            border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.blueAccent, width: 1.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0)),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.blueAccent, width: 2.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            suffixIcon: GestureDetector(
-                              child: const Icon(
-                                Icons.clear,
-                                color: Colors.blueAccent,
-                                size: 20,
+            child: Padding(
+                padding: const EdgeInsets.fromLTRB(20.0, 50.0, 20.0, 10.0),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 100,
+                      width: 100,
+                      color: Colors.black,
+                    ),
+                    Stepper(
+                      controlsBuilder: (context, _) {
+                        if (currentStep != 2) {
+                          return Row(
+                            children: [
+                              ElevatedButton(
+                                  onPressed: _onNext, child: Text('다음')),
+                              SizedBox(
+                                width: 10,
                               ),
-                              onTap: () => _userName.clear(),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white),
-                      ),
-                      const SizedBox(height: 30),
-                      const Text(
-                        "본인의 학번을 입력하세요.",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        controller: _userNumber,
-                        onChanged: (text) {},
-                        decoration: InputDecoration(
-                            hintText: "학번 ex.2022XXXXX",
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 20.0),
-                            border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.blueAccent, width: 1.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0)),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.blueAccent, width: 2.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            suffixIcon: GestureDetector(
-                              child: const Icon(
-                                Icons.clear,
-                                color: Colors.blueAccent,
-                                size: 20,
+                              ElevatedButton(
+                                onPressed: _onCancel,
+                                child: Text(
+                                  '취소',
+                                  style: TextStyle(color: Colors.blueGrey),
+                                ),
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                ),
                               ),
-                              onTap: () => _userNumber.clear(),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white),
-                      ),
-                      const SizedBox(height: 30),
-                      const Text(
-                        "비밀번호를 입력하세요.",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Text(
-                        "가급적이면 영어 + 숫자 + 특수문자였으면 좋겠어요.",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        controller: _userPass,
-                        obscureText: true,
-                        onChanged: (text) {},
-                        decoration: InputDecoration(
-                            hintText: "비밀번호",
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 20.0),
-                            border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.blueAccent, width: 1.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0)),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.blueAccent, width: 2.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            suffixIcon: GestureDetector(
-                              child: const Icon(
-                                Icons.clear,
-                                color: Colors.blueAccent,
-                                size: 20,
-                              ),
-                              onTap: () => _userPass.clear(),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const Text(
-                        "한번만 더 입력해줘요.",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        controller: _userPassAgain,
-                        obscureText: true,
-                        onChanged: (text) {},
-                        decoration: InputDecoration(
-                            hintText: "비밀번호 확인",
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 20.0),
-                            border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.blueAccent, width: 1.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0)),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.blueAccent, width: 2.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            suffixIcon: GestureDetector(
-                              child: const Icon(
-                                Icons.clear,
-                                color: Colors.blueAccent,
-                                size: 20,
-                              ),
-                              onTap: () => _userPassAgain.clear(),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const Text(
-                        "몇학년 인가요?",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        controller: _userGrade,
-                        onChanged: (text) {},
-                        decoration: InputDecoration(
-                            hintText: "학년",
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 20.0),
-                            border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.blueAccent, width: 1.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0)),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.blueAccent, width: 2.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            suffixIcon: GestureDetector(
-                              child: const Icon(
-                                Icons.clear,
-                                color: Colors.blueAccent,
-                                size: 20,
-                              ),
-                              onTap: () => _userGrade.clear(),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      const Text(
-                        "반이 어떻게 되나요?",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        controller: _userClass,
-                        onChanged: (text) {},
-                        decoration: InputDecoration(
-                            hintText: "A/B",
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 20.0),
-                            border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.blueAccent, width: 1.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0)),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.blueAccent, width: 2.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            suffixIcon: GestureDetector(
-                              child: const Icon(
-                                Icons.clear,
-                                color: Colors.blueAccent,
-                                size: 20,
-                              ),
-                              onTap: () => _userClass.clear(),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          SizedBox(
-                            height: 30,
-                          ),
-                          ElevatedButton(
-                              //회원가입 버튼
+                            ],
+                          );
+                        }
 
+                        return Row(
+                          children: [
+                            ElevatedButton(
                               onPressed: () async {
-                                //회원 추가 항목 넣을거임
                                 bool isAdmin = false;
                                 if (_userName.text.isEmpty) {
-                                  Fluttertoast.showToast(
-                                    msg: "학번을 입력하세요.",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    fontSize: 16,
-                                  );
-                                } else if (_userPass.text.isEmpty) {
-                                  Fluttertoast.showToast(
-                                    msg: "비밀번호를 입력하세요.",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    fontSize: 16,
-                                  );
-                                } else if (_userPassAgain.text.isEmpty) {
-                                  Fluttertoast.showToast(
-                                    msg: "비밀번호를 확인해야 합니다.",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    fontSize: 16,
-                                  );
-                                } else if (_userGrade.text.isEmpty) {
-                                  Fluttertoast.showToast(
-                                    msg: "학년을 입력해야 합니다.",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    fontSize: 16,
-                                  );
-                                } else if (_userClass.text.isEmpty) {
-                                  Fluttertoast.showToast(
-                                    msg: "반을 입력해야 합니다.",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    fontSize: 16,
-                                  );
-                                } else if (_userPass.text !=
-                                    _userPassAgain.text) {
-                                  Fluttertoast.showToast(
-                                    msg: "비밀번호 확인이 안됩니다.",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    fontSize: 16,
-                                  );
-                                } else {
+                                  toastMessage("학번을 입력하세요.");
+                                  return;
+                                }
+                                if (_userPass.text.isEmpty) {
+                                  toastMessage("비밀번호를 입력하세요.");
+                                  return;
+                                }
+                                if (_userPassAgain.text.isEmpty) {
+                                  toastMessage("비밀번호를 확인해야합니다.");
+                                  return;
+                                }
+                                if (_userPass.text != _userPassAgain.text) {
+                                  toastMessage("비밀번호 확인이 안됩니다.");
+                                  return;
+                                }
+                                if (_authCode.text != "160") {
+                                  toastMessage("학과 번호가 틀렸습니다.");
+                                  return;
+                                }
+
+                                try {
                                   DocumentSnapshot userinfoData =
                                       await FirebaseFirestore.instance
                                           .collection('UserInfo')
                                           .doc(_userNumber.text)
                                           .get();
-
-                                  try {
-                                    if (userinfoData.exists) {
-                                      Fluttertoast.showToast(
-                                        msg: "이미 계정이 있어요.",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        fontSize: 16,
-                                      );
-                                    } else {
-                                      await firestore
-                                          .collection('UserInfo')
-                                          .doc(_userNumber.text)
-                                          .set({
-                                        'userName': _userName.text,
-                                        'userNumber': _userNumber.text,
-                                        'userPass': _userPass.text,
-                                        'userGrade': _userGrade.text,
-                                        'userClass': _userClass.text,
-                                        'isAdmin': isAdmin,
-                                      });
-                                      Fluttertoast.showToast(
-                                        msg: "생성 완료!",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        fontSize: 16,
-                                      );
-                                      Navigator.pop(context);
-                                    }
-                                  } catch (err) {
-                                    Fluttertoast.showToast(
-                                      msg: "에러 타입 : $err",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      fontSize: 16,
-                                    );
+                                  if (userinfoData.exists) {
+                                    toastMessage("이미 계정이 있습니다.");
+                                    return;
                                   }
+                                  await firestore
+                                      .collection('UserInfo')
+                                      .doc(_userNumber.text)
+                                      .set({
+                                    'userName': _userName.text,
+                                    'userNumber': _userNumber.text,
+                                    'userPass': _userPass.text,
+                                    'isAdmin': isAdmin,
+                                  });
+                                  toastMessage("가입 완료!");
+                                  Navigator.pop(context);
+                                } catch (err) {
+                                  toastMessage("에러타입 : $err\n잠시후에 다시 시도해주세요.");
                                 }
                               },
+                              child: Text('완료'),
                               style: TextButton.styleFrom(
-                                  backgroundColor: Colors.blue[700],
-                                  padding: const EdgeInsets.all(16.0),
-                                  minimumSize: const Size(130, 25)),
-                              child: const Text(
-                                "회원가입",
-                                style:
-                                    TextStyle(fontSize: 15, letterSpacing: 4.0),
-                              )),
-                          SizedBox(
-                            height: 30,
+                                backgroundColor: Colors.blueGrey,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                      onStepTapped: (index) {
+                        setState(() {
+                          currentStep = index;
+                        });
+                      },
+                      steps: [
+                        Step(
+                            isActive: currentStep >= 0,
+                            title: const Text(
+                              "이름 & 학번",
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontFamily: 'hoon',
+                                color: Colors.black,
+                              ),
+                            ),
+                            content: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                TextField(
+                                  controller: _userName,
+                                  onChanged: (text) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                      hintText: "이름 ex.홍길동",
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 10.0, horizontal: 20.0),
+                                      border: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(4.0))),
+                                      focusedBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.blueGrey,
+                                              width: 2.0),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(4.0))),
+                                      suffixIcon: GestureDetector(
+                                        child: const Icon(
+                                          Icons.clear,
+                                          color: Colors.blueGrey,
+                                          size: 20,
+                                        ),
+                                        onTap: () => _userName.clear(),
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.white),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                TextField(
+                                  keyboardType: TextInputType.number,
+                                  controller: _userNumber,
+                                  onChanged: (text) {
+                                    setState(() {});
+                                  },
+                                  decoration: InputDecoration(
+                                      hintText: "학번 ex.2022XXXXX",
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 10.0, horizontal: 20.0),
+                                      border: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(4.0))),
+                                      focusedBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.blueGrey,
+                                              width: 2.0),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(4.0))),
+                                      suffixIcon: GestureDetector(
+                                        child: const Icon(
+                                          Icons.clear,
+                                          color: Colors.blueGrey,
+                                          size: 20,
+                                        ),
+                                        onTap: () => _userNumber.clear(),
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.white),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                )
+                              ],
+                            )),
+                        Step(
+                          isActive: currentStep >= 1,
+                          title: const Text(
+                            "비밀번호",
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontFamily: 'hoon',
+                              color: Colors.black,
+                            ),
                           ),
-                          ElevatedButton(
-                              //취소 버튼
-
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.blue[700],
-                                  padding: const EdgeInsets.all(16.0),
-                                  minimumSize: const Size(130, 25)),
-                              child: const Text(
-                                "취소",
-                                style:
-                                    TextStyle(fontSize: 15, letterSpacing: 4.0),
-                              )),
-                          SizedBox(
-                            height: 30,
+                          content: Column(
+                            children: [
+                              const Text(
+                                "영어 + 숫자 + 특수문자",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              TextField(
+                                controller: _userPass,
+                                obscureText: true,
+                                onChanged: (text) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                    hintText: "비밀번호",
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 20.0),
+                                    border: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4.0))),
+                                    focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.blueGrey, width: 2.0),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4.0))),
+                                    suffixIcon: GestureDetector(
+                                      child: const Icon(
+                                        Icons.clear,
+                                        color: Colors.blueGrey,
+                                        size: 20,
+                                      ),
+                                      onTap: () => _userPass.clear(),
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.white),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              TextField(
+                                controller: _userPassAgain,
+                                obscureText: true,
+                                onChanged: (text) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                    hintText: "비밀번호 확인",
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 20.0),
+                                    border: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4.0))),
+                                    focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.blueGrey, width: 2.0),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4.0))),
+                                    suffixIcon: GestureDetector(
+                                      child: const Icon(
+                                        Icons.clear,
+                                        color: Colors.blueGrey,
+                                        size: 20,
+                                      ),
+                                      onTap: () => _userPassAgain.clear(),
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.white),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                            ],
                           ),
-                        ],
-                      )
-                    ],
-                  )),
-            ]),
+                        ),
+                        Step(
+                          isActive: currentStep >= 2,
+                          title: const Text(
+                            "학과 인증",
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontFamily: 'hoon',
+                              color: Colors.black,
+                            ),
+                          ),
+                          content: Column(
+                            children: [
+                              TextField(
+                                keyboardType: TextInputType.number,
+                                controller: _authCode,
+                                obscureText: true,
+                                onChanged: (text) {
+                                  setState(() {});
+                                },
+                                decoration: InputDecoration(
+                                    hintText: "학과 번호",
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 20.0),
+                                    border: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4.0))),
+                                    focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.blueGrey, width: 2.0),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(4.0))),
+                                    suffixIcon: GestureDetector(
+                                      child: const Icon(
+                                        Icons.clear,
+                                        color: Colors.blueGrey,
+                                        size: 20,
+                                      ),
+                                      onTap: () => _userPassAgain.clear(),
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.white),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                      currentStep: currentStep,
+                    ),
+                  ],
+                )),
           ),
         ));
   }
 }
+
+// Column(
+//                   children: [
+// Container(
+//   height: 100,
+//   width: 100,
+//   color: Colors.black,
+// ), // 나중에 로고
+//                     SizedBox(
+//                       height: 30,
+//                     ),
+
+//                     const SizedBox(height: 30),
+
+//                     const SizedBox(
+//                       height: 10,
+//                     ),
+
+//                     const SizedBox(height: 30),
+
+//                     const Text(
+//                       "영어 + 숫자 + 특수문자",
+//                       style: TextStyle(
+//                         fontSize: 15,
+//                         color: Colors.black,
+//                       ),
+//                     ),
+//                     const SizedBox(
+//                       height: 10,
+//                     ),
+
+//                     const SizedBox(
+//                       height: 30,
+//                     ),
+
+//                     const SizedBox(
+//                       height: 10,
+//                     ),
+
+//                     const SizedBox(
+//                       height: 30,
+//                     ),
+//                     ElevatedButton(
+                        
+//                         style: TextButton.styleFrom(
+//                             backgroundColor: Colors.blueGrey,
+//                             padding: const EdgeInsets.all(16.0),
+//                             minimumSize: const Size(130, 25)),
+//                         child: const Text(
+//                           "회원가입",
+//                           style: TextStyle(fontSize: 15, letterSpacing: 4.0),
+//                         )),
+//                     SizedBox(
+//                       height: 30,
+//                     ),
+//                   ],
+//                 )

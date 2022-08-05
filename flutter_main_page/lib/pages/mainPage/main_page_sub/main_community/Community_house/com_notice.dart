@@ -7,8 +7,8 @@ import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Co
 
 class NoticePage extends StatefulWidget {
   final String user;
-  final bool? isAdmin;
-  const NoticePage(this.user, this.isAdmin, {Key? key}) : super(key: key);
+
+  const NoticePage(this.user, {Key? key}) : super(key: key);
 
   @override
   State<NoticePage> createState() => _NoticePageState();
@@ -26,156 +26,113 @@ class _NoticePageState extends State<NoticePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isAdmin == true) {
-      return GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.blue,
-            title: const Text(
-              "NOTICE",
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Pacifico',
-              ),
-            ),
-            centerTitle: true,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                _buildSearch(),
-                _buildItem(),
-              ],
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                //글쓰기 페이지 이동
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          WriteNotice(widget.user, widget.isAdmin)),
-                );
-              },
-              child: const Icon(Icons.border_color)),
-        ),
-      );
-    } else {
-      return GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.blue,
-            title: const Text(
-              "NOTICE",
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Pacifico',
-              ),
-            ),
-            centerTitle: true,
-            actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                _buildSearch(),
-                _buildItem(),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-  }
-
-  Widget _buildItem() {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('notice')
-                .orderBy('time', descending: true)
-                .snapshots(),
-            builder: (context, snapshot) {
-              return (snapshot.connectionState == ConnectionState.waiting)
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        var data = snapshot.data!.docs[index].data()
-                            as Map<String, dynamic>;
-
-                        if (_searchContent.isEmpty) {
-                          return _buildItemWidget(data['title'],
-                              data['content'], data['author'], data['time']);
-                        }
-                        if (data['title'].toString().contains(_searchContent)) {
-                          return _buildItemWidget(data['title'],
-                              data['content'], data['author'], data['time']);
-                        }
-                        return Container();
-                      });
-            }),
-      ),
-    );
-  }
-
-  Widget _buildItemWidget(
-      String title, String content, String author, String time) {
-    return Column(
-      children: [
-        ListTile(
-          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        NoticeViewPage(title, content, author, time)));
-          },
-          leading: const Icon(
-            Icons.notifications,
-            color: Colors.deepPurple,
-          ),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
           title: Text(
-            title,
-            style: const TextStyle(
-                fontSize: 20,
-                color: Colors.deepPurple,
-                fontWeight: FontWeight.bold),
+            '공지사항',
+            style: TextStyle(
+                fontFamily: 'hoon', color: Colors.black, fontSize: 25),
           ),
-          subtitle: Text(
-            "작성자 : $author",
-            style: const TextStyle(fontSize: 10),
+          centerTitle: true,
+          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
+          iconTheme: IconThemeData.fallback(),
+          shadowColor: Colors.white,
+          backgroundColor: Colors.white,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              _buildItem(),
+            ],
           ),
         ),
-        Divider(
-          color: Colors.grey,
-        )
-      ],
-    );
-  }
-
-  Widget _buildSearch() {
-    return TextField(
-      controller: _search,
-      onChanged: (text) {
-        setState(() {
-          _searchContent = text;
-        });
-      },
-      decoration: InputDecoration(
-        hintText: "제목을 입력하세요.",
-        prefixIcon: Icon(Icons.search),
       ),
     );
   }
 }
+
+Widget _buildItem() {
+  return Expanded(
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('notice')
+              .orderBy('time', descending: true)
+              .snapshots(),
+          builder: (context, snapshot) {
+            return (snapshot.connectionState == ConnectionState.waiting)
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      var data = snapshot.data!.docs[index].data()
+                          as Map<String, dynamic>;
+
+                      if (snapshot.hasData) {
+                        return _buildItemWidget(context, data['title'],
+                            data['content'], data['author'], data['time']);
+                      }
+
+                      return Container();
+                    });
+          }),
+    ),
+  );
+}
+
+Widget _buildItemWidget(BuildContext context, String title, String content,
+    String author, String time) {
+  return Column(
+    children: [
+      ListTile(
+        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+        onTap: () {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      NoticeViewPage(title, content, author, time)));
+        },
+        title: Text(
+          title,
+          style: const TextStyle(
+              fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          "작성자 : $author | $time",
+          style: const TextStyle(fontSize: 10),
+        ),
+      ),
+      Divider(
+        color: Colors.grey,
+      )
+    ],
+  );
+}
+
+// Widget _buildSearch() {
+//   return Padding(
+//     padding: const EdgeInsets.all(8.0),
+//     child: TextField(
+//       controller: _search,
+//       onChanged: (text) {
+//         setState(() {
+//           _searchContent = text;
+//         });
+//       },
+//       decoration: InputDecoration(
+//         hintText: "제목을 입력하세요.",
+//         prefixIcon: Icon(Icons.search),
+//       ),
+//     ),
+//   );
+// }
+
+
+

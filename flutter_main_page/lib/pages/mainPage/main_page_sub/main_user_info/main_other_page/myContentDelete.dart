@@ -81,7 +81,7 @@ class _MyContentDeletePageState extends State<MyContentDeletePage> {
           stream: FirebaseFirestore.instance
               .collection('com')
               .where('field')
-              .where('author', isEqualTo: widget.user)
+              .where('number', isEqualTo: widget.user)
               .orderBy('time', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
@@ -111,8 +111,8 @@ class _MyContentDeletePageState extends State<MyContentDeletePage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ComViewPage(
-                    com.title, com.content, com.author, com.time, doc.id, widget.user)));
+                builder: (context) => ComViewPage(com.title, com.content,
+                    com.author, com.time, doc.id, widget.user)));
       },
       title: Text(
         com.title,

@@ -19,20 +19,19 @@ import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/ma
 
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/user_info_template.dart';
 
-class MainPage4 extends StatefulWidget {
+class MainInfo extends StatefulWidget {
   final String userNumber;
   final String user;
+
   final bool? isAdmin;
-  const MainPage4(
-      this.userNumber, this.user, this.isAdmin,
-      {Key? key})
+  const MainInfo(this.userNumber, this.user, this.isAdmin, {Key? key})
       : super(key: key);
 
   @override
-  State<MainPage4> createState() => _MainPage4State();
+  State<MainInfo> createState() => _MainInfoState();
 }
 
-class _MainPage4State extends State<MainPage4> {
+class _MainInfoState extends State<MainInfo> {
   void _createItemDialog() {
     if (prefs.getBool('isSubscribe') == true) {
       showDialog(
@@ -180,8 +179,7 @@ class _MainPage4State extends State<MainPage4> {
   }
 
   Widget _buildUserInfo() {
-    return (userInfoBox.set_user_info(
-        widget.user, widget.userNumber));
+    return (userInfoBox.set_user_info(widget.user, widget.userNumber));
   }
 
   Widget _buildManager() {

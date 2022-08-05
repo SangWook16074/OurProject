@@ -2,11 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/loginPage/Create_user/create_user.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import '../mainPage/main_page_sub/main_home/main_home.dart';
 
 bool isChecked = false;
 // import 'package:flutter_main_page/main_page.dart';
+late bool autoLoginStatus;
+late String userNumber;
+late String user;
+late bool isAdmin;
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -16,6 +19,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  int currentStep = 0;
   late bool autoLoginStatus;
   late String userNumber;
   late String user;
@@ -54,12 +58,14 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     if (prefs.getBool('autoLoginStatus') == true) {
-      return MainPage(prefs.getString('userNumber').toString(),
-          prefs.getString('user').toString(), prefs.getBool('isAdmin'));
+      return MainHome(
+          userNumber: prefs.getString('userNumber').toString(),
+          user: prefs.getString('user').toString(),
+          isAdmin: prefs.getBool('isAdmin')!);
     } else {
       return Scaffold(
           resizeToAvoidBottomInset: true,
-          backgroundColor: Colors.blue[400],
+          backgroundColor: Colors.white,
           body: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
             child: SingleChildScrollView(
@@ -70,19 +76,19 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 250),
                       //로고 넣을 것임.
                       const Text(
-                        "Induk Univ.",
+                        "인덕대학교",
                         style: TextStyle(
-                            fontSize: 40,
-                            fontFamily: 'Pacifico',
+                            fontSize: 60,
+                            fontFamily: 'Dokdo',
                             fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                            color: Colors.black),
                       ),
                       const Text(
                         "Information and Communication",
                         style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 20,
                             fontFamily: 'Pacifico',
-                            color: Colors.white),
+                            color: Colors.black),
                       ),
                       const SizedBox(height: 50),
                       Padding(
@@ -107,20 +113,19 @@ class _LoginPageState extends State<LoginPage> {
                                             Radius.circular(4.0))),
                                     enabledBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: Colors.blueAccent, width: 1.0),
+                                          color: Colors.black, width: 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(4.0)),
                                     ),
                                     focusedBorder: const OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.blueAccent,
-                                            width: 2.0),
+                                            color: Colors.black, width: 2.0),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(4.0))),
                                     suffixIcon: GestureDetector(
                                       child: const Icon(
                                         Icons.clear,
-                                        color: Colors.blueAccent,
+                                        color: Colors.black,
                                         size: 20,
                                       ),
                                       onTap: () =>
@@ -148,20 +153,19 @@ class _LoginPageState extends State<LoginPage> {
                                             Radius.circular(4.0))),
                                     enabledBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: Colors.blueAccent, width: 1.0),
+                                          color: Colors.black, width: 1.0),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(4.0)),
                                     ),
                                     focusedBorder: const OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.blueAccent,
-                                            width: 2.0),
+                                            color: Colors.black, width: 2.0),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(4.0))),
                                     suffixIcon: GestureDetector(
                                       child: const Icon(
                                         Icons.clear,
-                                        color: Colors.blueAccent,
+                                        color: Colors.black,
                                         size: 20,
                                       ),
                                       onTap: () =>
@@ -184,8 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                                   const Text(
                                     "자동로그인",
                                     style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                        color: Colors.black,
                                         letterSpacing: (4.0)),
                                   )
                                 ],
@@ -198,21 +201,15 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () async {
                             //회원확인 절차 넣을것임
                             if (_textEditingControllerUser.text.isEmpty) {
-                              Fluttertoast.showToast(
-                                msg: "학번을 입력하세요.",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                fontSize: 16,
-                              );
-                            } else if (_textEditingControllerPassWd
-                                .text.isEmpty) {
-                              Fluttertoast.showToast(
-                                msg: "비밀번호를 입력하세요.",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                fontSize: 16,
-                              );
-                            } else {
+                              toastMessage("학번을 입력하세요.");
+                              return;
+                            }
+                            if (_textEditingControllerPassWd.text.isEmpty) {
+                              toastMessage("비밀번호를 입력하세요.");
+                              return;
+                            }
+
+                            try {
                               final String user =
                                   _textEditingControllerUser.text;
                               DocumentSnapshot userInfoData =
@@ -221,65 +218,53 @@ class _LoginPageState extends State<LoginPage> {
                                       .doc(user)
                                       .get();
 
-                              try {
-                                if (_textEditingControllerPassWd.text !=
-                                    userInfoData['userPass']) {
-                                  Fluttertoast.showToast(
-                                    msg: "비밀번호가 틀립니다.",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    fontSize: 16,
-                                  );
-                                } else {
-                                  if (isChecked == true) {
-                                    _updateAutoLoginStatus(isChecked);
-                                    _saveUserData(
-                                        userInfoData['userNumber'],
-                                        userInfoData['userName'],
-                                        userInfoData['isAdmin']);
-                                  }
-
-                                  prefs.setString(
-                                      'userNumber', userInfoData['userNumber']);
-                                  prefs.setInt(
-                                      'index', prefs.getInt('index') ?? 1);
-
-                                  Fluttertoast.showToast(
-                                    msg: "환영합니다!",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    fontSize: 16,
-                                  );
-
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MainPage(
-                                              userInfoData.id,
-                                              userInfoData['userName'],
-                                              userInfoData['isAdmin'])));
-
-                                  _textEditingControllerUser.clear();
-                                  _textEditingControllerPassWd.clear();
-                                }
-                              } catch (err) {
-                                print(err);
-                                Fluttertoast.showToast(
-                                  msg: "존재하지 않는 학번입니다.",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  fontSize: 16,
-                                );
+                              if (!userInfoData.exists) {
+                                toastMessage("가입하지 않은 학번입니다.");
+                                return;
                               }
+                              if (_textEditingControllerPassWd.text !=
+                                  userInfoData['userPass']) {
+                                toastMessage("비밀번호가 다릅니다.");
+                                return;
+                              }
+                              if (isChecked == true) {
+                                _updateAutoLoginStatus(isChecked);
+                                _saveUserData(
+                                    userInfoData['userNumber'],
+                                    userInfoData['userName'],
+                                    userInfoData['isAdmin']);
+                              }
+
+                              prefs.setString(
+                                  'userNumber', userInfoData['userNumber']);
+                              prefs.setInt('index', prefs.getInt('index') ?? 1);
+
+                              toastMessage("환영합니다!");
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MainHome(
+                                          userNumber: userInfoData.id,
+                                          user: userInfoData['userName'],
+                                          isAdmin: userInfoData['isAdmin'])));
+
+                              _textEditingControllerUser.clear();
+                              _textEditingControllerPassWd.clear();
+                            } catch (err) {
+                              toastMessage("에러타입 : $err\n잠시후에 다시 시도해주세요.");
                             }
                           },
                           style: TextButton.styleFrom(
-                              backgroundColor: Colors.blue[700],
+                              backgroundColor: Colors.blueGrey,
                               padding: const EdgeInsets.all(16.0),
                               minimumSize: const Size(355, 25)),
                           child: const Text(
                             "로그인",
-                            style: TextStyle(fontSize: 15, letterSpacing: 4.0),
+                            style: TextStyle(
+                                fontSize: 15,
+                                letterSpacing: 4.0,
+                                color: Colors.black),
                           )),
                       TextButton(
                         //회원가입 버튼
@@ -293,7 +278,7 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextButton.styleFrom(),
                         child: const Text(
                           "회원가입",
-                          style: TextStyle(fontSize: 15, color: Colors.white),
+                          style: TextStyle(fontSize: 15, color: Colors.black),
                         ),
                       )
                     ],

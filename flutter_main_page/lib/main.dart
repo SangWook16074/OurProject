@@ -41,6 +41,14 @@ Future<void> _addIndex() async {
   await prefs.setInt('index', number);
 }
 
+toastMessage(String message) {
+  Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      fontSize: 16);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -51,11 +59,7 @@ void main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
-  Fluttertoast.showToast(
-      msg: "Hello !",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      fontSize: 16);
+  toastMessage("Hello!");
 }
 
 // ignore: must_be_immutable
@@ -65,9 +69,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialBinding:
@@ -80,11 +85,11 @@ class MyApp extends StatelessWidget {
                 fontSize: 40,
                 fontFamily: 'Pacifico',
                 fontWeight: FontWeight.bold,
-                color: Colors.white),
+                color: Colors.black),
           ),
           splashTransition: SplashTransition.fadeTransition,
           pageTransitionType: PageTransitionType.fade,
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.white,
           nextScreen: LoginPage()),
     );
   }

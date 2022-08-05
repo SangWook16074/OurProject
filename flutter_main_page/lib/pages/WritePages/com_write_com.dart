@@ -14,8 +14,9 @@ class Write {
 }
 
 class WriteComPage extends StatefulWidget {
-  final String user;
-  const WriteComPage(this.user, {Key? key}) : super(key: key);
+  final String userNumber;
+
+  const WriteComPage(this.userNumber, {Key? key}) : super(key: key);
 
   @override
   State<WriteComPage> createState() => _WriteComPageState();
@@ -26,7 +27,7 @@ class _WriteComPageState extends State<WriteComPage> {
   final _title = TextEditingController();
   final _content = TextEditingController();
 
-  void _createItemDialog(Write com, String user) {
+  void _createItemDialog(Write com, String userNumber) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -44,7 +45,7 @@ class _WriteComPageState extends State<WriteComPage> {
             actions: [
               TextButton(
                   onPressed: () {
-                    _addNotice(com, user);
+                    _addNotice(com, userNumber);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   },
@@ -59,11 +60,11 @@ class _WriteComPageState extends State<WriteComPage> {
         });
   }
 
-  void _addNotice(Write com, String user) {
+  void _addNotice(Write com, String userNumber) {
     FirebaseFirestore.instance.collection('com').add({
       'title': com.title,
       'content': com.content,
-      'author': user,
+      'number': userNumber,
       'time': com.time,
       'countLike': 0,
       'likedUsersList': [],
@@ -131,7 +132,7 @@ class _WriteComPageState extends State<WriteComPage> {
                 } else {
                   _createItemDialog(
                       Write(_title.text, _content.text, _now.toString()),
-                      widget.user);
+                      widget.userNumber);
                 }
               },
               icon: Icon(Icons.check))

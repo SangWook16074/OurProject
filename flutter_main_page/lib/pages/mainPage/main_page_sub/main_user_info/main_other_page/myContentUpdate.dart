@@ -13,8 +13,8 @@ class Com {
 }
 
 class MyContentUpdatePage extends StatefulWidget {
-  final String user;
-  MyContentUpdatePage(this.user, {Key? key}) : super(key: key);
+  final String userNumber;
+  MyContentUpdatePage(this.userNumber, {Key? key}) : super(key: key);
 
   @override
   State<MyContentUpdatePage> createState() => _MyContentUpdatePageState();
@@ -77,7 +77,7 @@ class _MyContentUpdatePageState extends State<MyContentUpdatePage> {
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('com')
-              .where('author', isEqualTo: widget.user)
+              .where('number', isEqualTo: widget.userNumber)
               .orderBy('time', descending: true)
               .snapshots(),
           builder: (context, snapshot) {

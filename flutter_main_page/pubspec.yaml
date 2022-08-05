@@ -53,6 +53,9 @@ dependencies:
   file_picker: ^4.6.1
   firebase_storage: ^10.3.3
   cached_network_image: ^3.2.1
+  flutter_speed_dial: ^6.0.0
+  
+
 
 dev_dependencies:
   flutter_test:
@@ -106,6 +109,18 @@ flutter:
     - family: Pacifico
       fonts:
         - asset: assets/Fonts/Pacifico-Regular.ttf
+
+    - family: Dokdo
+      fonts:
+        - asset: assets\Fonts\EastSeaDokdo-Regular.ttf
+
+    - family: nexon
+      fonts:
+        - asset: assets\Fonts\NEXONLv1GothicRegular.ttf
+
+    - family: hoon
+      fonts:
+        - asset: assets\Fonts\DoHyeon-Regular.ttf
   #         
   #
   # For details regarding fonts from package dependencies,

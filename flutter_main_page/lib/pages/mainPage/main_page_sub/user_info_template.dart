@@ -28,58 +28,61 @@ class userInfoBox extends StatelessWidget {
       ),
       //안에 들어갈 디자인 입니다.
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Icon(
-                Icons.account_circle_rounded,
-                size: 100,
-              ),
+          // mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Icon(
+                  Icons.account_circle_rounded,
+                  size: 100,
+                ),
 
-              Column(
-                children: [
-                  SizedBox(
-                    child: Text(
-                      '${this.user}',
-                      style: const TextStyle(
-                          fontSize: 23, fontWeight: FontWeight.w700),
+                Column(
+                  children: [
+                    SizedBox(
+                      child: Text(
+                        '${this.user}',
+                        style: const TextStyle(
+                            fontSize: 23, fontWeight: FontWeight.w700),
+                      ),
                     ),
-                  ),
-                  Text(
-                    '${this.userNumber}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                ],
-              ),
+                    Text(
+                      '${this.userNumber}',
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ],
+                ),
 
-              //일단 냅다 주석 처리
-              IconButton(
-                icon: Icon(Icons.logout),
-                color: Color.fromRGBO(104, 103, 103, 100),
-                onPressed: () async {
-                  isChecked = false;
-                  _deleteAutoLoginStatus();
+                //일단 냅다 주석 처리
+                Column(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.logout),
+                      color: Color.fromRGBO(104, 103, 103, 100),
+                      onPressed: () async {
+                        isChecked = false;
+                        _deleteAutoLoginStatus();
 
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                      (route) => false);
-                },
-              ),
-            ],
-          ),
-          SizedBox(
-            width: 50,
-          ),
-          //일단 냅다 주석 처리
-        ],
-      ),
-
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
+                            (route) => false);
+                      },
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ]),
       // ],
-    ));
-    // )
+    )
+        // )
+        );
   }
 }
