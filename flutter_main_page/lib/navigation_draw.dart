@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/custom_page_route.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/pages/feedback.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_notice.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/calculate.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/myContentDelete.dart';
@@ -103,14 +104,10 @@ class NavigationDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Material(
-        color: Color.fromARGB(255, 25, 79, 107),
+        color: Colors.white,
         child: ListView(padding: padding, children: <Widget>[
           const SizedBox(
             height: 40,
-          ),
-          Text(
-            "User",
-            style: TextStyle(fontFamily: 'hoon', fontSize: 30),
           ),
           _buildUserInfo(context),
           Divider(
@@ -184,14 +181,6 @@ class NavigationDrawerWidget extends StatelessWidget {
               this.userNumber,
             ),
           ),
-          _buildMenuItem(
-            context,
-            text: '비밀번호 변경',
-            icon: Icons.password,
-            onTap: ComPage(
-              this.userNumber,
-            ),
-          ),
           Divider(
             color: Colors.black,
           ),
@@ -208,24 +197,20 @@ class NavigationDrawerWidget extends StatelessWidget {
             },
             leading: Icon(
               Icons.settings,
-              color: Colors.white70,
+              color: Colors.black87,
             ),
             title: Text(
               "알림 설정",
               style:
-                  TextStyle(color: Colors.white70, fontWeight: FontWeight.bold),
+                  TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
             ),
           ),
           _buildMenuItem(context,
               text: '학점 계산기', icon: Icons.calculate, onTap: CalculatePage()),
-          _buildMenuItem(
-            context,
-            text: '피드백',
-            icon: Icons.feedback,
-            onTap: ComPage(
-              this.userNumber,
-            ),
-          ),
+          _buildMenuItem(context,
+              text: '피드백',
+              icon: Icons.feedback,
+              onTap: FeedBackPage(userNumber: this.userNumber)),
           _buildMenuItem(
             context,
             text: '정보',
@@ -252,7 +237,7 @@ class NavigationDrawerWidget extends StatelessWidget {
           Icon(
             Icons.account_circle_rounded,
             size: 40,
-            color: Colors.white70,
+            color: Colors.black54,
           ),
           Column(
             children: [
@@ -262,19 +247,19 @@ class NavigationDrawerWidget extends StatelessWidget {
                   style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white70),
+                      color: Colors.black87),
                 ),
               ),
               Text(
                 '${this.userNumber}',
-                style: const TextStyle(fontSize: 15, color: Colors.white70),
+                style: const TextStyle(fontSize: 15, color: Colors.black87),
               ),
             ],
           ),
           IconButton(
             icon: Icon(
               Icons.logout,
-              color: Colors.white70,
+              color: Colors.black87,
               size: 20,
             ),
             color: Color.fromRGBO(104, 103, 103, 100),
@@ -295,7 +280,7 @@ class NavigationDrawerWidget extends StatelessWidget {
 
   Widget _buildMenuItem(BuildContext context,
       {required String text, required IconData icon, required Widget onTap}) {
-    final color = Colors.white70;
+    final color = Colors.black87;
 
     return ListTile(
       onTap: () {

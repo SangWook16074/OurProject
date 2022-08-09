@@ -2,8 +2,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/custom_page_route.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_noticeWrite.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_search.dart';
 
 class NoticePage extends StatefulWidget {
   final String user;
@@ -16,7 +17,6 @@ class NoticePage extends StatefulWidget {
 
 class _NoticePageState extends State<NoticePage> {
   var _search = TextEditingController();
-  String _searchContent = '';
 
   @override
   void dispose() {
@@ -36,7 +36,18 @@ class _NoticePageState extends State<NoticePage> {
                 fontFamily: 'hoon', color: Colors.black, fontSize: 25),
           ),
           centerTitle: true,
-          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      CustomPageRoute(
+                          child: SearchPage(
+                        topic: 'notice',
+                      )));
+                },
+                icon: Icon(Icons.search))
+          ],
           iconTheme: IconThemeData.fallback(),
           shadowColor: Colors.white,
           backgroundColor: Colors.white,
@@ -105,7 +116,7 @@ Widget _buildItemWidget(BuildContext context, String title, String content,
               fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          "작성자 : $author | $time",
+          "$author | $time",
           style: const TextStyle(fontSize: 10),
         ),
       ),
@@ -115,24 +126,3 @@ Widget _buildItemWidget(BuildContext context, String title, String content,
     ],
   );
 }
-
-// Widget _buildSearch() {
-//   return Padding(
-//     padding: const EdgeInsets.all(8.0),
-//     child: TextField(
-//       controller: _search,
-//       onChanged: (text) {
-//         setState(() {
-//           _searchContent = text;
-//         });
-//       },
-//       decoration: InputDecoration(
-//         hintText: "제목을 입력하세요.",
-//         prefixIcon: Icon(Icons.search),
-//       ),
-//     ),
-//   );
-// }
-
-
-

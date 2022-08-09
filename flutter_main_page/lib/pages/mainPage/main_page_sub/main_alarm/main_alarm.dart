@@ -111,13 +111,11 @@ class _MainAlarmState extends State<MainAlarm> {
                   if (documents.isEmpty) {
                     return _buildNonEvent();
                   } else {
-                    return Expanded(
-                      child: ListView(
-                        shrinkWrap: true,
-                        children: documents
-                            .map((doc) => _buildItemWidget(doc))
-                            .toList(),
-                      ),
+                    return ListView(
+                      shrinkWrap: true,
+                      children: documents
+                          .map((doc) => _buildItemWidget(doc))
+                          .toList(),
                     );
                   }
                 }),

@@ -138,6 +138,10 @@ class _MainHomeState extends State<MainHome> {
               SizedBox(
                 height: 20,
               ),
+              _buildTop(),
+              SizedBox(
+                height: 20,
+              ),
               _buildImage(),
               SizedBox(
                 height: 30,
@@ -182,6 +186,14 @@ class _MainHomeState extends State<MainHome> {
             ],
           ),
         ));
+  }
+
+  Widget _buildTop() {
+    return Container(
+      height: 100,
+      width: 100,
+      color: Colors.black,
+    );
   }
 
   Widget _buildBottom() {
@@ -274,7 +286,7 @@ class _MainHomeState extends State<MainHome> {
                 color: Colors.blueGrey),
           ),
           subtitle: Text(
-            "작성자 : ${notice.author}",
+            "${notice.author} | ${notice.time}",
             style: const TextStyle(fontSize: 12),
           ),
         ),

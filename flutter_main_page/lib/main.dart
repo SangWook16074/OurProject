@@ -11,7 +11,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
-late SharedPreferences prefs; //안드로이드만 가능함.
+late SharedPreferences prefs;
 Color myColor = Color(0xFF87C2F3);
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -55,7 +55,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  prefs = await SharedPreferences.getInstance(); // 안드로이드만 가능함.
+  prefs = await SharedPreferences.getInstance();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
