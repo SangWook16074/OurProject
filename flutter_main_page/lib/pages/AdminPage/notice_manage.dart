@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_noticeWrite.dart';
 
 import '../Update_Page/Notice_update.dart';
 
@@ -92,13 +93,24 @@ class _NoticeManagePageState extends State<NoticeManagePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        icon: Icon(Icons.edit),
+        label: Text("글쓰기"),
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => WriteNotice()));
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "Notice Manager",
+          "공지관리",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            color: Colors.black,
+            fontSize: 25,
+            fontFamily: 'hoon',
           ),
         ),
         centerTitle: true,
@@ -130,41 +142,46 @@ class _NoticeManagePageState extends State<NoticeManagePage> {
   Widget _buildEventWidget(DocumentSnapshot doc) {
     final notice =
         Notice(doc['title'], doc['author'], doc['content'], doc['time']);
-    return ListTile(
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => NoticeViewPage(
-                    notice.title, notice.content, notice.author, notice.time)));
-      },
-      title: Text(
-        notice.title,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(
-        notice.author,
-        style: const TextStyle(fontSize: 10),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            onPressed: () {
-              _deleteItemDialog(doc);
-            },
-            icon: Icon(Icons.delete),
+    return Column(
+      children: [
+        ListTile(
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NoticeViewPage(notice.title,
+                        notice.content, notice.author, notice.time)));
+          },
+          title: Text(
+            notice.title,
+            style: const TextStyle(
+                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
           ),
-          IconButton(
-            onPressed: () {
-              _updateItemDialog(doc, doc.id, notice.title, notice.content);
-            },
-            icon: Icon(Icons.update),
+          subtitle: Text(
+            notice.author,
+            style: const TextStyle(fontSize: 10),
           ),
-        ],
-      ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: () {
+                  _deleteItemDialog(doc);
+                },
+                icon: Icon(Icons.delete),
+              ),
+              IconButton(
+                onPressed: () {
+                  _updateItemDialog(doc, doc.id, notice.title, notice.content);
+                },
+                icon: Icon(Icons.update),
+              ),
+            ],
+          ),
+        ),
+        Divider(),
+      ],
     );
   }
 

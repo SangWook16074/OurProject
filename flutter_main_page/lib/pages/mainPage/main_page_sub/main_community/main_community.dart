@@ -8,7 +8,6 @@ import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_community.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_event.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_info_job.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/FAB/expandable_FAB.dart';
 
 class Content {
   String title;
@@ -51,7 +50,6 @@ class _MainPage2State extends State<MainPage2> {
           ],
         ),
       ),
-      floatingActionButton: ExpandableFab(widget.user, widget.isAdmin),
     );
   }
 
@@ -342,8 +340,8 @@ class _MainPage2State extends State<MainPage2> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ComViewPage(
-                    com.title, com.content, "익명", com.time, doc.id, widget.userNumber)));
+                builder: (context) => ComViewPage(com.title, com.content, "익명",
+                    com.time, doc.id, widget.userNumber)));
       },
       title: Text(
         "[익명] ${com.title}",

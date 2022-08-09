@@ -6,8 +6,6 @@ Future<void> _deleteAutoLoginStatus() async {
   prefs.setBool('autoLoginStatus', false);
   prefs.remove('userNumber');
   prefs.remove('user');
-  prefs.remove('userGrade');
-  prefs.remove('Class');
   prefs.remove('isAdmin');
 }
 

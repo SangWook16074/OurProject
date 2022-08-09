@@ -35,20 +35,28 @@ class _ComPageState extends State<ComPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton.extended(
+          icon: Icon(Icons.edit),
+          label: Text("글쓰기"),
+          onPressed: () {},
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         appBar: AppBar(
-          backgroundColor: Colors.blue,
+          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
+          iconTheme: IconThemeData.fallback(),
+          backgroundColor: Colors.white,
           title: const Text(
-            "Community",
+            "커뮤니티",
             style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Pacifico',
+              color: Colors.black,
+              fontFamily: 'hoon',
+              fontSize: 25,
             ),
           ),
           centerTitle: true,
         ),
         body: Column(
           children: [
-            _buildSearch(),
             _buildItem(),
           ],
         ));
@@ -75,7 +83,7 @@ class _ComPageState extends State<ComPage> {
                             as Map<String, dynamic>;
                         var id = snapshot.data!.docs[index].id;
 
-                        if (_searchContent.isEmpty) {
+                        if (snapshot.hasData) {
                           return _buildItemWidget(
                               id,
                               data['title'],
@@ -85,16 +93,7 @@ class _ComPageState extends State<ComPage> {
                               data['countLike'],
                               data['likedUsersList']);
                         }
-                        if (data['title'].toString().contains(_searchContent)) {
-                          return _buildItemWidget(
-                              id,
-                              data['title'],
-                              data['content'],
-                              data['author'],
-                              data['time'],
-                              data['countLike'],
-                              data['likedUsersList']);
-                        }
+
                         return Container();
                       });
             }),
@@ -147,24 +146,6 @@ class _ComPageState extends State<ComPage> {
           color: Colors.grey,
         )
       ],
-    );
-  }
-
-  Widget _buildSearch() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        controller: _search,
-        onChanged: (text) {
-          setState(() {
-            _searchContent = text;
-          });
-        },
-        decoration: InputDecoration(
-          hintText: "제목을 입력하세요.",
-          prefixIcon: Icon(Icons.search),
-        ),
-      ),
     );
   }
 

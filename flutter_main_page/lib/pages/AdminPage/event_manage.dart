@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/Update_Page/event_update.dart';
+import 'package:flutter_main_page/pages/WritePages/com_write_event.dart';
 import '../View_pages/notice_view.dart';
 
 class Event {
@@ -91,14 +92,24 @@ class _EventManagePageState extends State<EventManagePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        icon: Icon(Icons.edit),
+        label: Text("글쓰기"),
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => WriteEventPage()));
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.refresh))],
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "Event Manager",
+          "이벤트 관리",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            fontSize: 25,
+            color: Colors.black,
+            fontFamily: 'hoon',
           ),
         ),
         centerTitle: true,
@@ -130,41 +141,46 @@ class _EventManagePageState extends State<EventManagePage> {
   Widget _buildEventWidget(DocumentSnapshot doc) {
     final event =
         Event(doc['title'], doc['author'], doc['content'], doc['time']);
-    return ListTile(
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: ((context) => NoticeViewPage(
-                    event.title, event.content, event.author, event.time))));
-      },
-      title: Text(
-        event.title,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(
-        event.author,
-        style: const TextStyle(fontSize: 10),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            onPressed: () {
-              _deleteItemDialog(doc);
-            },
-            icon: Icon(Icons.delete),
+    return Column(
+      children: [
+        ListTile(
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: ((context) => NoticeViewPage(event.title,
+                        event.content, event.author, event.time))));
+          },
+          title: Text(
+            event.title,
+            style: const TextStyle(
+                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
           ),
-          IconButton(
-            onPressed: () {
-              _updateItemDialog(doc, doc.id, event.title, event.content);
-            },
-            icon: Icon(Icons.update),
+          subtitle: Text(
+            event.author,
+            style: const TextStyle(fontSize: 10),
           ),
-        ],
-      ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: () {
+                  _deleteItemDialog(doc);
+                },
+                icon: Icon(Icons.delete),
+              ),
+              IconButton(
+                onPressed: () {
+                  _updateItemDialog(doc, doc.id, event.title, event.content);
+                },
+                icon: Icon(Icons.update),
+              ),
+            ],
+          ),
+        ),
+        Divider(),
+      ],
     );
   }
 

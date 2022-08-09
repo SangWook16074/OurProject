@@ -2,81 +2,27 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_main_page/main.dart';
 import 'package:intl/intl.dart';
 
-class Write {
-  String title;
-  String content;
-  String time;
-
-  Write(this.title, this.content, this.time);
-}
-
-class WriteComPage extends StatefulWidget {
+class FeedBackPage extends StatefulWidget {
   final String userNumber;
-
-  const WriteComPage(this.userNumber, {Key? key}) : super(key: key);
+  const FeedBackPage({Key? key, required this.userNumber}) : super(key: key);
 
   @override
-  State<WriteComPage> createState() => _WriteComPageState();
+  State<FeedBackPage> createState() => _FeedBackPageState();
 }
 
-class _WriteComPageState extends State<WriteComPage> {
+class _FeedBackPageState extends State<FeedBackPage> {
   var _now;
   final _title = TextEditingController();
   final _content = TextEditingController();
 
-  void _createItemDialog(Write com, String userNumber) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Text('글을 등록하시겠습니까? \n등록된 글은 내정보 페이지에서 관리할 수 있습니다.')
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    _addNotice(com, userNumber);
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("확인")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("취소")),
-            ],
-          );
-        });
-  }
-
-  void _addNotice(Write com, String userNumber) {
-    FirebaseFirestore.instance.collection('com').add({
-      'title': com.title,
-      'content': com.content,
-      'number': userNumber,
-      'time': com.time,
-      'countLike': 0,
-      'likedUsersList': [],
-    });
-    Fluttertoast.showToast(
-      msg: "새 글이 등록되었습니다.",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      fontSize: 16,
-    );
-    _title.text = '';
-    _content.text = '';
+  @override
+  void dispose() {
+    _title.dispose();
+    _content.dispose();
+    super.dispose();
   }
 
   @override
@@ -91,11 +37,16 @@ class _WriteComPageState extends State<WriteComPage> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _title.dispose();
-    _content.dispose();
-    super.dispose();
+  void _addFeedback(String title, String content) {
+    FirebaseFirestore.instance.collection('feedback').add({
+      'title': title,
+      'content': content,
+      'author': widget.userNumber,
+      'time': _now
+    });
+    toastMessage("피드백을 작성해주셔서 감사합니다 !");
+    _title.text = '';
+    _content.text = '';
   }
 
   @override
@@ -103,37 +54,30 @@ class _WriteComPageState extends State<WriteComPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "Community",
+          "피드백",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            color: Colors.black,
+            fontSize: 25,
+            fontFamily: 'hoon',
           ),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_title.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "제목을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else if (_content.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "내용을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else {
-                  _createItemDialog(
-                      Write(_title.text, _content.text, _now.toString()),
-                      widget.userNumber);
+                  toastMessage("제목을 입력하세요.");
+                  return;
                 }
+                if (_content.text.isEmpty) {
+                  toastMessage("내용을 입력하세요");
+                }
+
+                _addFeedback(_title.text, _content.text);
+                Navigator.of(context).pop();
               },
               icon: Icon(Icons.check))
         ],
@@ -152,6 +96,7 @@ class _WriteComPageState extends State<WriteComPage> {
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   children: [
+                    Text("앱 개선을 위한 피드백을 작성해주세요!\n앱 업데이트에 반영하겠습니다!"),
                     TextField(
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold),

@@ -11,7 +11,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
-late SharedPreferences prefs; //안드로이드만 가능함.
+late SharedPreferences prefs;
 Color myColor = Color(0xFF87C2F3);
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -41,21 +41,25 @@ Future<void> _addIndex() async {
   await prefs.setInt('index', number);
 }
 
+toastMessage(String message) {
+  Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      fontSize: 16);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  prefs = await SharedPreferences.getInstance(); // 안드로이드만 가능함.
+  prefs = await SharedPreferences.getInstance();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
-  Fluttertoast.showToast(
-      msg: "Hello !",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      fontSize: 16);
+  toastMessage("Hello!");
 }
 
 // ignore: must_be_immutable
@@ -65,6 +69,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
@@ -73,7 +78,7 @@ class MyApp extends StatelessWidget {
       initialBinding:
           BindingsBuilder.put(() => NotificationController(), permanent: true),
       home: AnimatedSplashScreen(
-          duration: 3000,
+          duration: 2000,
           splash: const Text(
             "Induk Univ.",
             style: TextStyle(

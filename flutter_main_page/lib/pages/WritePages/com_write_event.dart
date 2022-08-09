@@ -20,8 +20,7 @@ class Write {
 }
 
 class WriteEventPage extends StatefulWidget {
-  final String user;
-  const WriteEventPage(this.user, {Key? key}) : super(key: key);
+  const WriteEventPage({Key? key}) : super(key: key);
 
   @override
   State<WriteEventPage> createState() => _WriteEventPageState();
@@ -70,7 +69,7 @@ class _WriteEventPageState extends State<WriteEventPage> {
     }
   }
 
-  void _createItemDialog(Write event, String user) {
+  void _createItemDialog(Write event) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -90,7 +89,7 @@ class _WriteEventPageState extends State<WriteEventPage> {
                   onPressed: () {
                     callOnFcmApiSendPushNotifications(
                         title: '새 이벤트가 등록되었습니다.', body: '[이벤트] ${event.title}');
-                    _addNotice(event, user);
+                    _addNotice(event);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   },
@@ -105,11 +104,11 @@ class _WriteEventPageState extends State<WriteEventPage> {
         });
   }
 
-  void _addNotice(Write event, String user) {
+  void _addNotice(Write event) {
     FirebaseFirestore.instance.collection('event').add({
       'title': event.title,
       'content': event.content,
-      'author': user,
+      'author': '학생회',
       'time': event.time,
       'countLike': 0,
       'likedUsersList': [],
@@ -170,8 +169,8 @@ class _WriteEventPageState extends State<WriteEventPage> {
                   );
                 } else {
                   _createItemDialog(
-                      Write(_title.text, _content.text, _now.toString()),
-                      widget.user);
+                    Write(_title.text, _content.text, _now.toString()),
+                  );
                 }
               },
               icon: Icon(Icons.check))

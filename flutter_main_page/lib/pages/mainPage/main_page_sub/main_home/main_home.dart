@@ -4,14 +4,18 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_main_page/main.dart';
-import 'package:flutter_main_page/pages/View_pages/image_view.dart';
+import 'package:flutter_main_page/custom_page_route.dart';
+import 'package:flutter_main_page/navigation_draw.dart';
+import 'package:flutter_main_page/pages/AdminPage/notice_manage.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
-
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_community.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_event.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_info_job.dart';
+import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_alarm/main_alarm.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_notice.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+
+import '../../../AdminPage/admin_list.dart';
+import '../../../AdminPage/cmty_manage.dart';
+import '../../../AdminPage/event_manage.dart';
+import '../../../AdminPage/job_manage.dart';
 
 final items = <Notice>[];
 
@@ -24,74 +28,172 @@ class Notice {
   Notice(this.title, this.content, this.author, this.time);
 }
 
-class MainPage1 extends StatefulWidget {
+class MainHome extends StatefulWidget {
+  final String userNumber;
   final String user;
-  final bool? isAdmin;
-  const MainPage1(this.user, this.isAdmin, {Key? key}) : super(key: key);
+  final bool isAdmin;
+  const MainHome(
+      {Key? key,
+      required this.user,
+      required this.isAdmin,
+      required this.userNumber})
+      : super(key: key);
 
   @override
-  State<MainPage1> createState() => _MainPage1State();
+  State<MainHome> createState() => _MainHomeState();
 }
 
-class _MainPage1State extends State<MainPage1> {
+class _MainHomeState extends State<MainHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView(
-        children: [
-          _buildIcon(context, widget.user, widget.isAdmin),
-          Divider(
-            height: 50,
-            color: Colors.black,
-          ),
-          _buildTop(),
-          Divider(
-            height: 50,
-            color: Colors.black,
-          ),
-          Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: myColor, width: 3)),
-              child: Column(
+        floatingActionButton: widget.isAdmin == true
+            ? SpeedDial(
+                gradientBoxShape: BoxShape.circle,
+                spaceBetweenChildren: 10,
+                spacing: 10,
+                icon: Icons.manage_accounts,
+                overlayOpacity: 0.6,
+                overlayColor: Colors.black,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        const Expanded(
-                          child: Text(
-                            '공지사항',
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => NoticePage(
-                                        widget.user, widget.isAdmin)));
-                          },
-                          child: const Text(
-                            '더보기 >',
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  _buildBottom(),
+                  SpeedDialChild(
+                      child: Icon(Icons.edit_notifications),
+                      label: '공지관리',
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NoticeManagePage()));
+                      }),
+                  SpeedDialChild(
+                      child: Icon(Icons.event_available),
+                      label: '이벤트관리',
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EventManagePage()));
+                      }),
+                  SpeedDialChild(
+                      child: Icon(Icons.lightbulb),
+                      label: '취업정보관리',
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => JobManagePage()));
+                      }),
+                  SpeedDialChild(
+                      child: Icon(Icons.message),
+                      label: '커뮤니티 관리',
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ComManagePage()));
+                      }),
+                  SpeedDialChild(
+                      child: Icon(Icons.admin_panel_settings),
+                      label: '관리자',
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AdminPage()));
+                      }),
+                  SpeedDialChild(
+                      child: Icon(Icons.photo_library),
+                      label: '배너사진관리',
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NoticeManagePage()));
+                      }),
                 ],
-              )),
-        ],
-      ),
-    ));
+              )
+            : null,
+        drawer: NavigationDrawerWidget(
+            userNumber: widget.userNumber,
+            user: widget.user,
+            isAdmin: widget.isAdmin),
+        appBar: AppBar(
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(context, CustomPageRoute(child: MainAlarm()));
+                },
+                icon: Icon(
+                  Icons.notifications_active,
+                ))
+          ],
+          iconTheme: IconThemeData.fallback(),
+          shadowColor: Colors.white,
+          backgroundColor: Colors.white,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              _buildTop(),
+              SizedBox(
+                height: 20,
+              ),
+              _buildImage(),
+              SizedBox(
+                height: 30,
+              ),
+              Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(color: Colors.grey, width: 2)),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            const Expanded(
+                              child: Text(
+                                '공지사항',
+                                style:
+                                    TextStyle(fontSize: 25, fontFamily: 'hoon'),
+                              ),
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(CustomPageRoute(
+                                      child: NoticePage(widget.user)));
+                                },
+                                icon: Icon(
+                                  Icons.add,
+                                  color: Colors.red,
+                                ))
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _buildBottom(),
+                    ],
+                  )),
+            ],
+          ),
+        ));
+  }
+
+  Widget _buildTop() {
+    return Container(
+      height: 100,
+      width: 100,
+      color: Colors.black,
+    );
   }
 
   Widget _buildBottom() {
@@ -122,87 +224,7 @@ class _MainPage1State extends State<MainPage1> {
         });
   }
 
-  Widget _buildIcon(BuildContext context, String user, bool? isAdmin) {
-    return Column(
-      children: [
-        const SizedBox(
-          height: 20,
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NoticePage(user, isAdmin)));
-              },
-              child: Column(
-                children: const [
-                  Icon(
-                    Icons.notifications,
-                    size: 40,
-                  ),
-                  Text('공지사항'),
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => EventPage(user)));
-              },
-              child: Column(
-                children: const [
-                  Icon(
-                    Icons.card_giftcard,
-                    size: 40,
-                  ),
-                  Text('학과이벤트'),
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const InfoJobPage()));
-              },
-              child: Column(
-                children: const [
-                  Icon(
-                    Icons.lightbulb,
-                    size: 40,
-                  ),
-                  Text('취업정보'),
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ComPage(user)));
-              },
-              child: Column(
-                children: const [
-                  Icon(
-                    Icons.reorder,
-                    size: 40,
-                  ),
-                  Text('익명게시글'),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTop() {
+  Widget _buildImage() {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('eventImage').snapshots(),
         builder: (context, snapshot) {
@@ -256,22 +278,19 @@ class _MainPage1State extends State<MainPage1> {
                     builder: (context) => NoticeViewPage(notice.title,
                         notice.content, notice.author, notice.time)));
           },
-          // leading: const Icon(
-          //   Icons.notifications,
-          //   color: Colors.red,
-          // ),
           title: Text(
-            "[공지사항] ${notice.title}",
+            notice.title,
             style: const TextStyle(
-                color: Colors.deepPurple,
                 fontSize: 17,
-                fontWeight: FontWeight.bold),
+                fontWeight: FontWeight.bold,
+                color: Colors.blueGrey),
           ),
           subtitle: Text(
-            "작성자 : ${notice.author}",
+            "${notice.author} | ${notice.time}",
             style: const TextStyle(fontSize: 12),
           ),
         ),
+        Divider(),
       ],
     );
   }

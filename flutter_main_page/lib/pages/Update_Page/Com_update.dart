@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class Com  {
+class Com {
   String title;
   String content;
   String author;
   String time;
 
-  Com (this.title, this.author, this.content, this.time);
+  Com(this.title, this.author, this.content, this.time);
 }
 
 class ComUpdatePage extends StatefulWidget {
@@ -64,32 +65,18 @@ class _ComUpdatePageState extends State<ComUpdatePage> {
           IconButton(
               onPressed: () {
                 if (_titleController.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "제목을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else if (_contentController.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "내용을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else {
-                  //수정하기
-                  _updateContent(widget.docID, _titleController.text,
-                      _contentController.text);
-                  Fluttertoast.showToast(
-                    msg: "수정이 완료되었습니다.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  toastMessage('제목을 입력하세요.');
+                  return;
                 }
+                if (_contentController.text.isEmpty) {
+                  toastMessage('내용을 입력하세요.');
+                  return;
+                }
+                _updateContent(widget.docID, _titleController.text,
+                    _contentController.text);
+                toastMessage('수정 완료!');
+                Navigator.pop(context);
+                Navigator.pop(context);
               },
               icon: Icon(Icons.check)),
           IconButton(

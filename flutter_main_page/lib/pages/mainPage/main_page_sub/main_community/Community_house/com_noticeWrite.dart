@@ -18,9 +18,7 @@ class NoticeWrite {
 }
 
 class WriteNotice extends StatefulWidget {
-  final String user;
-  final bool? isAdmin;
-  WriteNotice(this.user, this.isAdmin, {Key? key}) : super(key: key);
+  WriteNotice({Key? key}) : super(key: key);
 
   @override
   State<WriteNotice> createState() => _WriteNoticeState();
@@ -80,9 +78,7 @@ class _WriteNoticeState extends State<WriteNotice> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Text('공지를 등록하시겠습니까? 등록된 공지는 내정보 페이지에서 관리할 수 있습니다.')
-              ],
+              children: const [Text('공지를 등록하시겠습니까?')],
             ),
             actions: [
               TextButton(
@@ -147,12 +143,14 @@ class _WriteNoticeState extends State<WriteNotice> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "NOTICE",
+          "공지작성",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            color: Colors.black,
+            fontSize: 25,
+            fontFamily: 'hoon',
           ),
         ),
         centerTitle: true,
@@ -176,7 +174,7 @@ class _WriteNoticeState extends State<WriteNotice> {
                 } else {
                   _createItemDialog(
                       NoticeWrite(_title.text, _content.text, _now.toString()),
-                      widget.user);
+                      "정보통신공학과");
                 }
               },
               icon: Icon(Icons.check))
