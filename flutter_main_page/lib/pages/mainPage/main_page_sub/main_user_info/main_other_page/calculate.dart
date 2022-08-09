@@ -62,7 +62,7 @@ class _CalculatePageState extends State<CalculatePage> {
       padding: EdgeInsets.all(8.0),
       margin: EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        border: Border.all(color: myColor, width: 3),
+        border: Border.all(color: Colors.blueGrey, width: 2),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -125,6 +125,7 @@ class _CalculatePageState extends State<CalculatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData.fallback(),
           actions: [
             IconButton(
               onPressed: () {
@@ -133,12 +134,13 @@ class _CalculatePageState extends State<CalculatePage> {
               icon: Icon(Icons.refresh),
             ),
           ],
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.white,
           title: const Text(
-            "Calculator",
+            "학점계산기",
             style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Pacifico',
+              fontSize: 25,
+              color: Colors.black,
+              fontFamily: 'hoon',
             ),
           ),
           centerTitle: true,
@@ -229,7 +231,7 @@ class _CalculatePageState extends State<CalculatePage> {
                       });
                     },
                     icon: Icon(Icons.remove_circle,
-                        color: Colors.lightBlueAccent, size: 35)),
+                        color: Colors.black38, size: 35)),
               ],
             );
           },
@@ -242,7 +244,7 @@ class _CalculatePageState extends State<CalculatePage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        color: myColor,
+        color: Colors.black12,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
@@ -294,9 +296,13 @@ class _CalculatePageState extends State<CalculatePage> {
             width: 130,
             child: ElevatedButton(
                 onPressed: () async {
-                  setState(() {
-                    _calculate();
-                  });
+                  try {
+                    setState(() {
+                      _calculate();
+                    });
+                  } catch (e) {
+                    toastMessage("제대로 입력했나요?");
+                  }
                 },
                 child: Text("계산하기")),
           ),

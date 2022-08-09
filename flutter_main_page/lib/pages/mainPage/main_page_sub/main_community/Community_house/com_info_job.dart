@@ -19,70 +19,53 @@ class InfoJobPage extends StatefulWidget {
 }
 
 class _InfoJobPageState extends State<InfoJobPage> {
-  var _search = TextEditingController();
-  String _searchContent = '';
-
-  @override
-  void dispose() {
-    _search.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "information of JOB",
+          "취업정보",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            fontSize: 25,
+            color: Colors.black,
+            fontFamily: 'hoon',
           ),
         ),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          _buildSearch(),
-          _buildItem(),
-        ],
-      ),
+      body: _buildItem(),
     );
   }
 
   Widget _buildItem() {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('job')
-                .orderBy('time', descending: true)
-                .snapshots(),
-            builder: (context, snapshot) {
-              return (snapshot.connectionState == ConnectionState.waiting)
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        var data = snapshot.data!.docs[index].data()
-                            as Map<String, dynamic>;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('job')
+              .orderBy('time', descending: true)
+              .snapshots(),
+          builder: (context, snapshot) {
+            return (snapshot.connectionState == ConnectionState.waiting)
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      var data = snapshot.data!.docs[index].data()
+                          as Map<String, dynamic>;
 
-                        if (_searchContent.isEmpty) {
-                          return _buildItemWidget(data['title'],
-                              data['content'], data['author'], data['time']);
-                        }
-                        if (data['title'].toString().contains(_searchContent)) {
-                          return _buildItemWidget(data['title'],
-                              data['content'], data['author'], data['time']);
-                        }
-                        return Container();
-                      });
-            }),
-      ),
+                      if (snapshot.hasData) {
+                        return _buildItemWidget(data['title'], data['content'],
+                            data['author'], data['time']);
+                      }
+
+                      return Container();
+                    });
+          }),
     );
   }
 
@@ -113,24 +96,6 @@ class _InfoJobPageState extends State<InfoJobPage> {
           color: Colors.grey,
         )
       ],
-    );
-  }
-
-  Widget _buildSearch() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        controller: _search,
-        onChanged: (text) {
-          setState(() {
-            _searchContent = text;
-          });
-        },
-        decoration: InputDecoration(
-          hintText: "제목을 입력하세요.",
-          prefixIcon: Icon(Icons.search),
-        ),
-      ),
     );
   }
 }

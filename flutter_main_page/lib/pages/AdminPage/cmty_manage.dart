@@ -4,7 +4,6 @@ import 'package:flutter_main_page/pages/Update_Page/Com_update.dart';
 
 import '../View_pages/notice_view.dart';
 
-
 class Com {
   String title;
   String content;
@@ -13,6 +12,7 @@ class Com {
 
   Com(this.title, this.author, this.content, this.time);
 }
+
 class ComManagePage extends StatefulWidget {
   const ComManagePage({Key? key}) : super(key: key);
 
@@ -93,13 +93,14 @@ class _ComManagePageState extends State<ComManagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.refresh))],
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "Community Manager",
+          "익명게시판 관리",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            fontSize: 25,
+            color: Colors.black,
+            fontFamily: 'hoon',
           ),
         ),
         centerTitle: true,
@@ -129,8 +130,7 @@ class _ComManagePageState extends State<ComManagePage> {
   }
 
   Widget _buildEventWidget(DocumentSnapshot doc) {
-    final event =
-        Com(doc['title'], doc['author'], doc['content'], doc['time']);
+    final event = Com(doc['title'], doc['author'], doc['content'], doc['time']);
     return ListTile(
       visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
       onTap: () {

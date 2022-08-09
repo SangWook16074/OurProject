@@ -66,13 +66,14 @@ class _MyContentDeletePageState extends State<MyContentDeletePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.refresh))],
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "My Content",
+          "내가 쓴 글",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            fontSize: 25,
+            color: Colors.black,
+            fontFamily: 'hoon',
           ),
         ),
         centerTitle: true,
@@ -105,30 +106,35 @@ class _MyContentDeletePageState extends State<MyContentDeletePage> {
 
   Widget _buildEventWidget(DocumentSnapshot doc) {
     final com = Com(doc['title'], doc['author'], doc['content'], doc['time']);
-    return ListTile(
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ComViewPage(com.title, com.content,
-                    com.author, com.time, doc.id, widget.user)));
-      },
-      title: Text(
-        com.title,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(
-        "익명",
-        style: const TextStyle(fontSize: 10),
-      ),
-      trailing: IconButton(
-        onPressed: () {
-          _deleteItemDialog(doc);
-        },
-        icon: Icon(Icons.delete),
-      ),
+    return Column(
+      children: [
+        ListTile(
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ComViewPage(com.title, com.content,
+                        com.author, com.time, doc.id, widget.user)));
+          },
+          title: Text(
+            com.title,
+            style: const TextStyle(
+                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            "익명",
+            style: const TextStyle(fontSize: 10),
+          ),
+          trailing: IconButton(
+            onPressed: () {
+              _deleteItemDialog(doc);
+            },
+            icon: Icon(Icons.delete),
+          ),
+        ),
+        Divider(),
+      ],
     );
   }
 

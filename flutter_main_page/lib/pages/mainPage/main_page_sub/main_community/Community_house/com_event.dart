@@ -24,87 +24,64 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> {
-  var _search = TextEditingController();
-  String _searchContent = '';
-
-  @override
-  void dispose() {
-    _search.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blue,
+          iconTheme: IconThemeData.fallback(),
+          backgroundColor: Colors.white,
           title: const Text(
-            "EVENT",
+            "이벤트",
             style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Pacifico',
+              fontSize: 25,
+              color: Colors.black,
+              fontFamily: 'hoon',
             ),
           ),
           centerTitle: true,
         ),
         resizeToAvoidBottomInset: true,
-        body: Column(
-          children: [
-            _buildSearch(),
-            _buildItem(),
-          ],
-        ),
+        body: _buildItem(),
       ),
     );
   }
 
   Widget _buildItem() {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('event')
-                .orderBy('time', descending: true)
-                .snapshots(),
-            builder: (context, snapshot) {
-              return (snapshot.connectionState == ConnectionState.waiting)
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        var data = snapshot.data!.docs[index].data()
-                            as Map<String, dynamic>;
-                        var id = snapshot.data!.docs[index].id;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('event')
+              .orderBy('time', descending: true)
+              .snapshots(),
+          builder: (context, snapshot) {
+            return (snapshot.connectionState == ConnectionState.waiting)
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      var data = snapshot.data!.docs[index].data()
+                          as Map<String, dynamic>;
+                      var id = snapshot.data!.docs[index].id;
 
-                        if (_searchContent.isEmpty) {
-                          return _buildItemWidget(
-                              id,
-                              data['title'],
-                              data['content'],
-                              data['author'],
-                              data['time'],
-                              data['countLike'],
-                              data['likedUsersList']);
-                        }
-                        if (data['title'].toString().contains(_searchContent)) {
-                          return _buildItemWidget(
-                              id,
-                              data['title'],
-                              data['content'],
-                              data['author'],
-                              data['time'],
-                              data['countLike'],
-                              data['likedUsersList']);
-                        }
-                        return Container();
-                      });
-            }),
-      ),
+                      if (snapshot.hasData) {
+                        return _buildItemWidget(
+                            id,
+                            data['title'],
+                            data['content'],
+                            data['author'],
+                            data['time'],
+                            data['countLike'],
+                            data['likedUsersList']);
+                      }
+
+                      return Container();
+                    });
+          }),
     );
   }
 
@@ -145,28 +122,19 @@ class _EventPageState extends State<EventPage> {
                     _updatecountLike(id, likedUsersList);
                   }),
             ])),
-        Divider(
-          color: Colors.grey,
-        )
+        Container(
+            width: MediaQuery.of(context).size.width,
+            height: 300,
+            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Container(
+                color: Colors.amber,
+                child: Center(child: Text("이벤트 메인 사진")),
+              ),
+            )),
+        Divider(),
       ],
-    );
-  }
-
-  Widget _buildSearch() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        controller: _search,
-        onChanged: (text) {
-          setState(() {
-            _searchContent = text;
-          });
-        },
-        decoration: InputDecoration(
-          hintText: "제목을 입력하세요.",
-          prefixIcon: Icon(Icons.search),
-        ),
-      ),
     );
   }
 }

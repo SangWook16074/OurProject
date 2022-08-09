@@ -92,12 +92,14 @@ class _JobManagePageState extends State<JobManagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "Job Manager",
+          "취업정보 관리",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            fontSize: 25,
+            color: Colors.black,
+            fontFamily: 'hoon',
           ),
         ),
         centerTitle: true,

@@ -63,13 +63,15 @@ class _MyContentUpdatePageState extends State<MyContentUpdatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData.fallback(),
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.refresh))],
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         title: const Text(
-          "My Content",
+          "내가 쓴 글",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            fontSize: 25,
+            color: Colors.black,
+            fontFamily: 'hoon',
           ),
         ),
         centerTitle: true,
@@ -101,30 +103,35 @@ class _MyContentUpdatePageState extends State<MyContentUpdatePage> {
 
   Widget _buildEventWidget(DocumentSnapshot doc) {
     final com = Com(doc['title'], doc['author'], doc['content'], doc['time']);
-    return ListTile(
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => NoticeViewPage(
-                    com.title, com.content, com.author, com.time)));
-      },
-      title: Text(
-        com.title,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(
-        "익명",
-        style: const TextStyle(fontSize: 10),
-      ),
-      trailing: IconButton(
-        onPressed: () {
-          _updateItemDialog(doc, doc.id, com.title, com.content);
-        },
-        icon: Icon(Icons.update),
-      ),
+    return Column(
+      children: [
+        ListTile(
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NoticeViewPage(
+                        com.title, com.content, com.author, com.time)));
+          },
+          title: Text(
+            com.title,
+            style: const TextStyle(
+                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            "익명",
+            style: const TextStyle(fontSize: 10),
+          ),
+          trailing: IconButton(
+            onPressed: () {
+              _updateItemDialog(doc, doc.id, com.title, com.content);
+            },
+            icon: Icon(Icons.update),
+          ),
+        ),
+        Divider()
+      ],
     );
   }
 

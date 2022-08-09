@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
@@ -41,12 +42,7 @@ class _ComViewPageState extends State<ComViewPage> {
       "time": time,
       "author": author,
     });
-    Fluttertoast.showToast(
-      msg: "새 댓글이 등록되었습니다.",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      fontSize: 16,
-    );
+    toastMessage('댓글이 등록되었습니다');
     _chat.text = '';
   }
 
@@ -114,16 +110,17 @@ class _ComViewPageState extends State<ComViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "Content",
+          "익명글",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            fontSize: 25,
+            color: Colors.black,
+            fontFamily: 'hoon',
           ),
         ),
         centerTitle: true,
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.refresh))],
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -143,26 +140,17 @@ class _ComViewPageState extends State<ComViewPage> {
                       shrinkWrap: true,
                       children: [
                         ListTile(
-                          title: Row(
-                            children: [
-                              Icon(
-                                Icons.account_box_rounded,
-                                size: 40,
-                                color: Colors.blueAccent,
-                              ),
-                              Text(
-                                widget.author,
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
+                          title: Text(
+                            widget.author,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(
                             widget.time,
                             style: const TextStyle(
-                                fontSize: 20, color: Colors.grey),
+                                fontSize: 15, color: Colors.grey),
                           ),
                         ),
                         Divider(
@@ -250,11 +238,6 @@ class _ComViewPageState extends State<ComViewPage> {
             children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.account_box_rounded,
-                    size: 30,
-                    color: Colors.blueAccent,
-                  ),
                   Text(
                     chat.author.contains(widget.user) ? "나" : "익명",
                     style: const TextStyle(
@@ -297,11 +280,6 @@ class _ComViewPageState extends State<ComViewPage> {
             children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.account_box_rounded,
-                    size: 30,
-                    color: Colors.blueAccent,
-                  ),
                   Text(
                     chat.author.contains(widget.user) ? "나" : "익명",
                     style: const TextStyle(
@@ -368,7 +346,7 @@ class _ComViewPageState extends State<ComViewPage> {
               }
             },
             style: TextButton.styleFrom(
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.blueGrey,
             ),
             child: Icon(Icons.send),
           ),

@@ -11,8 +11,6 @@ import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_alarm/main_alarm.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_notice.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-
-import '../../../AdminPage/admin_list.dart';
 import '../../../AdminPage/cmty_manage.dart';
 import '../../../AdminPage/event_manage.dart';
 import '../../../AdminPage/job_manage.dart';
@@ -91,15 +89,6 @@ class _MainHomeState extends State<MainHome> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ComManagePage()));
-                      }),
-                  SpeedDialChild(
-                      child: Icon(Icons.admin_panel_settings),
-                      label: '관리자',
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AdminPage()));
                       }),
                   SpeedDialChild(
                       child: Icon(Icons.photo_library),
