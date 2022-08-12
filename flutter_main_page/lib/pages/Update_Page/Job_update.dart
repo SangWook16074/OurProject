@@ -50,12 +50,14 @@ class _JobUpdatePageState extends State<JobUpdatePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "Modify",
+          "취업정보 수정",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            fontSize: 25,
+            color: Colors.black,
+            fontFamily: 'hoon',
           ),
         ),
         automaticallyImplyLeading: false,
@@ -87,14 +89,13 @@ class _JobUpdatePageState extends State<JobUpdatePage> {
                     gravity: ToastGravity.BOTTOM,
                     fontSize: 16,
                   );
-                  Navigator.pop(context);
+
                   Navigator.pop(context);
                 }
               },
               icon: Icon(Icons.check)),
           IconButton(
               onPressed: () {
-                Navigator.pop(context);
                 Navigator.pop(context);
               },
               icon: Icon(Icons.close))

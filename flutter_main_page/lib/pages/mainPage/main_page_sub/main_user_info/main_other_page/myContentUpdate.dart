@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/Update_Page/Content_update.dart';
-import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
+import '../../../../View_pages/com_view.dart';
 
 class Com {
   String title;
@@ -38,6 +38,7 @@ class _MyContentUpdatePageState extends State<MyContentUpdatePage> {
             actions: [
               TextButton(
                   onPressed: () {
+                    Navigator.of(context).pop();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -64,7 +65,6 @@ class _MyContentUpdatePageState extends State<MyContentUpdatePage> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData.fallback(),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.refresh))],
         backgroundColor: Colors.white,
         title: const Text(
           "내가 쓴 글",
@@ -111,8 +111,11 @@ class _MyContentUpdatePageState extends State<MyContentUpdatePage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => NoticeViewPage(
-                        com.title, com.content, com.author, com.time)));
+                    builder: (context) => ComViewPage(
+                        title: com.title,
+                        content: com.content,
+                        author: com.author,
+                        time: com.time)));
           },
           title: Text(
             com.title,

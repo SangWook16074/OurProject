@@ -37,6 +37,7 @@ class _JobManagePageState extends State<JobManagePage> {
             actions: [
               TextButton(
                   onPressed: () {
+                    Navigator.of(context).pop();
                     Navigator.push(
                         context,
                         MaterialPageRoute(

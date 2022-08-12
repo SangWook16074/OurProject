@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -113,18 +114,6 @@ class _WriteJobPageState extends State<WriteJobPage> {
   }
 
   @override
-  void initState() {
-    Timer.periodic((const Duration(seconds: 1)), (v) {
-      if (mounted) {
-        setState(() {
-          _now = DateFormat('yyyy-MM-dd - HH:mm:ss').format(DateTime.now());
-        });
-      }
-    });
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _title.dispose();
     _content.dispose();
@@ -149,24 +138,21 @@ class _WriteJobPageState extends State<WriteJobPage> {
           IconButton(
               onPressed: () {
                 if (_title.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "제목을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else if (_content.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "내용을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else {
-                  _createItemDialog(
-                      Write(_title.text, _content.text, _now.toString()),
-                      widget.user);
+                  toastMessage('제목을 입력하세요');
+                  return;
                 }
+                if (_content.text.isEmpty) {
+                  toastMessage('내용을 입력하세요');
+                  return;
+                }
+
+                setState(() {
+                  _now = DateFormat('yyyy-MM-dd - HH:mm:ss')
+                      .format(DateTime.now());
+                });
+                _createItemDialog(
+                    Write(_title.text, _content.text, _now.toString()),
+                    widget.user);
               },
               icon: const Icon(Icons.check))
         ],

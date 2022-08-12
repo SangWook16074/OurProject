@@ -1,13 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/custom_page_route.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/pages/QandAhome.dart';
 import 'package:flutter_main_page/pages/feedback.dart';
+import 'package:flutter_main_page/pages/loginPage/reset_pass.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_notice.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/calculate.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/myContentDelete.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/myContentUpdate.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'pages/loginPage/login_page.dart';
 import 'pages/mainPage/main_page_sub/main_community/Community_house/com_community.dart';
 import 'pages/mainPage/main_page_sub/main_community/Community_house/com_event.dart';
@@ -25,6 +28,11 @@ class NavigationDrawerWidget extends StatelessWidget {
       : super(key: key);
 
   final padding = EdgeInsets.symmetric(horizontal: 20);
+  Future<void> _launchUrl(Uri url) async {
+    if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
+      throw 'Could not launch $url';
+    }
+  }
 
   Future<void> _deleteAutoLoginStatus() async {
     prefs.setBool('autoLoginStatus', false);
@@ -159,10 +167,10 @@ class NavigationDrawerWidget extends StatelessWidget {
           ),
           _buildMenuItem(
             context,
-            text: 'Q/A',
+            text: 'Q / A',
             icon: Icons.question_answer,
-            onTap: ComPage(
-              this.userNumber,
+            onTap: QuestionHome(
+              userNumber: this.userNumber,
             ),
           ),
           _buildMenuItem(
@@ -181,6 +189,8 @@ class NavigationDrawerWidget extends StatelessWidget {
               this.userNumber,
             ),
           ),
+          _buildMenuItem(context,
+              text: '비밀번호 변경', icon: Icons.password, onTap: ResetPassPage()),
           Divider(
             color: Colors.black,
           ),
@@ -219,6 +229,20 @@ class NavigationDrawerWidget extends StatelessWidget {
               this.userNumber,
             ),
           ),
+          Divider(
+            color: Colors.black,
+          ),
+          Text(
+            "More + ",
+            style: TextStyle(
+              fontFamily: 'hoon',
+              fontSize: 20,
+            ),
+          ),
+          _buildIcon(),
+          SizedBox(
+            height: 30,
+          )
         ]),
       ),
     );
@@ -266,7 +290,7 @@ class NavigationDrawerWidget extends StatelessWidget {
             onPressed: () async {
               isChecked = false;
               _deleteAutoLoginStatus();
-
+              FirebaseAuth.instance.signOut();
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
@@ -294,6 +318,55 @@ class NavigationDrawerWidget extends StatelessWidget {
       title: Text(
         text,
         style: TextStyle(color: color, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _buildIcon() {
+    return ListTile(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GestureDetector(
+            onTap: () {
+              Uri uri = Uri(
+                  scheme: 'https', host: 'www.facebook.com', path: '/IC2019');
+              _launchUrl(uri);
+            },
+            child: Container(
+              width: 50,
+              height: 50,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.asset(
+                  'assets/title_facebook.png',
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Uri uri = Uri(
+                  scheme: 'https',
+                  host: 'www.instagram.com',
+                  path: '/induk_jt');
+              _launchUrl(uri);
+            },
+            child: Container(
+              width: 50,
+              height: 50,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.asset(
+                  'assets/title_instagram.png',
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

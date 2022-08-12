@@ -19,11 +19,16 @@ class ComViewPage extends StatefulWidget {
   final String content;
   final String author;
   final String time;
-  final String id;
-  final String user;
+  final String? id;
+  final String? user;
   const ComViewPage(
-      this.title, this.content, this.author, this.time, this.id, this.user,
-      {Key? key})
+      {Key? key,
+      required this.title,
+      required this.content,
+      required this.author,
+      required this.time,
+      this.id,
+      this.user})
       : super(key: key);
 
   @override
@@ -86,18 +91,6 @@ class _ComViewPageState extends State<ComViewPage> {
       gravity: ToastGravity.BOTTOM,
       fontSize: 16,
     );
-  }
-
-  @override
-  void initState() {
-    Timer.periodic((const Duration(seconds: 1)), (v) {
-      if (mounted) {
-        setState(() {
-          _now = DateFormat('yyyy-MM-dd - HH:mm:ss').format(DateTime.now());
-        });
-      }
-    });
-    super.initState();
   }
 
   @override
@@ -202,7 +195,6 @@ class _ComViewPageState extends State<ComViewPage> {
         stream: FirebaseFirestore.instance
             .collection('com/${widget.id}/chat')
             .orderBy('time')
-            .limit(5)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -239,7 +231,7 @@ class _ComViewPageState extends State<ComViewPage> {
               Row(
                 children: [
                   Text(
-                    chat.author.contains(widget.user) ? "나" : "익명",
+                    chat.author.contains(widget.user!) ? "나" : "익명",
                     style: const TextStyle(
                         color: Colors.black,
                         fontSize: 15,
@@ -281,7 +273,7 @@ class _ComViewPageState extends State<ComViewPage> {
               Row(
                 children: [
                   Text(
-                    chat.author.contains(widget.user) ? "나" : "익명",
+                    chat.author.contains(widget.user!) ? "나" : "익명",
                     style: const TextStyle(
                         color: Colors.black,
                         fontSize: 15,
@@ -342,7 +334,11 @@ class _ComViewPageState extends State<ComViewPage> {
                   fontSize: 16,
                 );
               } else {
-                _addChat(_chat.text, _now.toString(), widget.user);
+                setState(() {
+                  _now = DateFormat('yyyy-MM-dd - HH:mm:ss')
+                      .format(DateTime.now());
+                });
+                _addChat(_chat.text, _now.toString(), widget.user!);
               }
             },
             style: TextButton.styleFrom(

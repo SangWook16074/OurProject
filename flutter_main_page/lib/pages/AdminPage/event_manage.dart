@@ -38,6 +38,7 @@ class _EventManagePageState extends State<EventManagePage> {
             actions: [
               TextButton(
                   onPressed: () {
+                    Navigator.of(context).pop();
                     Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/pages/Update_Page/Com_update.dart';
-
+import '../View_pages/com_view.dart';
 import '../View_pages/notice_view.dart';
 
 class Com {
@@ -21,40 +20,6 @@ class ComManagePage extends StatefulWidget {
 }
 
 class _ComManagePageState extends State<ComManagePage> {
-  void _updateItemDialog(
-      DocumentSnapshot doc, String docID, String title, String content) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [Text('수정하시겠습니까??')],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) =>
-                                ComUpdatePage(docID, title, content))));
-                  },
-                  child: const Text("확인")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("취소")),
-            ],
-          );
-        });
-  }
-
   void _deleteItemDialog(DocumentSnapshot doc) {
     showDialog(
         context: context,
@@ -131,41 +96,44 @@ class _ComManagePageState extends State<ComManagePage> {
 
   Widget _buildEventWidget(DocumentSnapshot doc) {
     final event = Com(doc['title'], doc['author'], doc['content'], doc['time']);
-    return ListTile(
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: ((context) => NoticeViewPage(
-                    event.title, event.content, event.author, event.time))));
-      },
-      title: Text(
-        event.title,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(
-        "익명",
-        style: const TextStyle(fontSize: 10),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            onPressed: () {
-              _deleteItemDialog(doc);
-            },
-            icon: Icon(Icons.delete),
+    return Column(
+      children: [
+        ListTile(
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: ((context) => ComViewPage(
+                          title: event.title,
+                          content: event.content,
+                          author: '익명',
+                          time: event.time,
+                        ))));
+          },
+          title: Text(
+            event.title,
+            style: const TextStyle(
+                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
           ),
-          IconButton(
-            onPressed: () {
-              _updateItemDialog(doc, doc.id, event.title, event.content);
-            },
-            icon: Icon(Icons.update),
+          subtitle: Text(
+            "익명",
+            style: const TextStyle(fontSize: 10),
           ),
-        ],
-      ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: () {
+                  _deleteItemDialog(doc);
+                },
+                icon: Icon(Icons.delete),
+              ),
+            ],
+          ),
+        ),
+        Divider(),
+      ],
     );
   }
 

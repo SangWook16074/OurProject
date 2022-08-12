@@ -12,7 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
 late SharedPreferences prefs;
-Color myColor = Color(0xFF87C2F3);
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   prefs = await SharedPreferences.getInstance();
@@ -79,13 +78,8 @@ class MyApp extends StatelessWidget {
           BindingsBuilder.put(() => NotificationController(), permanent: true),
       home: AnimatedSplashScreen(
           duration: 2000,
-          splash: const Text(
-            "Induk Univ.",
-            style: TextStyle(
-                fontSize: 40,
-                fontFamily: 'Pacifico',
-                fontWeight: FontWeight.bold,
-                color: Colors.black),
+          splash: Image.asset(
+            'assets/app_logo.png',
           ),
           splashTransition: SplashTransition.fadeTransition,
           pageTransitionType: PageTransitionType.fade,

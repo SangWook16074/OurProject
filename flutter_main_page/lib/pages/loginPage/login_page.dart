@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/loginPage/Create_user/create_user.dart';
+import 'package:flutter_main_page/pages/loginPage/reset_pass.dart';
 import '../mainPage/main_page_sub/main_home/main_home.dart';
 
 bool isChecked = false;
@@ -19,7 +21,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  int currentStep = 0;
+  final _auth = FirebaseAuth.instance;
   late bool autoLoginStatus;
   late String userNumber;
   late String user;
@@ -68,12 +70,20 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: Colors.white,
           body: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
-            child: SingleChildScrollView(
-              child: Column(children: [
-                Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20.0, right: 20, left: 20),
+              child: Center(
+                child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      const SizedBox(height: 250),
+                      Container(
+                        width: 100,
+                        height: 100,
+                        child: Image.asset('assets/app_logo.png'),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
                       //로고 넣을 것임.
                       const Text(
                         "인덕대학교",
@@ -91,110 +101,99 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.black),
                       ),
                       const SizedBox(height: 50),
-                      Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 10.0),
-                          child: Column(
-                            children: [
-                              TextField(
-                                controller: _textEditingControllerUser,
-                                keyboardType: TextInputType.number,
-                                onChanged: (text) {
-                                  setState(() {});
-                                },
-                                decoration: InputDecoration(
-                                    prefixIcon:
-                                        const Icon(Icons.account_circle),
-                                    hintText: "학번을 입력하세요.",
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 20.0),
-                                    border: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4.0))),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.black, width: 1.0),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(4.0)),
-                                    ),
-                                    focusedBorder: const OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.black, width: 2.0),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4.0))),
-                                    suffixIcon: GestureDetector(
-                                      child: const Icon(
-                                        Icons.clear,
-                                        color: Colors.black,
-                                        size: 20,
-                                      ),
-                                      onTap: () =>
-                                          _textEditingControllerUser.clear(),
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.white),
+                      TextField(
+                        controller: _textEditingControllerUser,
+                        keyboardType: TextInputType.number,
+                        onChanged: (text) {
+                          setState(() {});
+                        },
+                        decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.account_circle),
+                            hintText: "학번을 입력하세요.",
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 20.0),
+                            border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4.0))),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4.0)),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.black, width: 2.0),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4.0))),
+                            suffixIcon: GestureDetector(
+                              child: const Icon(
+                                Icons.clear,
+                                color: Colors.black,
+                                size: 20,
                               ),
-                              const SizedBox(
-                                height: 5,
+                              onTap: () => _textEditingControllerUser.clear(),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      TextField(
+                        controller: _textEditingControllerPassWd,
+                        onChanged: (text) {
+                          setState(() {});
+                        },
+                        obscureText: true,
+                        decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.lock),
+                            hintText: "비밀번호를 입력하세요.",
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 20.0),
+                            border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4.0))),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4.0)),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.black, width: 2.0),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4.0))),
+                            suffixIcon: GestureDetector(
+                              child: const Icon(
+                                Icons.clear,
+                                color: Colors.black,
+                                size: 20,
                               ),
-                              TextField(
-                                controller: _textEditingControllerPassWd,
-                                onChanged: (text) {
-                                  setState(() {});
-                                },
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                    prefixIcon: const Icon(Icons.lock),
-                                    hintText: "비밀번호를 입력하세요.",
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 20.0),
-                                    border: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4.0))),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.black, width: 1.0),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(4.0)),
-                                    ),
-                                    focusedBorder: const OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.black, width: 2.0),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4.0))),
-                                    suffixIcon: GestureDetector(
-                                      child: const Icon(
-                                        Icons.clear,
-                                        color: Colors.black,
-                                        size: 20,
-                                      ),
-                                      onTap: () =>
-                                          _textEditingControllerPassWd.clear(),
-                                    ),
-                                    filled: true,
-                                    fillColor: Colors.white),
-                              ),
-                              Row(
-                                children: [
-                                  Checkbox(
-                                      value: isChecked,
-                                      activeColor: Colors.white,
-                                      checkColor: Colors.black,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          isChecked = value!;
-                                        });
-                                      }),
-                                  const Text(
-                                    "자동로그인",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        letterSpacing: (4.0)),
-                                  )
-                                ],
-                              )
-                            ],
-                          )),
+                              onTap: () => _textEditingControllerPassWd.clear(),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white),
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                              value: isChecked,
+                              activeColor: Colors.white,
+                              checkColor: Colors.black,
+                              onChanged: (value) {
+                                setState(() {
+                                  isChecked = value!;
+                                });
+                              }),
+                          const Text(
+                            "자동로그인",
+                            style: TextStyle(
+                                color: Colors.black, letterSpacing: (4.0)),
+                          )
+                        ],
+                      ),
                       ElevatedButton(
                           //로그인 버튼
 
@@ -222,37 +221,51 @@ class _LoginPageState extends State<LoginPage> {
                                 toastMessage("가입하지 않은 학번입니다.");
                                 return;
                               }
-                              if (_textEditingControllerPassWd.text !=
-                                  userInfoData['userPass']) {
-                                toastMessage("비밀번호가 다릅니다.");
+                              await _auth
+                                  .signInWithEmailAndPassword(
+                                      email: userInfoData['email'],
+                                      password:
+                                          _textEditingControllerPassWd.text)
+                                  .then((value) {
+                                if (value.user!.emailVerified == false) {
+                                  toastMessage(
+                                      '인증 이메일을 확인해주세요.\n인증이 완료되지 않았습니다.');
+                                  return;
+                                }
+                                if (isChecked == true) {
+                                  _updateAutoLoginStatus(isChecked);
+                                  _saveUserData(
+                                      userInfoData['userNumber'],
+                                      userInfoData['userName'],
+                                      userInfoData['isAdmin']);
+                                  return;
+                                }
+
+                                prefs.setString(
+                                    'userNumber', userInfoData['userNumber']);
+                                prefs.setInt(
+                                    'index', prefs.getInt('index') ?? 1);
+
+                                toastMessage("환영합니다!");
+                                _textEditingControllerUser.clear();
+                                _textEditingControllerPassWd.clear();
+
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MainHome(
+                                            userNumber: userInfoData.id,
+                                            user: userInfoData['userName'],
+                                            isAdmin: userInfoData['isAdmin'])),
+                                    (route) => false);
+                              });
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code == 'wrong-password') {
+                                toastMessage('비밀번호가 다릅니다');
                                 return;
                               }
-                              if (isChecked == true) {
-                                _updateAutoLoginStatus(isChecked);
-                                _saveUserData(
-                                    userInfoData['userNumber'],
-                                    userInfoData['userName'],
-                                    userInfoData['isAdmin']);
-                              }
 
-                              prefs.setString(
-                                  'userNumber', userInfoData['userNumber']);
-                              prefs.setInt('index', prefs.getInt('index') ?? 1);
-
-                              toastMessage("환영합니다!");
-
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MainHome(
-                                          userNumber: userInfoData.id,
-                                          user: userInfoData['userName'],
-                                          isAdmin: userInfoData['isAdmin'])));
-
-                              _textEditingControllerUser.clear();
-                              _textEditingControllerPassWd.clear();
-                            } catch (err) {
-                              toastMessage("에러타입 : $err\n잠시후에 다시 시도해주세요.");
+                              toastMessage('잠시 후에 다시 시도해주세요');
                             }
                           },
                           style: TextButton.styleFrom(
@@ -280,11 +293,36 @@ class _LoginPageState extends State<LoginPage> {
                           "회원가입",
                           style: TextStyle(fontSize: 15, color: Colors.black),
                         ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          const Text(
+                            "비밀번호를 잊으셨나요?",
+                            style: TextStyle(fontSize: 15, color: Colors.black),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ResetPassPage()));
+                            },
+                            style: TextButton.styleFrom(),
+                            child: const Text(
+                              "Help",
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.blue),
+                            ),
+                          ),
+                        ],
                       )
                     ],
                   ),
-                )
-              ]),
+                ),
+              ),
             ),
           ));
     }

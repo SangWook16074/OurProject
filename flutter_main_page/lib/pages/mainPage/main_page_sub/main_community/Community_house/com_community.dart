@@ -112,15 +112,20 @@ class _ComPageState extends State<ComPage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => ComViewPage(
-                        title, content, '익명', time, id, widget.userNumber)));
+                        title: title,
+                        content: content,
+                        author: '익명',
+                        time: time,
+                        id: id,
+                        user: widget.userNumber)));
           },
           title: Text(
-            "[익명] $title",
+            title,
             style: const TextStyle(
-                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+                fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
-            "익명",
+            "익명 | $time",
             style: const TextStyle(fontSize: 10),
           ),
           trailing: Row(
@@ -130,6 +135,7 @@ class _ComPageState extends State<ComPage> {
               IconButton(
                   icon: Icon(
                     Icons.favorite,
+                    size: 20,
                     color: likedUsersList.contains(widget.userNumber)
                         ? Colors.red
                         : Colors.grey,

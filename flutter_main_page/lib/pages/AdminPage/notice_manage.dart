@@ -39,6 +39,7 @@ class _NoticeManagePageState extends State<NoticeManagePage> {
             actions: [
               TextButton(
                   onPressed: () {
+                    Navigator.of(context).pop();
                     Navigator.push(
                         context,
                         MaterialPageRoute(

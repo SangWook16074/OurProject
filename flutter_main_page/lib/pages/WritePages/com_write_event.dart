@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_main_page/main.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,6 +30,7 @@ class WriteEventPage extends StatefulWidget {
 }
 
 class _WriteEventPageState extends State<WriteEventPage> {
+  File? image;
   var _now;
   final _title = TextEditingController();
   final _content = TextEditingController();
@@ -104,7 +108,29 @@ class _WriteEventPageState extends State<WriteEventPage> {
         });
   }
 
-  void _addNotice(Write event) {
+  void _addNotice(Write event) async {
+    if (image != null) {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('event')
+          .child("${event.title}.jpg");
+      final uploadTask = ref.putFile(image!);
+      await uploadTask.whenComplete(() => null);
+
+      final getUrl = await ref.getDownloadURL();
+      FirebaseFirestore.instance.collection('event').add({
+        'title': event.title,
+        'content': event.content,
+        'author': '학생회',
+        'time': event.time,
+        'countLike': 0,
+        'likedUsersList': [],
+        'url': getUrl
+      });
+
+      return;
+    }
+
     FirebaseFirestore.instance.collection('event').add({
       'title': event.title,
       'content': event.content,
@@ -112,21 +138,27 @@ class _WriteEventPageState extends State<WriteEventPage> {
       'time': event.time,
       'countLike': 0,
       'likedUsersList': [],
+      'url': ''
     });
     _title.text = '';
     _content.text = '';
   }
 
-  @override
-  void initState() {
-    Timer.periodic((const Duration(seconds: 1)), (v) {
-      if (mounted) {
-        setState(() {
-          _now = DateFormat('yyyy-MM-dd - HH:mm:ss').format(DateTime.now());
-        });
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) {
+        return;
       }
-    });
-    super.initState();
+
+      final imageTemporary = File(image.path);
+
+      setState(() {
+        this.image = imageTemporary;
+      });
+    } catch (e) {
+      toastMessage('에러! 잠시뒤에 다시 시도해주세요');
+    }
   }
 
   @override
@@ -139,48 +171,81 @@ class _WriteEventPageState extends State<WriteEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "Event",
+          "이벤트 작성",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            fontSize: 25,
+            color: Colors.black,
+            fontFamily: 'hoon',
           ),
         ),
         centerTitle: true,
         actions: [
           IconButton(
               onPressed: () {
+                pickImage();
+              },
+              icon: Icon(Icons.image_outlined)),
+          IconButton(
+              onPressed: () {
                 if (_title.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "제목을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else if (_content.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "내용을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else {
+                  toastMessage('제목을 입력하세요');
+                  return;
+                }
+                if (_content.text.isEmpty) {
+                  toastMessage('내용을 입력하세요');
+                  return;
+                }
+                try {
+                  setState(() {
+                    _now = DateFormat('yyyy-MM-dd - HH:mm:ss')
+                        .format(DateTime.now());
+                  });
                   _createItemDialog(
                     Write(_title.text, _content.text, _now.toString()),
                   );
+                } catch (e) {
+                  toastMessage("잠시 후에 다시 시도해주세요!");
                 }
               },
-              icon: Icon(Icons.check))
+              icon: Icon(Icons.check)),
         ],
       ),
       resizeToAvoidBottomInset: true,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: ListView(
+          shrinkWrap: true,
           children: [
+            SizedBox(
+              height: 40,
+            ),
+            (image != null)
+                ? Column(
+                    children: [
+                      Image.file(
+                        image!,
+                        width: 160,
+                        height: 160,
+                        fit: BoxFit.cover,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text('선택한 이벤트 로고')
+                    ],
+                  )
+                : Column(
+                    children: [
+                      Text('선택한 로고 없음'),
+                    ],
+                  ),
+            SizedBox(
+              height: 40,
+            ),
             Container(
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(

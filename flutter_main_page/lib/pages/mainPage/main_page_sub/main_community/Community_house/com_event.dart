@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
+
+import '../../../../View_pages/event_view.dart';
 
 class Event {
   String id;
@@ -76,7 +78,8 @@ class _EventPageState extends State<EventPage> {
                             data['author'],
                             data['time'],
                             data['countLike'],
-                            data['likedUsersList']);
+                            data['likedUsersList'],
+                            data['url']);
                       }
 
                       return Container();
@@ -85,56 +88,73 @@ class _EventPageState extends State<EventPage> {
     );
   }
 
-  Widget _buildItemWidget(String id, String title, String content,
-      String author, String time, int countLike, List likedUsersList) {
-    return Column(
-      children: [
-        ListTile(
-            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          NoticeViewPage(title, content, author, time)));
-            },
-            title: Text(
-              "[이벤트] $title",
-              style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(
-              "작성자 : $author",
-              style: const TextStyle(fontSize: 10),
-            ),
-            trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-              Text(countLike.toString()),
-              IconButton(
-                  icon: Icon(Icons.favorite,
-                      color: likedUsersList.contains(widget.userNumber)
-                          ? Colors.red
-                          : Colors.grey),
-                  onPressed: () {
-                    _updatelikedUsersList(
-                        id, widget.userNumber, likedUsersList);
-                    _updatecountLike(id, likedUsersList);
-                  }),
-            ])),
-        Container(
-            width: MediaQuery.of(context).size.width,
-            height: 300,
-            margin: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Container(
-                color: Colors.amber,
-                child: Center(child: Text("이벤트 메인 사진")),
+  Widget _buildItemWidget(
+      String id,
+      String title,
+      String content,
+      String author,
+      String time,
+      int countLike,
+      List likedUsersList,
+      String url) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    EventViewPage(title, content, author, time)));
+      },
+      child: Column(
+        children: [
+          ListTile(
+              visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+              title: Text(
+                title,
+                style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
               ),
-            )),
-        Divider(),
-      ],
+              trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                Text(countLike.toString()),
+                IconButton(
+                    icon: Icon(Icons.favorite,
+                        color: likedUsersList.contains(widget.userNumber)
+                            ? Colors.red
+                            : Colors.grey),
+                    onPressed: () {
+                      _updatelikedUsersList(
+                          id, widget.userNumber, likedUsersList);
+                      _updatecountLike(id, likedUsersList);
+                    }),
+              ])),
+          SizedBox(
+            height: 10,
+          ),
+          (url != '')
+              ? Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 400,
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: CachedNetworkImage(
+                          imageUrl: url,
+                          fit: BoxFit.fill,
+                          placeholder: (context, url) => Container(
+                            color: Colors.black,
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                      )))
+              : Container(),
+          Divider(),
+        ],
+      ),
     );
   }
 }
