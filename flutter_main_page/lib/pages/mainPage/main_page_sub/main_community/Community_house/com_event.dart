@@ -102,8 +102,13 @@ class _EventPageState extends State<EventPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    EventViewPage(title, content, author, time)));
+                builder: (context) => EventViewPage(
+                      title: title,
+                      content: content,
+                      author: author,
+                      time: time,
+                      url: url,
+                    )));
       },
       child: Column(
         children: [

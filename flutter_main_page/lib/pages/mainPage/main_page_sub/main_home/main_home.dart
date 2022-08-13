@@ -9,6 +9,7 @@ import 'package:flutter_main_page/navigation_draw.dart';
 import 'package:flutter_main_page/pages/AdminPage/add_photo.dart';
 import 'package:flutter_main_page/pages/AdminPage/notice_manage.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
+import 'package:flutter_main_page/pages/View_pages/zoom_image.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_alarm/main_alarm.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_notice.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -288,7 +289,7 @@ class _MainHomeState extends State<MainHome> {
                         children: [
                           const Expanded(
                             child: Text(
-                              '커뮤니티',
+                              '최근 등록된 글',
                               style:
                                   TextStyle(fontSize: 25, fontFamily: 'hoon'),
                             ),
@@ -521,7 +522,12 @@ class _MainHomeState extends State<MainHome> {
 
   Widget _buildEvent() {
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('event').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('event')
+            .orderBy('url')
+            .where('url', isNotEqualTo: "")
+            .orderBy('time', descending: true)
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
@@ -550,24 +556,29 @@ class _MainHomeState extends State<MainHome> {
                       child: Column(
                         children: [
                           Expanded(
-                            child: (doc['url'] != '')
-                                ? Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    child: CachedNetworkImage(
-                                      imageUrl: doc['url'],
-                                      fit: BoxFit.fill,
-                                      placeholder: (context, url) => Container(
-                                        color: Colors.black,
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
+                                  return ZoomImage(url: doc['url']);
+                                }));
+                              },
+                              child: Hero(
+                                tag: doc['url'],
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: CachedNetworkImage(
+                                    imageUrl: doc['url'],
+                                    fit: BoxFit.fill,
+                                    placeholder: (context, url) => Container(
+                                      color: Colors.black,
                                     ),
-                                  )
-                                : Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Container(
-                                      color: Colors.amber,
-                                    )),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),

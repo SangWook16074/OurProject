@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 
 class Chat {
@@ -93,6 +95,19 @@ class _ComViewPageState extends State<ComViewPage> {
     );
   }
 
+  BannerAd? banner;
+
+  @override
+  void initState() {
+    super.initState();
+    banner = BannerAd(
+        size: AdSize.fullBanner,
+        adUnitId: UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
+        listener: BannerAdListener(),
+        request: AdRequest())
+      ..load();
+  }
+
   @override
   dispose() {
     _chat.dispose();
@@ -169,6 +184,12 @@ class _ComViewPageState extends State<ComViewPage> {
                         ),
                         SizedBox(
                           height: 40,
+                        ),
+                        Container(
+                          height: 50,
+                          child: this.banner != null
+                              ? AdWidget(ad: banner!)
+                              : Container(),
                         ),
                         Divider(
                           color: Colors.grey,
