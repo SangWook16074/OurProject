@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../View_pages/com_view.dart';
-import '../View_pages/notice_view.dart';
 
 class Com {
   String title;

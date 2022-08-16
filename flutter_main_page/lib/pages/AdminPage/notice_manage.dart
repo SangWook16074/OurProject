@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_noticeWrite.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../Update_Page/Notice_update.dart';
 
@@ -145,40 +146,45 @@ class _NoticeManagePageState extends State<NoticeManagePage> {
         Notice(doc['title'], doc['author'], doc['content'], doc['time']);
     return Column(
       children: [
-        ListTile(
-          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NoticeViewPage(notice.title,
-                        notice.content, notice.author, notice.time)));
-          },
-          title: Text(
-            notice.title,
-            style: const TextStyle(
-                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-          subtitle: Text(
-            notice.author,
-            style: const TextStyle(fontSize: 10),
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                onPressed: () {
-                  _deleteItemDialog(doc);
-                },
-                icon: Icon(Icons.delete),
-              ),
-              IconButton(
-                onPressed: () {
-                  _updateItemDialog(doc, doc.id, notice.title, notice.content);
-                },
-                icon: Icon(Icons.update),
-              ),
-            ],
+        Slidable(
+          endActionPane: ActionPane(motion: DrawerMotion(), children: [
+            SlidableAction(
+              onPressed: ((context) {
+                _deleteItemDialog(doc);
+              }),
+              icon: Icons.delete,
+              label: '삭제',
+              foregroundColor: Colors.red,
+            ),
+            SlidableAction(
+              onPressed: (context) {
+                _updateItemDialog(doc, doc.id, notice.title, notice.content);
+              },
+              icon: Icons.update,
+              label: '수정',
+              foregroundColor: Colors.blue,
+            )
+          ]),
+          child: ListTile(
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NoticeViewPage(notice.title,
+                          notice.content, notice.author, notice.time)));
+            },
+            title: Text(
+              notice.title,
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              notice.author,
+              style: const TextStyle(fontSize: 10),
+            ),
           ),
         ),
         Divider(),

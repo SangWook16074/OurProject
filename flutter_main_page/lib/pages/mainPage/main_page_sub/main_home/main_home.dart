@@ -41,9 +41,10 @@ class Com {
   String number;
   int countLike;
   List likedUsersList;
+  String? url;
 
   Com(this.title, this.author, this.content, this.time, this.number,
-      this.countLike, this.likedUsersList);
+      this.countLike, this.likedUsersList, this.url);
 }
 
 class MainHome extends StatefulWidget {
@@ -150,7 +151,8 @@ class _MainHomeState extends State<MainHome> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(context, CustomPageRoute(child: MainAlarm()));
+                Navigator.push(
+                    context, CustomPageRightRoute(child: MainAlarm()));
               },
               icon: Icon(
                 Icons.notifications_active,
@@ -174,7 +176,49 @@ class _MainHomeState extends State<MainHome> {
           SizedBox(
             height: 20,
           ),
-          //_buildIconNavigator(),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+          //   child: Container(
+          //       padding: const EdgeInsets.all(8.0),
+          //       decoration: BoxDecoration(
+          //           borderRadius: BorderRadius.circular(25),
+          //           border: Border.all(color: Colors.grey, width: 1)),
+          //       child: ClipRRect(
+          //         child: Column(
+          //           children: [
+          //             Padding(
+          //               padding: const EdgeInsets.only(left: 8.0),
+          //               child: Row(
+          //                 mainAxisSize: MainAxisSize.max,
+          //                 children: [
+          //                   const Expanded(
+          //                     child: Text(
+          //                       '정보통신공학과',
+          //                       style:
+          //                           TextStyle(fontSize: 25, fontFamily: 'hoon'),
+          //                     ),
+          //                   ),
+          //                   TextButton(
+          //                       onPressed: () {
+          //                         Navigator.of(context).push(CustomPageRoute(
+          //                             child: NoticePage(widget.userNumber)));
+          //                       },
+          //                       child: Text(
+          //                         '더보기',
+          //                         style: TextStyle(color: Colors.blueGrey),
+          //                       ))
+          //                 ],
+          //               ),
+          //             ),
+          //             SizedBox(
+          //               height: 10,
+          //             ),
+          //             _buildImage(),
+          //             _buildText(context),
+          //           ],
+          //         ),
+          //       )),
+          // ),
           SizedBox(
             height: 20,
           ),
@@ -183,11 +227,11 @@ class _MainHomeState extends State<MainHome> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                 child: Container(
-                  height: 460,
+                  height: 500,
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
-                      border: Border.all(color: Colors.grey, width: 2)),
+                      border: Border.all(color: Colors.grey, width: 1)),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Column(
@@ -199,15 +243,16 @@ class _MainHomeState extends State<MainHome> {
                             children: [
                               const Expanded(
                                 child: Text(
-                                  '학과 이벤트',
+                                  '학생회 이벤트',
                                   style: TextStyle(
                                       fontSize: 25, fontFamily: 'hoon'),
                                 ),
                               ),
                               TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).push(CustomPageRoute(
-                                        child: EventPage(widget.user)));
+                                    Navigator.of(context).push(
+                                        CustomPageRightRoute(
+                                            child: EventPage(widget.user)));
                                   },
                                   child: Text(
                                     '더보기',
@@ -222,13 +267,13 @@ class _MainHomeState extends State<MainHome> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 50.0),
+                padding: const EdgeInsets.only(top: 70.0),
                 child: _buildEvent(),
               ),
             ],
           ),
           SizedBox(
-            height: 10,
+            height: 30,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -236,7 +281,7 @@ class _MainHomeState extends State<MainHome> {
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
-                    border: Border.all(color: Colors.grey, width: 2)),
+                    border: Border.all(color: Colors.grey, width: 1)),
                 child: Column(
                   children: [
                     Padding(
@@ -253,7 +298,7 @@ class _MainHomeState extends State<MainHome> {
                           ),
                           TextButton(
                               onPressed: () {
-                                Navigator.of(context).push(CustomPageRoute(
+                                Navigator.of(context).push(CustomPageRightRoute(
                                     child: NoticePage(widget.userNumber)));
                               },
                               child: Text(
@@ -271,7 +316,7 @@ class _MainHomeState extends State<MainHome> {
                 )),
           ),
           SizedBox(
-            height: 10,
+            height: 30,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -279,7 +324,7 @@ class _MainHomeState extends State<MainHome> {
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
-                    border: Border.all(color: Colors.grey, width: 2)),
+                    border: Border.all(color: Colors.grey, width: 1)),
                 child: Column(
                   children: [
                     Padding(
@@ -296,7 +341,7 @@ class _MainHomeState extends State<MainHome> {
                           ),
                           TextButton(
                               onPressed: () {
-                                Navigator.of(context).push(CustomPageRoute(
+                                Navigator.of(context).push(CustomPageRightRoute(
                                     child: ComPage(widget.userNumber)));
                               },
                               child: Text(
@@ -314,10 +359,103 @@ class _MainHomeState extends State<MainHome> {
                 )),
           ),
           SizedBox(
+            height: 30,
+          ),
+
+          Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                child: Container(
+                  height: 320,
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(color: Colors.grey, width: 1)),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 40,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              const Expanded(
+                                child: Text(
+                                  '학과 소식',
+                                  style: TextStyle(
+                                      fontSize: 25, fontFamily: 'hoon'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 70.0),
+                child: _buildBannerImage(),
+              ),
+            ],
+          ),
+
+          SizedBox(
             height: 10,
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildImage() {
+    return Container(
+      height: 400,
+      width: MediaQuery.of(context).size.width,
+      child: Image.asset('assets/title.png'),
+    );
+  }
+
+  Widget _buildText(BuildContext context) {
+    return ExpansionTile(
+      title: Text(
+        '학과 소개',
+        style: TextStyle(fontSize: 15),
+      ),
+      children: [
+        Row(
+          children: [
+            Text(
+              '교육 목표',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+            '4차 산업혁명시대에 알맞는 산학일체형 직업교육을 실시함으로서 현장실무능력 제고와 취업분야 및 창업분야를 학생 스스로 선별할 수 있는 능력 배양을 교육목표로 한다.'),
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          children: [
+            Text(
+              '교육 방침',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+            '가. 전문 중견 기술인으로서의 투철한 직업관 고취\n나. ICT 융합 기술분야에특성화된 심화전공 교육과정을 운영하여 현장실무능력 제고\n다. 전공과 관련된 현장실무과정을 고려한 특성화된 전문 기술교육을 운영함으로써 산학일체형 직업 교육 및 현장 실무능력 제고\n라. 교육의 질을 높여 국제화 산업사회의 특성에 맞는 글로컬 전문인력 배출\n마. 4차 산업혁명에 발맞추어 ICT 융합기술 기반 인재를 양성하기 위한 전문교육을 실시하여 학생 스스로 미래 지향형 취업 분야 선택 및 창업 유도'),
+      ],
     );
   }
 
@@ -399,49 +537,60 @@ class _MainHomeState extends State<MainHome> {
     );
   }
 
-  // Widget _buildImage() {
-  //   return StreamBuilder<QuerySnapshot>(
-  //       stream: FirebaseFirestore.instance.collection('eventImage').snapshots(),
-  //       builder: (context, snapshot) {
-  //         if (!snapshot.hasData) {
-  //           return Center(child: CircularProgressIndicator());
-  //         }
-  //         final documents = snapshot.data!.docs;
+  Widget _buildBannerImage() {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('eventImage').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+          final documents = snapshot.data!.docs;
 
-  //         return CarouselSlider(
-  //           options: CarouselOptions(
-  //             height: 220.0,
-  //             autoPlay: true,
-  //             enlargeCenterPage: false,
-  //           ),
-  //           items: documents.map((doc) {
-  //             return Builder(
-  //               builder: (BuildContext context) {
-  //                 return Container(
-  //                     width: MediaQuery.of(context).size.width,
-  //                     margin: const EdgeInsets.symmetric(horizontal: 5.0),
-  //                     child: ClipRRect(
-  //                       borderRadius: BorderRadius.circular(8.0),
-  //                       child: CachedNetworkImage(
-  //                         imageUrl: doc['url'],
-  //                         fit: BoxFit.fill,
-  //                         placeholder: (context, url) => Container(
-  //                           color: Colors.black,
-  //                         ),
-  //                         errorWidget: (context, url, error) =>
-  //                             Icon(Icons.error),
-  //                       ),
-  //                     ));
-  //               },
-  //             );
-  //           }).toList(),
-  //         );
-  //       });
-  // }
+          return CarouselSlider(
+            options: CarouselOptions(
+              height: 220.0,
+              enableInfiniteScroll: false,
+              enlargeCenterPage: false,
+            ),
+            items: documents.map((doc) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return ZoomImage(url: doc['url']);
+                      }));
+                    },
+                    child: Hero(
+                      tag: doc['url'],
+                      child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: CachedNetworkImage(
+                              imageUrl: doc['url'],
+                              fit: BoxFit.fill,
+                              placeholder: (context, url) => Container(
+                                color: Colors.black,
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                            ),
+                          )),
+                    ),
+                  );
+                },
+              );
+            }).toList(),
+          );
+        });
+  }
 
   Widget _buildItemCom(DocumentSnapshot doc, BuildContext context) {
-    final com = Com(doc['title'], doc['content'], doc['author'], doc['time'],
-        doc['number'], doc['countLike'], doc['likedUsersList']);
+    final com = Com(doc['title'], doc['author'], doc['content'], doc['time'],
+        doc['number'], doc['countLike'], doc['likedUsersList'], doc['url']);
     return Column(
       children: [
         ListTile(
@@ -456,6 +605,7 @@ class _MainHomeState extends State<MainHome> {
                         author: '익명',
                         time: com.time,
                         id: doc.id,
+                        url: (com.url != null) ? com.url : null,
                         user: widget.userNumber)));
           },
           title: Text(
@@ -469,6 +619,24 @@ class _MainHomeState extends State<MainHome> {
             "익명 | ${com.time}",
             style: const TextStyle(fontSize: 10),
           ),
+          trailing: (doc['url'] != '')
+              ? Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Container(
+                        width: 70,
+                        child: CachedNetworkImage(
+                          imageUrl: doc['url']!,
+                          fit: BoxFit.fitWidth,
+                          placeholder: (context, url) => Container(
+                            color: Colors.black,
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                      )))
+              : null,
         ),
         Divider(
           color: Colors.grey,
@@ -585,7 +753,7 @@ class _MainHomeState extends State<MainHome> {
                             child: Text(
                               doc['title'],
                               style: TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.w300),
+                                  fontSize: 17, fontWeight: FontWeight.w700),
                             ),
                           )
                         ],

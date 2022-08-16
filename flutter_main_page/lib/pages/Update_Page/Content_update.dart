@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,7 +16,13 @@ class ContentUpdatePage extends StatefulWidget {
   final String docID;
   final String title;
   final String content;
-  const ContentUpdatePage(this.docID, this.title, this.content, {Key? key})
+  final String? url;
+  const ContentUpdatePage(
+      {Key? key,
+      required this.docID,
+      required this.title,
+      required this.content,
+      required this.url})
       : super(key: key);
 
   @override
@@ -115,6 +122,10 @@ class _ContentUpdatePageState extends State<ContentUpdatePage> {
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   children: [
+                    Text('사진은 수정이 불가능합니다. 사진 수정을 하려면, 글을 지웠다가 다시 작성하셔야합니다.'),
+                    SizedBox(
+                      height: 5,
+                    ),
                     TextField(
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold),
@@ -129,6 +140,27 @@ class _ContentUpdatePageState extends State<ContentUpdatePage> {
                           fillColor: Colors.white),
                     ),
                     const SizedBox(
+                      height: 5,
+                    ),
+                    (widget.url != null)
+                        ? Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Container(
+                                  width: 70,
+                                  child: CachedNetworkImage(
+                                    imageUrl: widget.url!,
+                                    fit: BoxFit.fitWidth,
+                                    placeholder: (context, url) => Container(
+                                      color: Colors.black,
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  ),
+                                )))
+                        : Container(),
+                    SizedBox(
                       height: 5,
                     ),
                     TextField(

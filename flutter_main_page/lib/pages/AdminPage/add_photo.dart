@@ -1,11 +1,11 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 const Duration _duration = Duration(milliseconds: 300);
 
@@ -164,6 +164,7 @@ class _AddPhotoPageState extends State<AddPhotoPage> {
 
           return ListView(
             shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             children: documents.map((doc) => _buildItem(doc)).toList(),
           );
         });
@@ -171,24 +172,19 @@ class _AddPhotoPageState extends State<AddPhotoPage> {
 
   Widget _buildItem(DocumentSnapshot doc) {
     return Container(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
           Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 10)),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
-              child: Image.network(
-                doc['url'],
-                fit: BoxFit.cover,
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child;
-                  }
-                  return Center(child: CircularProgressIndicator());
-                },
+              child: CachedNetworkImage(
+                imageUrl: doc['url']!,
+                fit: BoxFit.fitWidth,
+                placeholder: (context, url) => Container(
+                  color: Colors.black,
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
             ),
           ),
@@ -197,6 +193,7 @@ class _AddPhotoPageState extends State<AddPhotoPage> {
                 _deleteItemDialog(doc);
               },
               child: Text("위 사진 삭제하기")),
+          Divider()
         ],
       ),
     );

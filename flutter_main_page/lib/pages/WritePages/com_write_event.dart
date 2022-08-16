@@ -220,32 +220,6 @@ class _WriteEventPageState extends State<WriteEventPage> {
         child: ListView(
           shrinkWrap: true,
           children: [
-            SizedBox(
-              height: 40,
-            ),
-            (image != null)
-                ? Column(
-                    children: [
-                      Image.file(
-                        image!,
-                        width: 160,
-                        height: 160,
-                        fit: BoxFit.cover,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text('선택한 이벤트 로고')
-                    ],
-                  )
-                : Column(
-                    children: [
-                      Text('선택한 로고 없음'),
-                    ],
-                  ),
-            SizedBox(
-              height: 40,
-            ),
             Container(
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
@@ -276,6 +250,14 @@ class _WriteEventPageState extends State<WriteEventPage> {
                     const SizedBox(
                       height: 5,
                     ),
+                    (image != null)
+                        ? Container(
+                            child: Image.file(
+                              image!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Container(),
                     TextField(
                       minLines: 15,
                       maxLines: 100,

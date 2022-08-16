@@ -1,6 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/com_view.dart';
+import 'package:flutter_main_page/pages/WritePages/com_write_com.dart';
+
+import '../../../../../custom_page_route.dart';
+import 'com_search.dart';
 
 class Com {
   String title;
@@ -23,26 +28,32 @@ class ComPage extends StatefulWidget {
 }
 
 class _ComPageState extends State<ComPage> {
-  var _search = TextEditingController();
-  String _searchContent = '';
-
-  @override
-  void dispose() {
-    _search.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton.extended(
           icon: Icon(Icons.edit),
           label: Text("글쓰기"),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (contexst) {
+              return WriteComPage(userNumber: widget.userNumber);
+            }));
+          },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         appBar: AppBar(
-          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      CustomPageRightRoute(
+                          child: SearchPage(
+                        topic: 'com',
+                      )));
+                },
+                icon: Icon(Icons.search))
+          ],
           iconTheme: IconThemeData.fallback(),
           backgroundColor: Colors.white,
           title: const Text(
@@ -84,14 +95,27 @@ class _ComPageState extends State<ComPage> {
                         var id = snapshot.data!.docs[index].id;
 
                         if (snapshot.hasData) {
-                          return _buildItemWidget(
+                          if (data['url'] == "") {
+                            return _buildItemWidget(
                               id,
                               data['title'],
                               data['content'],
                               data['author'],
                               data['time'],
                               data['countLike'],
-                              data['likedUsersList']);
+                              data['likedUsersList'],
+                            );
+                          } else {
+                            return _buildItemImageWidget(
+                                id,
+                                data['title'],
+                                data['content'],
+                                data['author'],
+                                data['time'],
+                                data['countLike'],
+                                data['likedUsersList'],
+                                data['url']);
+                          }
                         }
 
                         return Container();
@@ -101,8 +125,15 @@ class _ComPageState extends State<ComPage> {
     );
   }
 
-  Widget _buildItemWidget(String id, String title, String content,
-      String author, String time, int countLike, List likedUsersList) {
+  Widget _buildItemImageWidget(
+      String id,
+      String title,
+      String content,
+      String author,
+      String time,
+      int countLike,
+      List likedUsersList,
+      String? url) {
     return Column(
       children: [
         ListTile(
@@ -117,34 +148,112 @@ class _ComPageState extends State<ComPage> {
                         author: '익명',
                         time: time,
                         id: id,
-                        user: widget.userNumber)));
+                        url: url!,
+                        user: widget.userNumber,
+                        countLike: countLike,
+                        likedUsersList: likedUsersList)));
           },
           title: Text(
             title,
             style: const TextStyle(
                 fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
           ),
-          subtitle: Text(
-            "익명 | $time",
-            style: const TextStyle(fontSize: 10),
-          ),
-          trailing: Row(
+          subtitle: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(countLike.toString()),
-              IconButton(
-                  icon: Icon(
-                    Icons.favorite,
-                    size: 20,
-                    color: likedUsersList.contains(widget.userNumber)
-                        ? Colors.red
-                        : Colors.grey,
-                  ),
-                  onPressed: () {
-                    _updatelikedUsersList(
-                        id, widget.userNumber, likedUsersList);
-                    _updatecountLike(id, likedUsersList);
-                  }),
+              Text(
+                "익명 | $time",
+                style: const TextStyle(fontSize: 10),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Icon(Icons.thumb_up, size: 15, color: Colors.purple),
+                  Text('  $countLike')
+                ],
+              )
+            ],
+          ),
+          trailing: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Container(
+                        width: 70,
+                        child: CachedNetworkImage(
+                          imageUrl: url!,
+                          fit: BoxFit.fitWidth,
+                          placeholder: (context, url) => Container(
+                            color: Colors.black,
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                      ))),
+            ],
+          ),
+        ),
+        Divider(
+          color: Colors.grey,
+        )
+      ],
+    );
+  }
+
+  Widget _buildItemWidget(
+    String id,
+    String title,
+    String content,
+    String author,
+    String time,
+    int countLike,
+    List likedUsersList,
+  ) {
+    return Column(
+      children: [
+        ListTile(
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ComViewPage(
+                        title: title,
+                        content: content,
+                        author: '익명',
+                        time: time,
+                        id: id,
+                        user: widget.userNumber,
+                        countLike: countLike,
+                        likedUsersList: likedUsersList)));
+          },
+          title: Text(
+            title,
+            style: const TextStyle(
+                fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "익명 | $time",
+                style: const TextStyle(fontSize: 10),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Icon(Icons.thumb_up, size: 15, color: Colors.purple),
+                  Text('  $countLike')
+                ],
+              )
             ],
           ),
         ),

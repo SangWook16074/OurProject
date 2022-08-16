@@ -9,7 +9,7 @@ import 'package:flutter_main_page/pages/loginPage/reset_pass.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_notice.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/calculate.dart';
 import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/myContentDelete.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/myContentUpdate.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 import 'pages/loginPage/login_page.dart';
 import 'pages/mainPage/main_page_sub/main_community/Community_house/com_community.dart';
@@ -175,17 +175,9 @@ class NavigationDrawerWidget extends StatelessWidget {
           ),
           _buildMenuItem(
             context,
-            text: '글 삭제',
-            icon: Icons.delete_outline,
-            onTap: MyContentDeletePage(
-              this.userNumber,
-            ),
-          ),
-          _buildMenuItem(
-            context,
-            text: '글 수정',
+            text: '내가 쓴 글',
             icon: Icons.edit,
-            onTap: MyContentUpdatePage(
+            onTap: MyContentManagePage(
               this.userNumber,
             ),
           ),
@@ -309,7 +301,9 @@ class NavigationDrawerWidget extends StatelessWidget {
     return ListTile(
       onTap: () {
         Navigator.of(context).pop();
-        Navigator.push(context, CustomPageRoute(child: onTap));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return onTap;
+        }));
       },
       leading: Icon(
         icon,

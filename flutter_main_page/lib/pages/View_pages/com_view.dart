@@ -1,9 +1,10 @@
-import 'dart:async';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/pages/View_pages/zoom_image.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +24,9 @@ class ComViewPage extends StatefulWidget {
   final String time;
   final String? id;
   final String? user;
+  final String? url;
+  final int? countLike;
+  final List? likedUsersList;
   const ComViewPage(
       {Key? key,
       required this.title,
@@ -30,7 +34,10 @@ class ComViewPage extends StatefulWidget {
       required this.author,
       required this.time,
       this.id,
-      this.user})
+      this.user,
+      this.url,
+      this.countLike,
+      this.likedUsersList})
       : super(key: key);
 
   @override
@@ -40,6 +47,29 @@ class ComViewPage extends StatefulWidget {
 class _ComViewPageState extends State<ComViewPage> {
   var _now;
   final _chat = TextEditingController();
+
+  void _updatecountLike(String docID, List likedUsersList) {
+    FirebaseFirestore.instance
+        .collection('com')
+        .doc(docID)
+        .set({'countLike': likedUsersList.length}, SetOptions(merge: true));
+  }
+
+  _updatelikedUsersList(String docID, String userNumber, List usersList) {
+    FirebaseFirestore.instance.collection('com').doc(docID)
+        // .set({'likedUsersMap': userNumber}, SetOptions(merge: true));
+        .set({'likedUsersList': userCheck(usersList, userNumber)},
+            SetOptions(merge: true));
+  }
+
+  userCheck(List usersList, String userNumber) {
+    if (usersList.contains(userNumber)) {
+      usersList.remove(userNumber);
+    } else {
+      usersList.add(userNumber);
+    }
+    return usersList;
+  }
 
   void _addChat(String chat, String time, String author) {
     var db = FirebaseFirestore.instance.collection("com");
@@ -87,12 +117,7 @@ class _ComViewPageState extends State<ComViewPage> {
     var db = FirebaseFirestore.instance.collection("com");
 
     db.doc(widget.id).collection('chat').doc(id).delete();
-    Fluttertoast.showToast(
-      msg: "댓글이 삭제되었습니다.",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      fontSize: 16,
-    );
+    toastMessage('댓글이 삭제되었습니다');
   }
 
   BannerAd? banner;
@@ -103,7 +128,10 @@ class _ComViewPageState extends State<ComViewPage> {
     banner = BannerAd(
         size: AdSize.fullBanner,
         adUnitId: UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
-        listener: BannerAdListener(),
+        listener: BannerAdListener(
+          onAdLoaded: (ad) {},
+          onAdFailedToLoad: (ad, error) {},
+        ),
         request: AdRequest())
       ..load();
   }
@@ -184,6 +212,72 @@ class _ComViewPageState extends State<ComViewPage> {
                         ),
                         SizedBox(
                           height: 40,
+                        ),
+                        (widget.url != null)
+                            ? GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return ZoomImage(url: widget.url!);
+                                  }));
+                                },
+                                child: Hero(
+                                  tag: widget.url!,
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 400,
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5.0),
+                                      child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: CachedNetworkImage(
+                                              imageUrl: widget.url!,
+                                              fit: BoxFit.fill,
+                                              placeholder: (context, url) =>
+                                                  Container(
+                                                color: Colors.black,
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                            ),
+                                          ))),
+                                ),
+                              )
+                            : Container(),
+                        (widget.countLike != null)
+                            ? Row(
+                                children: [
+                                  IconButton(
+                                      icon: Icon(
+                                        Icons.thumb_up,
+                                        size: 20,
+                                        color: widget.likedUsersList!
+                                                .contains(widget.user)
+                                            ? Colors.purple
+                                            : Colors.grey,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _updatelikedUsersList(
+                                              widget.id!,
+                                              widget.user!,
+                                              widget.likedUsersList!);
+                                          _updatecountLike(widget.id!,
+                                              widget.likedUsersList!);
+                                        });
+                                      }),
+                                  Text('추천하기')
+                                ],
+                              )
+                            : Container(),
+                        Divider(
+                          color: Colors.grey,
                         ),
                         Container(
                           height: 50,

@@ -1,33 +1,42 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_main_page/main.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class Write {
   String title;
   String content;
   String time;
 
-  Write(this.title, this.content, this.time);
+  Write(
+    this.title,
+    this.content,
+    this.time,
+  );
 }
 
 class WriteComPage extends StatefulWidget {
   final String userNumber;
-
-  const WriteComPage(this.userNumber, {Key? key}) : super(key: key);
+  const WriteComPage({Key? key, required this.userNumber}) : super(key: key);
 
   @override
   State<WriteComPage> createState() => _WriteComPageState();
 }
 
 class _WriteComPageState extends State<WriteComPage> {
+  File? image;
   var _now;
   final _title = TextEditingController();
   final _content = TextEditingController();
 
-  void _createItemDialog(Write com, String userNumber) {
+  void _createItemDialog(Write event) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -39,15 +48,16 @@ class _WriteComPageState extends State<WriteComPage> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: const [
-                Text('글을 등록하시겠습니까? \n등록된 글은 내정보 페이지에서 관리할 수 있습니다.')
+                Text('이벤트를 등록하시겠습니까? \n등록된 이벤트는 내정보 페이지에서 관리할 수 있습니다.')
               ],
             ),
             actions: [
               TextButton(
                   onPressed: () {
-                    _addNotice(com, userNumber);
+                    _addNotice(event);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
+                    toastMessage('작성완료!');
                   },
                   child: const Text("확인")),
               TextButton(
@@ -60,35 +70,57 @@ class _WriteComPageState extends State<WriteComPage> {
         });
   }
 
-  void _addNotice(Write com, String userNumber) {
+  void _addNotice(Write com) async {
+    if (image != null) {
+      final ref =
+          FirebaseStorage.instance.ref().child('com').child("${com.title}.jpg");
+      final uploadTask = ref.putFile(image!);
+      await uploadTask.whenComplete(() => null);
+
+      final getUrl = await ref.getDownloadURL();
+      FirebaseFirestore.instance.collection('com').add({
+        'author': '익명',
+        'title': com.title,
+        'content': com.content,
+        'number': widget.userNumber,
+        'time': com.time,
+        'countLike': 0,
+        'likedUsersList': [],
+        'url': getUrl
+      });
+
+      return;
+    }
+
     FirebaseFirestore.instance.collection('com').add({
+      'author': '익명',
       'title': com.title,
       'content': com.content,
-      'number': userNumber,
+      'number': widget.userNumber,
       'time': com.time,
       'countLike': 0,
       'likedUsersList': [],
+      'url': ''
     });
-    Fluttertoast.showToast(
-      msg: "새 글이 등록되었습니다.",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      fontSize: 16,
-    );
     _title.text = '';
     _content.text = '';
   }
 
-  @override
-  void initState() {
-    Timer.periodic((const Duration(seconds: 1)), (v) {
-      if (mounted) {
-        setState(() {
-          _now = DateFormat('yyyy-MM-dd - HH:mm:ss').format(DateTime.now());
-        });
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) {
+        return;
       }
-    });
-    super.initState();
+
+      final imageTemporary = File(image.path);
+
+      setState(() {
+        this.image = imageTemporary;
+      });
+    } catch (e) {
+      toastMessage('에러! 잠시뒤에 다시 시도해주세요');
+    }
   }
 
   @override
@@ -101,47 +133,54 @@ class _WriteComPageState extends State<WriteComPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "Community",
+          "글쓰기",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            fontSize: 25,
+            color: Colors.black,
+            fontFamily: 'hoon',
           ),
         ),
         centerTitle: true,
         actions: [
           IconButton(
               onPressed: () {
+                pickImage();
+              },
+              icon: Icon(Icons.image_outlined)),
+          IconButton(
+              onPressed: () {
                 if (_title.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "제목을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else if (_content.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "내용을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else {
+                  toastMessage('제목을 입력하세요');
+                  return;
+                }
+                if (_content.text.isEmpty) {
+                  toastMessage('내용을 입력하세요');
+                  return;
+                }
+                try {
+                  setState(() {
+                    _now = DateFormat('yyyy-MM-dd - HH:mm:ss')
+                        .format(DateTime.now());
+                  });
                   _createItemDialog(
-                      Write(_title.text, _content.text, _now.toString()),
-                      widget.userNumber);
+                    Write(_title.text, _content.text, _now.toString()),
+                  );
+                } catch (e) {
+                  toastMessage("잠시 후에 다시 시도해주세요!");
                 }
               },
-              icon: Icon(Icons.check))
+              icon: Icon(Icons.check)),
         ],
       ),
       resizeToAvoidBottomInset: true,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: ListView(
+          shrinkWrap: true,
           children: [
             Container(
                 padding: const EdgeInsets.all(8.0),
@@ -173,6 +212,14 @@ class _WriteComPageState extends State<WriteComPage> {
                     const SizedBox(
                       height: 5,
                     ),
+                    (image != null)
+                        ? Container(
+                            child: Image.file(
+                              image!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Container(),
                     TextField(
                       minLines: 15,
                       maxLines: 100,
@@ -187,6 +234,11 @@ class _WriteComPageState extends State<WriteComPage> {
                           filled: true,
                           fillColor: Colors.white),
                     ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Text(
+                        '작성된 글은 모두 익명으로 표시되며, 특수한 경우(비난, 비방, 명예훼손의 경우) 익명성이 보장되지 않습니다.')
                   ],
                 )),
           ],

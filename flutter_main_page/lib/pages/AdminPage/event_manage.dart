@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/Update_Page/event_update.dart';
 import 'package:flutter_main_page/pages/WritePages/com_write_event.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import '../View_pages/notice_view.dart';
 
 class Event {
@@ -144,40 +145,45 @@ class _EventManagePageState extends State<EventManagePage> {
         Event(doc['title'], doc['author'], doc['content'], doc['time']);
     return Column(
       children: [
-        ListTile(
-          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: ((context) => NoticeViewPage(event.title,
-                        event.content, event.author, event.time))));
-          },
-          title: Text(
-            event.title,
-            style: const TextStyle(
-                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-          subtitle: Text(
-            event.author,
-            style: const TextStyle(fontSize: 10),
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                onPressed: () {
-                  _deleteItemDialog(doc);
-                },
-                icon: Icon(Icons.delete),
-              ),
-              IconButton(
-                onPressed: () {
-                  _updateItemDialog(doc, doc.id, event.title, event.content);
-                },
-                icon: Icon(Icons.update),
-              ),
-            ],
+        Slidable(
+          endActionPane: ActionPane(motion: DrawerMotion(), children: [
+            SlidableAction(
+              onPressed: (context) {
+                _deleteItemDialog(doc);
+              },
+              icon: Icons.delete,
+              label: '삭제',
+              foregroundColor: Colors.red,
+            ),
+            SlidableAction(
+              onPressed: (context) {
+                _updateItemDialog(doc, doc.id, event.title, event.content);
+              },
+              icon: Icons.update,
+              label: '수정',
+              foregroundColor: Colors.blue,
+            )
+          ]),
+          child: ListTile(
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => NoticeViewPage(event.title,
+                          event.content, event.author, event.time))));
+            },
+            title: Text(
+              event.title,
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              event.author,
+              style: const TextStyle(fontSize: 10),
+            ),
           ),
         ),
         Divider(),

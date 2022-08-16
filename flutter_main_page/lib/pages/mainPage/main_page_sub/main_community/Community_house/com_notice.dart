@@ -41,7 +41,7 @@ class _NoticePageState extends State<NoticePage> {
                 onPressed: () {
                   Navigator.push(
                       context,
-                      CustomPageRoute(
+                      CustomPageRightRoute(
                           child: SearchPage(
                         topic: 'notice',
                       )));

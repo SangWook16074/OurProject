@@ -1,25 +1,29 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/com_view.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
+import '../../../../Update_Page/Content_update.dart';
 
 class Com {
   String title;
   String content;
   String author;
   String time;
-
-  Com(this.title, this.author, this.content, this.time);
+  String? url;
+  Com(this.title, this.author, this.content, this.time, this.url);
 }
 
-class MyContentDeletePage extends StatefulWidget {
+class MyContentManagePage extends StatefulWidget {
   final String user;
-  MyContentDeletePage(this.user, {Key? key}) : super(key: key);
+  MyContentManagePage(this.user, {Key? key}) : super(key: key);
 
   @override
-  State<MyContentDeletePage> createState() => _MyContentDeletePageState();
+  State<MyContentManagePage> createState() => _MyContentManagePageState();
 }
 
-class _MyContentDeletePageState extends State<MyContentDeletePage> {
+class _MyContentManagePageState extends State<MyContentManagePage> {
   void _deleteItemDialog(DocumentSnapshot doc) {
     showDialog(
         context: context,
@@ -38,6 +42,44 @@ class _MyContentDeletePageState extends State<MyContentDeletePage> {
                   onPressed: () {
                     _deleteItem(doc);
                     Navigator.of(context).pop();
+                  },
+                  child: const Text("확인")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("취소")),
+            ],
+          );
+        });
+  }
+
+  void _updateItemDialog(DocumentSnapshot doc, String docID, String title,
+      String content, String? url) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const [Text('수정하시겠습니까??')],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => ContentUpdatePage(
+                                docID: docID,
+                                title: title,
+                                content: content,
+                                url: (url! == '') ? null : url))));
                   },
                   child: const Text("확인")),
               TextButton(
@@ -104,39 +146,61 @@ class _MyContentDeletePageState extends State<MyContentDeletePage> {
   }
 
   Widget _buildEventWidget(DocumentSnapshot doc) {
-    final com = Com(doc['title'], doc['author'], doc['content'], doc['time']);
+    final com = Com(
+        doc['title'], doc['author'], doc['content'], doc['time'], doc['url']);
     return Column(
       children: [
-        ListTile(
-          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ComViewPage(
-                        title: com.title,
-                        content: com.content,
-                        author: com.author,
-                        time: com.time,
-                        id: doc.id,
-                        user: widget.user)));
-          },
-          title: Text(
-            com.title,
-            style: const TextStyle(
-                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-          subtitle: Text(
-            "익명",
-            style: const TextStyle(fontSize: 10),
-          ),
-          trailing: IconButton(
-            onPressed: () {
-              _deleteItemDialog(doc);
-            },
-            icon: Icon(Icons.delete),
-          ),
-        ),
+        Builder(builder: (context) {
+          return Slidable(
+            endActionPane: ActionPane(motion: DrawerMotion(), children: [
+              SlidableAction(
+                onPressed: (context) {
+                  _deleteItemDialog(doc);
+                },
+                icon: Icons.delete,
+                label: '삭제',
+                foregroundColor: Colors.red,
+              ),
+              SlidableAction(
+                onPressed: (context) {
+                  _updateItemDialog(doc, doc.id, com.title, com.content,
+                      (com.url == '') ? null : com.url);
+                },
+                icon: Icons.update,
+                label: '수정',
+                foregroundColor: Colors.blue,
+              ),
+            ]),
+            child: ListTile(
+              visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ComViewPage(
+                              title: com.title,
+                              content: com.content,
+                              author: com.author,
+                              time: com.time,
+                              id: doc.id,
+                              user: widget.user,
+                              url: (com.url == "") ? null : com.url,
+                            )));
+              },
+              title: Text(
+                com.title,
+                style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                "익명",
+                style: const TextStyle(fontSize: 10),
+              ),
+            ),
+          );
+        }),
         Divider(),
       ],
     );
