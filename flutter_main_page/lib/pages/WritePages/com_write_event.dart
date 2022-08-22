@@ -1,32 +1,79 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_main_page/main.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class Write {
   String title;
   String content;
   String time;
 
-  Write(this.title, this.content, this.time);
+  Write(
+    this.title,
+    this.content,
+    this.time,
+  );
 }
 
 class WriteEventPage extends StatefulWidget {
-  final String user;
-  const WriteEventPage(this.user, {Key? key}) : super(key: key);
+  const WriteEventPage({Key? key}) : super(key: key);
 
   @override
   State<WriteEventPage> createState() => _WriteEventPageState();
 }
 
 class _WriteEventPageState extends State<WriteEventPage> {
+  File? image;
   var _now;
   final _title = TextEditingController();
   final _content = TextEditingController();
 
-  void _createItemDialog(Write event, String user) {
+  Future<bool> callOnFcmApiSendPushNotifications(
+      {required String title, required String body}) async {
+    const postUrl = 'https://fcm.googleapis.com/fcm/send';
+    final data = {
+      "to": "/topics/connectTopic",
+      "notification": {
+        "title": title,
+        "body": body,
+      },
+      "data": {
+        "type": '0rder',
+        "id": '28',
+        "click_action": 'FLUTTER_NOTIFICATION_CLICK',
+      }
+    };
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+          'key=AAAA4skJqo4:APA91bFmXAZAeG3JGPd5Dym_iILSxUTAwi1mQwxOCz9CuQG9wvAB2Y1lnT_CZv_uOFuWJtpFm3QomTu28sE9C9jWEi1nz3QVTEzL7Ym765LQoTtG9aqYkHYV83fW87P0_mj3eNpPtw5M' // 'key=YOUR_SERVER_KEY'
+    };
+
+    final response = await http.post(Uri.parse(postUrl),
+        body: json.encode(data),
+        encoding: Encoding.getByName('utf-8'),
+        headers: headers);
+
+    if (response.statusCode == 200) {
+      // on success do sth
+      print('test ok push CFM');
+      return true;
+    } else {
+      print(' CFM error');
+      // on failure do sth
+      return false;
+    }
+  }
+
+  void _createItemDialog(Write event) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -38,13 +85,15 @@ class _WriteEventPageState extends State<WriteEventPage> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: const [
-                Text('이벤트를 등록하시겠습니까? 등록된 이벤트는 내정보 페이지에서 관리할 수 있습니다.')
+                Text('이벤트를 등록하시겠습니까? \n등록된 이벤트는 내정보 페이지에서 관리할 수 있습니다.')
               ],
             ),
             actions: [
               TextButton(
                   onPressed: () {
-                    _addNotice(event, user);
+                    callOnFcmApiSendPushNotifications(
+                        title: '새 이벤트가 등록되었습니다.', body: '[이벤트] ${event.title}');
+                    _addNotice(event);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   },
@@ -59,27 +108,57 @@ class _WriteEventPageState extends State<WriteEventPage> {
         });
   }
 
-  void _addNotice(Write event, String user) {
+  void _addNotice(Write event) async {
+    if (image != null) {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('event')
+          .child("${event.title}.jpg");
+      final uploadTask = ref.putFile(image!);
+      await uploadTask.whenComplete(() => null);
+
+      final getUrl = await ref.getDownloadURL();
+      FirebaseFirestore.instance.collection('event').add({
+        'title': event.title,
+        'content': event.content,
+        'author': '학생회',
+        'time': event.time,
+        'countLike': 0,
+        'likedUsersList': [],
+        'url': getUrl
+      });
+
+      return;
+    }
+
     FirebaseFirestore.instance.collection('event').add({
-      'title': "[이벤트] ${event.title}",
+      'title': event.title,
       'content': event.content,
-      'author': user,
+      'author': '학생회',
       'time': event.time,
+      'countLike': 0,
+      'likedUsersList': [],
+      'url': ''
     });
     _title.text = '';
     _content.text = '';
   }
 
-  @override
-  void initState() {
-    Timer.periodic((const Duration(seconds: 1)), (v) {
-      if (mounted) {
-        setState(() {
-          _now = DateFormat('yyyy-MM-dd - HH:mm:ss').format(DateTime.now());
-        });
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) {
+        return;
       }
-    });
-    super.initState();
+
+      final imageTemporary = File(image.path);
+
+      setState(() {
+        this.image = imageTemporary;
+      });
+    } catch (e) {
+      toastMessage('에러! 잠시뒤에 다시 시도해주세요');
+    }
   }
 
   @override
@@ -92,47 +171,54 @@ class _WriteEventPageState extends State<WriteEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "Event",
+          "이벤트 작성",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            fontSize: 25,
+            color: Colors.black,
+            fontFamily: 'hoon',
           ),
         ),
         centerTitle: true,
         actions: [
           IconButton(
               onPressed: () {
+                pickImage();
+              },
+              icon: Icon(Icons.image_outlined)),
+          IconButton(
+              onPressed: () {
                 if (_title.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "제목을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else if (_content.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "내용을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else {
+                  toastMessage('제목을 입력하세요');
+                  return;
+                }
+                if (_content.text.isEmpty) {
+                  toastMessage('내용을 입력하세요');
+                  return;
+                }
+                try {
+                  setState(() {
+                    _now = DateFormat('yyyy-MM-dd - HH:mm:ss')
+                        .format(DateTime.now());
+                  });
                   _createItemDialog(
-                      Write(_title.text, _content.text, _now.toString()),
-                      widget.user);
+                    Write(_title.text, _content.text, _now.toString()),
+                  );
+                } catch (e) {
+                  toastMessage("잠시 후에 다시 시도해주세요!");
                 }
               },
-              icon: Icon(Icons.check))
+              icon: Icon(Icons.check)),
         ],
       ),
       resizeToAvoidBottomInset: true,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: ListView(
+          shrinkWrap: true,
           children: [
             Container(
                 padding: const EdgeInsets.all(8.0),
@@ -164,6 +250,14 @@ class _WriteEventPageState extends State<WriteEventPage> {
                     const SizedBox(
                       height: 5,
                     ),
+                    (image != null)
+                        ? Container(
+                            child: Image.file(
+                              image!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Container(),
                     TextField(
                       minLines: 15,
                       maxLines: 100,

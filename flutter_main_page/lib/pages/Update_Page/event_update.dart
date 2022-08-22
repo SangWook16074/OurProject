@@ -50,12 +50,14 @@ class _EventUpdatePageState extends State<EventUpdatePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         title: const Text(
-          "Modify",
+          "이벤트 수정",
           style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+            fontSize: 25,
+            color: Colors.black,
+            fontFamily: 'hoon',
           ),
         ),
         automaticallyImplyLeading: false,
@@ -87,14 +89,13 @@ class _EventUpdatePageState extends State<EventUpdatePage> {
                     gravity: ToastGravity.BOTTOM,
                     fontSize: 16,
                   );
-                  Navigator.pop(context);
+
                   Navigator.pop(context);
                 }
               },
               icon: Icon(Icons.check)),
           IconButton(
               onPressed: () {
-                Navigator.pop(context);
                 Navigator.pop(context);
               },
               icon: Icon(Icons.close))

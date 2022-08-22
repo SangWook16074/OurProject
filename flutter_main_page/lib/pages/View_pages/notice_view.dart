@@ -18,14 +18,8 @@ class _NoticeViewPageState extends State<NoticeViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          "Content",
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
-          ),
-        ),
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
         centerTitle: true,
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.refresh))],
       ),
@@ -44,15 +38,18 @@ class _NoticeViewPageState extends State<NoticeViewPage> {
                 Text(
                   widget.title,
                   style: const TextStyle(
-                      fontSize: 30, fontWeight: FontWeight.bold),
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   "[${widget.author}]",
-                  style: const TextStyle(color: Colors.blue, fontSize: 20),
+                  style: const TextStyle(color: Colors.blueGrey, fontSize: 15),
                 ),
                 Text(
                   widget.time,
-                  style: const TextStyle(fontSize: 20, color: Colors.grey),
+                  style: const TextStyle(fontSize: 15, color: Colors.grey),
+                ),
+                Divider(
+                  color: Colors.grey,
                 ),
                 const SizedBox(
                   height: 40,
@@ -63,6 +60,33 @@ class _NoticeViewPageState extends State<NoticeViewPage> {
                     fontSize: 20,
                   ),
                 ),
+                SizedBox(
+                  height: 40,
+                ),
+                Divider(
+                  color: Colors.grey,
+                ),
+                ElevatedButton(
+                    //취소 버튼
+
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.blueGrey,
+                      padding: const EdgeInsets.all(16.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "목록",
+                          style: TextStyle(fontSize: 15, letterSpacing: 4.0),
+                        ),
+                        Icon(Icons.reorder),
+                      ],
+                    )),
               ],
             ),
           )

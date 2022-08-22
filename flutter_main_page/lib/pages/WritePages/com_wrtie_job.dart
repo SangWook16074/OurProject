@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class Write {
   String title;
@@ -26,6 +29,44 @@ class _WriteJobPageState extends State<WriteJobPage> {
   final _title = TextEditingController();
   final _content = TextEditingController();
 
+  Future<bool> callOnFcmApiSendPushNotifications(
+      {required String title, required String body}) async {
+    const postUrl = 'https://fcm.googleapis.com/fcm/send';
+    final data = {
+      "to": "/topics/connectTopic",
+      "notification": {
+        "title": title,
+        "body": body,
+      },
+      "data": {
+        "type": '0rder',
+        "id": '28',
+        "click_action": 'FLUTTER_NOTIFICATION_CLICK',
+      }
+    };
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+          'key=AAAA4skJqo4:APA91bFmXAZAeG3JGPd5Dym_iILSxUTAwi1mQwxOCz9CuQG9wvAB2Y1lnT_CZv_uOFuWJtpFm3QomTu28sE9C9jWEi1nz3QVTEzL7Ym765LQoTtG9aqYkHYV83fW87P0_mj3eNpPtw5M' // 'key=YOUR_SERVER_KEY'
+    };
+
+    final response = await http.post(Uri.parse(postUrl),
+        body: json.encode(data),
+        encoding: Encoding.getByName('utf-8'),
+        headers: headers);
+
+    if (response.statusCode == 200) {
+      // on success do sth
+      print('test ok push CFM');
+      return true;
+    } else {
+      print(' CFM error');
+      // on failure do sth
+      return false;
+    }
+  }
+
   void _createItemDialog(Write job, String user) {
     showDialog(
         context: context,
@@ -44,6 +85,8 @@ class _WriteJobPageState extends State<WriteJobPage> {
             actions: [
               TextButton(
                   onPressed: () {
+                    callOnFcmApiSendPushNotifications(
+                        title: '새 취업정보가 등록되었습니다.', body: '[취업정보] ${job.title}');
                     _addNotice(job, user);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
@@ -61,25 +104,13 @@ class _WriteJobPageState extends State<WriteJobPage> {
 
   void _addNotice(Write job, String user) {
     FirebaseFirestore.instance.collection('job').add({
-      'title': "[취업정보] ${job.title}",
+      'title': job.title,
       'content': job.content,
       'author': user,
       'time': job.time,
     });
     _title.text = '';
     _content.text = '';
-  }
-
-  @override
-  void initState() {
-    Timer.periodic((const Duration(seconds: 1)), (v) {
-      if (mounted) {
-        setState(() {
-          _now = DateFormat('yyyy-MM-dd - HH:mm:ss').format(DateTime.now());
-        });
-      }
-    });
-    super.initState();
   }
 
   @override
@@ -107,24 +138,21 @@ class _WriteJobPageState extends State<WriteJobPage> {
           IconButton(
               onPressed: () {
                 if (_title.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "제목을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else if (_content.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "내용을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else {
-                  _createItemDialog(
-                      Write(_title.text, _content.text, _now.toString()),
-                      widget.user);
+                  toastMessage('제목을 입력하세요');
+                  return;
                 }
+                if (_content.text.isEmpty) {
+                  toastMessage('내용을 입력하세요');
+                  return;
+                }
+
+                setState(() {
+                  _now = DateFormat('yyyy-MM-dd - HH:mm:ss')
+                      .format(DateTime.now());
+                });
+                _createItemDialog(
+                    Write(_title.text, _content.text, _now.toString()),
+                    widget.user);
               },
               icon: const Icon(Icons.check))
         ],
