@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../main.dart';
+import '../../main.dart';
 
 class QuestionAddPage extends StatefulWidget {
   final String userNumber;

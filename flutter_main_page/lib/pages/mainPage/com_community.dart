@@ -3,8 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/com_view.dart';
 import 'package:flutter_main_page/pages/WritePages/com_write_com.dart';
-
-import '../../../../../custom_page_route.dart';
+import '../../custom_page_route.dart';
 import 'com_search.dart';
 
 class Com {

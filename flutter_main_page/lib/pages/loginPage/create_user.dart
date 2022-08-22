@@ -25,6 +25,8 @@ class _CreateUserPageState extends State<CreateUserPage> {
   var _authCode;
   var _email;
 
+  var isChecked = false;
+
   int currentStep = 0;
 
   void _showAuthDialog() {
@@ -149,7 +151,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         Container(
                           height: 40,
                           width: 40,
-                          child: Image.asset('assets/app_logo.png'),
+                          child: Image.asset('assets/Images/app_logo.png'),
                         ),
                         Text(
                           "계정생성",
@@ -184,94 +186,97 @@ class _CreateUserPageState extends State<CreateUserPage> {
                           );
                         }
 
-                        return Row(
-                          children: [
-                            ElevatedButton(
-                              onPressed: () async {
-                                bool isAdmin = false;
-                                if (_userName.text.isEmpty) {
-                                  toastMessage("이름을 입력하세요.");
-                                  return;
-                                }
-                                if (_userNumber.text.isEmpty) {
-                                  toastMessage("학번을 입력하세요.");
-                                  return;
-                                }
-                                if (_email.text.isEmpty) {
-                                  toastMessage("이메일을 입력하세요.");
-                                  return;
-                                }
-                                if (_userPass.text.isEmpty) {
-                                  toastMessage("비밀번호를 입력하세요.");
-                                  return;
-                                }
-                                if (_userPassAgain.text.isEmpty) {
-                                  toastMessage("비밀번호를 확인해야합니다.");
-                                  return;
-                                }
-                                if (_userPass.text != _userPassAgain.text) {
-                                  toastMessage("비밀번호 확인이 안됩니다.");
-                                  return;
-                                }
-                                if (_authCode.text != "160") {
-                                  toastMessage("학과 번호가 틀렸습니다.");
-                                  return;
-                                }
+                        return (isChecked == true)
+                            ? Row(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      bool isAdmin = false;
+                                      if (_userName.text.isEmpty) {
+                                        toastMessage("이름을 입력하세요.");
+                                        return;
+                                      }
+                                      if (_userNumber.text.isEmpty) {
+                                        toastMessage("학번을 입력하세요.");
+                                        return;
+                                      }
+                                      if (_email.text.isEmpty) {
+                                        toastMessage("이메일을 입력하세요.");
+                                        return;
+                                      }
+                                      if (_userPass.text.isEmpty) {
+                                        toastMessage("비밀번호를 입력하세요.");
+                                        return;
+                                      }
+                                      if (_userPassAgain.text.isEmpty) {
+                                        toastMessage("비밀번호를 확인해야합니다.");
+                                        return;
+                                      }
+                                      if (_userPass.text !=
+                                          _userPassAgain.text) {
+                                        toastMessage("비밀번호 확인이 안됩니다.");
+                                        return;
+                                      }
+                                      if (_authCode.text != "160") {
+                                        toastMessage("학과 번호가 틀렸습니다.");
+                                        return;
+                                      }
 
-                                try {
-                                  DocumentSnapshot userinfoData =
-                                      await FirebaseFirestore.instance
-                                          .collection('UserInfo')
-                                          .doc(_userNumber.text)
-                                          .get();
-                                  if (userinfoData.exists) {
-                                    toastMessage("이미 존재하는 학번이 있습니다.");
-                                    return;
-                                  }
+                                      try {
+                                        DocumentSnapshot userinfoData =
+                                            await FirebaseFirestore.instance
+                                                .collection('UserInfo')
+                                                .doc(_userNumber.text)
+                                                .get();
+                                        if (userinfoData.exists) {
+                                          toastMessage("이미 존재하는 학번이 있습니다.");
+                                          return;
+                                        }
 
-                                  await _auth
-                                      .createUserWithEmailAndPassword(
-                                          email: _email.text,
-                                          password: _userPass.text)
-                                      .then((value) {
-                                    if (value.user!.email == null) {
-                                    } else {
-                                      firestore
-                                          .collection('UserInfo')
-                                          .doc(_userNumber.text)
-                                          .set({
-                                        'userName': _userName.text,
-                                        'userNumber': _userNumber.text,
-                                        'email': _email.text,
-                                        'isAdmin': isAdmin,
-                                      });
-                                    }
-                                    return value;
-                                  });
-                                  _showAuthDialog();
+                                        await _auth
+                                            .createUserWithEmailAndPassword(
+                                                email: _email.text,
+                                                password: _userPass.text)
+                                            .then((value) {
+                                          if (value.user!.email == null) {
+                                          } else {
+                                            firestore
+                                                .collection('UserInfo')
+                                                .doc(_userNumber.text)
+                                                .set({
+                                              'userName': _userName.text,
+                                              'userNumber': _userNumber.text,
+                                              'email': _email.text,
+                                              'isAdmin': isAdmin,
+                                            });
+                                          }
+                                          return value;
+                                        });
+                                        _showAuthDialog();
 
-                                  FirebaseAuth.instance.currentUser
-                                      ?.sendEmailVerification();
-                                } on FirebaseAuthException catch (e) {
-                                  if (e.code == 'weak-password') {
-                                    toastMessage(
-                                        '비밀번호가 약합니다\n(추천)숫자 + 영어 + 특수문자');
-                                    return;
-                                  }
-                                  if (e.code == 'email-already-in-use') {
-                                    toastMessage('이미 사용된 이메일입니다.');
-                                    return;
-                                  }
-                                  toastMessage("잠시후에 다시 시도해주세요.");
-                                }
-                              },
-                              child: Text('완료'),
-                              style: TextButton.styleFrom(
-                                backgroundColor: Colors.blueGrey,
-                              ),
-                            ),
-                          ],
-                        );
+                                        FirebaseAuth.instance.currentUser
+                                            ?.sendEmailVerification();
+                                      } on FirebaseAuthException catch (e) {
+                                        if (e.code == 'weak-password') {
+                                          toastMessage(
+                                              '비밀번호가 약합니다\n(추천)숫자 + 영어 + 특수문자');
+                                          return;
+                                        }
+                                        if (e.code == 'email-already-in-use') {
+                                          toastMessage('이미 사용된 이메일입니다.');
+                                          return;
+                                        }
+                                        toastMessage("잠시후에 다시 시도해주세요.");
+                                      }
+                                    },
+                                    child: Text('완료'),
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.blueGrey,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Container();
                       },
                       onStepTapped: (index) {
                         setState(() {
@@ -541,6 +546,26 @@ class _CreateUserPageState extends State<CreateUserPage> {
                               SizedBox(
                                 height: 20,
                               ),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                      value: isChecked,
+                                      activeColor: Colors.white,
+                                      checkColor: Colors.black,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isChecked = value!;
+                                        });
+                                      }),
+                                  const Text(
+                                    "개인정보 수집에 동의합니다.",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 15),
+                                  )
+                                ],
+                              ),
+                              Text(
+                                  '수집된 개인정보는 앱 화면 디스플레이, 회원이 관리자인지 확인하는 용도 외에는 사용되지 않습니다.(단, 비방성, 욕설 글을 작성한 사용자의 정보는 요청에 따라서 제 3자에게 제공될 수 있음)')
                             ],
                           ),
                         )
@@ -553,60 +578,3 @@ class _CreateUserPageState extends State<CreateUserPage> {
         ));
   }
 }
-
-// Column(
-//                   children: [
-// Container(
-//   height: 100,
-//   width: 100,
-//   color: Colors.black,
-// ), // 나중에 로고
-//                     SizedBox(
-//                       height: 30,
-//                     ),
-
-//                     const SizedBox(height: 30),
-
-//                     const SizedBox(
-//                       height: 10,
-//                     ),
-
-//                     const SizedBox(height: 30),
-
-//                     const Text(
-//                       "영어 + 숫자 + 특수문자",
-//                       style: TextStyle(
-//                         fontSize: 15,
-//                         color: Colors.black,
-//                       ),
-//                     ),
-//                     const SizedBox(
-//                       height: 10,
-//                     ),
-
-//                     const SizedBox(
-//                       height: 30,
-//                     ),
-
-//                     const SizedBox(
-//                       height: 10,
-//                     ),
-
-//                     const SizedBox(
-//                       height: 30,
-//                     ),
-//                     ElevatedButton(
-                        
-//                         style: TextButton.styleFrom(
-//                             backgroundColor: Colors.blueGrey,
-//                             padding: const EdgeInsets.all(16.0),
-//                             minimumSize: const Size(130, 25)),
-//                         child: const Text(
-//                           "회원가입",
-//                           style: TextStyle(fontSize: 15, letterSpacing: 4.0),
-//                         )),
-//                     SizedBox(
-//                       height: 30,
-//                     ),
-//                   ],
-//                 )

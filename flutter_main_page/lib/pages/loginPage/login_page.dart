@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
-import 'package:flutter_main_page/pages/loginPage/Create_user/create_user.dart';
+import 'package:flutter_main_page/pages/loginPage/create_user.dart';
 import 'package:flutter_main_page/pages/loginPage/reset_pass.dart';
-import '../mainPage/main_page_sub/main_home/main_home.dart';
+import '../mainPage/main_home.dart';
 
 bool isChecked = false;
 // import 'package:flutter_main_page/main_page.dart';
@@ -79,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         width: 100,
                         height: 100,
-                        child: Image.asset('assets/app_logo.png'),
+                        child: Image.asset('assets/Images/app_logo.png'),
                       ),
                       SizedBox(
                         height: 10,

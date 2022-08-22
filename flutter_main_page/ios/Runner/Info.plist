@@ -54,8 +54,8 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>https</string>
-  		<string>sms</string>
-  		<string>tel</string>
+  	<string>sms</string>
+  	<string>tel</string>
 	</array>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-6916891167493641~6231394837</string>

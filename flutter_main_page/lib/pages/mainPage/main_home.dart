@@ -4,23 +4,23 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_main_page/custom_page_route.dart';
 import 'package:flutter_main_page/navigation_draw.dart';
 import 'package:flutter_main_page/pages/AdminPage/add_photo.dart';
 import 'package:flutter_main_page/pages/AdminPage/notice_manage.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/pages/View_pages/zoom_image.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_alarm/main_alarm.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_notice.dart';
+import 'package:flutter_main_page/pages/mainPage/main_alarm.dart';
+import 'package:flutter_main_page/pages/mainPage/com_notice.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../AdminPage/cmty_manage.dart';
-import '../../../AdminPage/event_manage.dart';
-import '../../../AdminPage/job_manage.dart';
-import '../../../View_pages/com_view.dart';
-import '../../../answer.dart';
-import '../main_community/Community_house/com_community.dart';
-import '../main_community/Community_house/com_event.dart';
+import '../../custom_page_route.dart';
+import '../AdminPage/cmty_manage.dart';
+import '../AdminPage/event_manage.dart';
+import '../AdminPage/job_manage.dart';
+import '../View_pages/com_view.dart';
+import '../others/answer.dart';
+import 'com_community.dart';
+import 'com_event.dart';
 
 final items = <Notice>[];
 
@@ -64,7 +64,10 @@ class MainHome extends StatefulWidget {
 
 class _MainHomeState extends State<MainHome> {
   Future<void> _launchUrl(Uri url) async {
-    if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
+    if (!await launchUrl(url,
+        mode: LaunchMode.inAppWebView,
+        webViewConfiguration: const WebViewConfiguration(
+            enableJavaScript: true, enableDomStorage: true))) {
       throw 'Could not launch $url';
     }
   }
@@ -144,7 +147,7 @@ class _MainHomeState extends State<MainHome> {
           isAdmin: widget.isAdmin),
       appBar: AppBar(
         title: Image.asset(
-          'assets/app_logo.png',
+          'assets/Images/app_logo.png',
           height: 30,
           width: 30,
         ),
@@ -219,6 +222,7 @@ class _MainHomeState extends State<MainHome> {
           //         ),
           //       )),
           // ),
+          _buildIconNavigator(),
           SizedBox(
             height: 20,
           ),
@@ -411,54 +415,6 @@ class _MainHomeState extends State<MainHome> {
     );
   }
 
-  Widget _buildImage() {
-    return Container(
-      height: 400,
-      width: MediaQuery.of(context).size.width,
-      child: Image.asset('assets/title.png'),
-    );
-  }
-
-  Widget _buildText(BuildContext context) {
-    return ExpansionTile(
-      title: Text(
-        '학과 소개',
-        style: TextStyle(fontSize: 15),
-      ),
-      children: [
-        Row(
-          children: [
-            Text(
-              '교육 목표',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(
-            '4차 산업혁명시대에 알맞는 산학일체형 직업교육을 실시함으로서 현장실무능력 제고와 취업분야 및 창업분야를 학생 스스로 선별할 수 있는 능력 배양을 교육목표로 한다.'),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: [
-            Text(
-              '교육 방침',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(
-            '가. 전문 중견 기술인으로서의 투철한 직업관 고취\n나. ICT 융합 기술분야에특성화된 심화전공 교육과정을 운영하여 현장실무능력 제고\n다. 전공과 관련된 현장실무과정을 고려한 특성화된 전문 기술교육을 운영함으로써 산학일체형 직업 교육 및 현장 실무능력 제고\n라. 교육의 질을 높여 국제화 산업사회의 특성에 맞는 글로컬 전문인력 배출\n마. 4차 산업혁명에 발맞추어 ICT 융합기술 기반 인재를 양성하기 위한 전문교육을 실시하여 학생 스스로 미래 지향형 취업 분야 선택 및 창업 유도'),
-      ],
-    );
-  }
-
   Widget _buildNotice() {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -520,18 +476,85 @@ class _MainHomeState extends State<MainHome> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.min,
         children: [
-          IconButton(
-              onPressed: () {
-                Uri uri = Uri(
-                  scheme: 'https',
-                  host: 'www.induk.ac.kr',
-                );
-                _launchUrl(uri);
-              },
-              icon: Icon(
-                Icons.home_rounded,
-                size: 40,
-              )),
+          Column(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Uri uri = Uri(
+                      scheme: 'https',
+                      host: 'www.induk.ac.kr',
+                      path: '/KR/index.do',
+                    );
+                    _launchUrl(uri);
+                  },
+                  icon: Icon(
+                    Icons.account_balance,
+                    size: 30,
+                  )),
+              Text(
+                '대학홈',
+                style: TextStyle(fontSize: 13),
+              )
+            ],
+          ),
+          Column(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Uri uri = Uri(
+                      scheme: 'https',
+                      host: 'portal.induk.ac.kr',
+                    );
+                    _launchUrl(uri);
+                  },
+                  icon: Icon(
+                    Icons.language,
+                    size: 30,
+                  )),
+              Text(
+                '대학포털',
+                style: TextStyle(fontSize: 13),
+              )
+            ],
+          ),
+          // Column(
+          //   children: [
+          //     IconButton(
+          //         onPressed: () {
+          //           Uri uri = Uri(
+          //               scheme: 'https',
+          //               host: 'www.induk.ac.kr',
+          //               path: '/KR/cms/CM_CN01_CON/index.do',
+          //               query: '?MENU_SN=812');
+          //           _launchUrl(uri);
+          //         },
+          //         icon: Icon(
+          //           Icons.post_add,
+          //           size: 30,
+          //         )),
+          //     Text(
+          //       '학과소개',
+          //       style: TextStyle(fontSize: 13),
+          //     )
+          //   ],
+          // ),
+          Column(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Uri uri = Uri(scheme: 'https', host: 'jjam.induk.ac.kr');
+                    _launchUrl(uri);
+                  },
+                  icon: Icon(
+                    Icons.menu_book,
+                    size: 30,
+                  )),
+              Text(
+                '비교과',
+                style: TextStyle(fontSize: 13),
+              )
+            ],
+          ),
         ],
       ),
     );

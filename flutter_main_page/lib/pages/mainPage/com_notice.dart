@@ -2,9 +2,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/custom_page_route.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_search.dart';
+import 'package:flutter_main_page/pages/mainPage/com_search.dart';
+
+import '../../custom_page_route.dart';
 
 class NoticePage extends StatefulWidget {
   final String user;

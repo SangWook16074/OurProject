@@ -1,20 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/custom_page_route.dart';
 import 'package:flutter_main_page/main.dart';
-import 'package:flutter_main_page/pages/QandAhome.dart';
-import 'package:flutter_main_page/pages/feedback.dart';
+import 'package:flutter_main_page/pages/others/QandAhome.dart';
+import 'package:flutter_main_page/pages/others/feedback.dart';
 import 'package:flutter_main_page/pages/loginPage/reset_pass.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_community/Community_house/com_notice.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/calculate.dart';
-import 'package:flutter_main_page/pages/mainPage/main_page_sub/main_user_info/main_other_page/myContentDelete.dart';
+import 'package:flutter_main_page/pages/mainPage/com_notice.dart';
+import 'package:flutter_main_page/pages/others/calculate.dart';
+import 'package:flutter_main_page/pages/mainPage/myContentDelete.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 import 'pages/loginPage/login_page.dart';
-import 'pages/mainPage/main_page_sub/main_community/Community_house/com_community.dart';
-import 'pages/mainPage/main_page_sub/main_community/Community_house/com_event.dart';
-import 'pages/mainPage/main_page_sub/main_community/Community_house/com_info_job.dart';
+import 'pages/mainPage/com_community.dart';
+import 'pages/mainPage/com_event.dart';
+import 'pages/mainPage/com_info_job.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final String userNumber;
@@ -167,7 +166,7 @@ class NavigationDrawerWidget extends StatelessWidget {
           ),
           _buildMenuItem(
             context,
-            text: 'Q / A',
+            text: '1:1 문의',
             icon: Icons.question_answer,
             onTap: QuestionHome(
               userNumber: this.userNumber,
@@ -334,7 +333,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.asset(
-                  'assets/title_facebook.png',
+                  'assets/Images/title_facebook.png',
                   fit: BoxFit.fill,
                 ),
               ),
@@ -354,7 +353,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.asset(
-                  'assets/title_instagram.png',
+                  'assets/Images/title_instagram.png',
                   fit: BoxFit.fill,
                 ),
               ),

@@ -70,7 +70,6 @@ void main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
-  toastMessage("Hello!");
 }
 
 // ignore: must_be_immutable
@@ -91,11 +90,10 @@ class MyApp extends StatelessWidget {
       home: AnimatedSplashScreen(
           duration: 2000,
           splash: Image.asset(
-            'assets/app_logo.png',
+            'assets/Images/app_logo.png',
           ),
           splashTransition: SplashTransition.fadeTransition,
           pageTransitionType: PageTransitionType.fade,
-          backgroundColor: Colors.white,
           nextScreen: LoginPage()),
     );
   }

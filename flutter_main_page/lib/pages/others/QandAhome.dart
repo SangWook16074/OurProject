@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
-import 'package:flutter_main_page/pages/QandA.dart';
+import 'package:flutter_main_page/pages/others/QandA.dart';
 
-import 'View_pages/qna_view.dart';
+import '../View_pages/qna_view.dart';
 
 class QuestionHome extends StatefulWidget {
   final String userNumber;

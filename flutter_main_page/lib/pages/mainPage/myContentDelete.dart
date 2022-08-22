@@ -1,10 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/com_view.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-import '../../../../Update_Page/Content_update.dart';
+import '../Update_Page/Content_update.dart';
 
 class Com {
   String title;
