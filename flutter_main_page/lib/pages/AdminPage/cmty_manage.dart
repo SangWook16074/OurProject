@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import '../View_pages/com_view.dart';
 
 class Com {
@@ -97,38 +98,41 @@ class _ComManagePageState extends State<ComManagePage> {
     final event = Com(doc['title'], doc['author'], doc['content'], doc['time']);
     return Column(
       children: [
-        ListTile(
-          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: ((context) => ComViewPage(
-                          title: event.title,
-                          content: event.content,
-                          author: '익명',
-                          time: event.time,
-                        ))));
-          },
-          title: Text(
-            event.title,
-            style: const TextStyle(
-                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-          subtitle: Text(
-            "익명",
-            style: const TextStyle(fontSize: 10),
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                onPressed: () {
-                  _deleteItemDialog(doc);
-                },
-                icon: Icon(Icons.delete),
-              ),
-            ],
+        Slidable(
+          endActionPane: ActionPane(motion: DrawerMotion(), children: [
+            SlidableAction(
+              onPressed: ((context) {
+                _deleteItemDialog(doc);
+              }),
+              label: '삭제',
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.red,
+            ),
+          ]),
+          child: ListTile(
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => ComViewPage(
+                            title: event.title,
+                            content: event.content,
+                            author: '익명',
+                            time: event.time,
+                          ))));
+            },
+            title: Text(
+              event.title,
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              "익명",
+              style: const TextStyle(fontSize: 10),
+            ),
           ),
         ),
         Divider(),

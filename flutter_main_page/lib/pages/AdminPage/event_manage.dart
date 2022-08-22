@@ -151,17 +151,17 @@ class _EventManagePageState extends State<EventManagePage> {
               onPressed: (context) {
                 _deleteItemDialog(doc);
               },
-              icon: Icons.delete,
               label: '삭제',
-              foregroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.red,
             ),
             SlidableAction(
               onPressed: (context) {
                 _updateItemDialog(doc, doc.id, event.title, event.content);
               },
-              icon: Icons.update,
               label: '수정',
-              foregroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.blue,
             )
           ]),
           child: ListTile(

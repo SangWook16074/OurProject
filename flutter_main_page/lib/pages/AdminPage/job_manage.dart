@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/Update_Page/Job_update.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Job {
   String title;
@@ -131,41 +132,51 @@ class _JobManagePageState extends State<JobManagePage> {
 
   Widget _buildEventWidget(DocumentSnapshot doc) {
     final job = Job(doc['title'], doc['author'], doc['content'], doc['time']);
-    return ListTile(
-      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => NoticeViewPage(
-                    job.title, job.content, job.author, job.time)));
-      },
-      title: Text(
-        job.title,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(
-        job.author,
-        style: const TextStyle(fontSize: 10),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            onPressed: () {
-              _deleteItemDialog(doc);
+    return Column(
+      children: [
+        Slidable(
+          endActionPane: ActionPane(motion: DrawerMotion(), children: [
+            SlidableAction(
+              onPressed: ((context) {
+                _deleteItemDialog(doc);
+              }),
+              label: '삭제',
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.red,
+            ),
+            SlidableAction(
+              onPressed: (context) {
+                _updateItemDialog(doc, doc.id, job.title, job.content);
+              },
+              label: '수정',
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.blue,
+            )
+          ]),
+          child: ListTile(
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NoticeViewPage(
+                          job.title, job.content, job.author, job.time)));
             },
-            icon: Icon(Icons.delete),
+            title: Text(
+              job.title,
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              job.author,
+              style: const TextStyle(fontSize: 10),
+            ),
           ),
-          IconButton(
-            onPressed: () {
-              _updateItemDialog(doc, doc.id, job.title, job.content);
-            },
-            icon: Icon(Icons.update),
-          ),
-        ],
-      ),
+        ),
+        Divider(),
+      ],
     );
   }
 

@@ -152,17 +152,17 @@ class _NoticeManagePageState extends State<NoticeManagePage> {
               onPressed: ((context) {
                 _deleteItemDialog(doc);
               }),
-              icon: Icons.delete,
               label: '삭제',
-              foregroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.red,
             ),
             SlidableAction(
               onPressed: (context) {
                 _updateItemDialog(doc, doc.id, notice.title, notice.content);
               },
-              icon: Icons.update,
               label: '수정',
-              foregroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.blue,
             )
           ]),
           child: ListTile(

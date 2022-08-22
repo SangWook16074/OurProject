@@ -476,6 +476,7 @@ class _MainHomeState extends State<MainHome> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.min,
         children: [
+          SizedBox(),
           Column(
             children: [
               IconButton(
@@ -555,6 +556,7 @@ class _MainHomeState extends State<MainHome> {
               )
             ],
           ),
+          SizedBox(),
         ],
       ),
     );
