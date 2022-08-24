@@ -134,7 +134,7 @@ class _EventViewPageState extends State<EventViewPage> {
                     //취소 버튼
 
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.of(context).pop();
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: Colors.blueGrey,
@@ -144,11 +144,11 @@ class _EventViewPageState extends State<EventViewPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        Icon(Icons.navigate_before),
                         Text(
-                          "목록",
+                          "이전",
                           style: TextStyle(fontSize: 15, letterSpacing: 4.0),
                         ),
-                        Icon(Icons.reorder),
                       ],
                     )),
               ],

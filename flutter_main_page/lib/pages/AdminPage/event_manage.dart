@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/Update_Page/event_update.dart';
 import 'package:flutter_main_page/pages/WritePages/com_write_event.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../main.dart';
 import '../View_pages/notice_view.dart';
 
 class Event {
@@ -106,12 +108,10 @@ class _EventManagePageState extends State<EventManagePage> {
       appBar: AppBar(
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           "이벤트 관리",
-          style: TextStyle(
-            fontSize: 25,
-            color: Colors.black,
-            fontFamily: 'hoon',
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
           ),
         ),
         centerTitle: true,

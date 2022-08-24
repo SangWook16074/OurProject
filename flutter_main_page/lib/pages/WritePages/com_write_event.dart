@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -174,12 +175,10 @@ class _WriteEventPageState extends State<WriteEventPage> {
       appBar: AppBar(
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           "이벤트 작성",
-          style: TextStyle(
-            fontSize: 25,
-            color: Colors.black,
-            fontFamily: 'hoon',
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
           ),
         ),
         centerTitle: true,

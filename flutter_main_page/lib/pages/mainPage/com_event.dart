@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../../main.dart';
 import '../View_pages/event_view.dart';
 
 class Event {
@@ -34,13 +36,11 @@ class _EventPageState extends State<EventPage> {
         appBar: AppBar(
           iconTheme: IconThemeData.fallback(),
           backgroundColor: Colors.white,
-          title: const Text(
+          title: Text(
             "이벤트",
-            style: TextStyle(
-              fontSize: 25,
-              color: Colors.black,
-              fontFamily: 'hoon',
-            ),
+            style: GoogleFonts.doHyeon(
+                                    textStyle: mainStyle,
+                                  ),
           ),
           centerTitle: true,
         ),

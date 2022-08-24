@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../main.dart';
 
@@ -80,10 +81,9 @@ class _ResetPassPageState extends State<ResetPassPage> {
                     children: [
                       Text(
                         "비밀번호 재설정",
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: Colors.black,
-                            fontFamily: 'hoon'),
+                        style: GoogleFonts.doHyeon(
+                          textStyle: mainStyle,
+                        ),
                       ),
                       Text(
                         "입력한 정보가 맞다면,",

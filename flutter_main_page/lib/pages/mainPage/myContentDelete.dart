@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/com_view.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../../main.dart';
 import '../Update_Page/Content_update.dart';
 
 class Com {
@@ -109,12 +111,10 @@ class _MyContentManagePageState extends State<MyContentManagePage> {
       appBar: AppBar(
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           "내가 쓴 글",
-          style: TextStyle(
-            fontSize: 25,
-            color: Colors.black,
-            fontFamily: 'hoon',
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
           ),
         ),
         centerTitle: true,

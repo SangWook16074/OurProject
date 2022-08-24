@@ -5,7 +5,9 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
@@ -109,12 +111,7 @@ class _WriteNoticeState extends State<WriteNotice> {
       'author': user,
       'time': notice.time,
     });
-    Fluttertoast.showToast(
-      msg: "새 공지가 등록되었습니다.",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      fontSize: 16,
-    );
+    toastMessage('새 공지가 등록되었습니다');
     _title.text = '';
     _content.text = '';
   }
@@ -145,12 +142,10 @@ class _WriteNoticeState extends State<WriteNotice> {
       appBar: AppBar(
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           "공지작성",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 25,
-            fontFamily: 'hoon',
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
           ),
         ),
         centerTitle: true,

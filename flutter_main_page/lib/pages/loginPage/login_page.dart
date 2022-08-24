@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/loginPage/create_user.dart';
 import 'package:flutter_main_page/pages/loginPage/reset_pass.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../mainPage/main_home.dart';
 
 bool isChecked = false;
@@ -85,13 +86,15 @@ class _LoginPageState extends State<LoginPage> {
                         height: 10,
                       ),
                       //로고 넣을 것임.
-                      const Text(
+                      Text(
                         "인덕대학교",
-                        style: TextStyle(
+                        style: GoogleFonts.eastSeaDokdo(
+                          textStyle: TextStyle(
                             fontSize: 60,
-                            fontFamily: 'Dokdo',
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black),
+                          ),
+                        ),
                       ),
                       const Text(
                         "Information and Communication",

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
@@ -125,12 +126,12 @@ class _WriteJobPageState extends State<WriteJobPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          "information of Job",
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Pacifico',
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
+        title: Text(
+          "취업정보",
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
           ),
         ),
         centerTitle: true,

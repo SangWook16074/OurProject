@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 const Duration _duration = Duration(milliseconds: 300);
 
@@ -101,12 +102,10 @@ class _AddPhotoPageState extends State<AddPhotoPage> {
       appBar: AppBar(
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           "배너 사진 관리",
-          style: TextStyle(
-            fontSize: 25,
-            color: Colors.black,
-            fontFamily: 'hoon',
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
           ),
         ),
         centerTitle: true,

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/Update_Page/Job_update.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../main.dart';
 
 class Job {
   String title;
@@ -96,12 +99,10 @@ class _JobManagePageState extends State<JobManagePage> {
       appBar: AppBar(
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           "취업정보 관리",
-          style: TextStyle(
-            fontSize: 25,
-            color: Colors.black,
-            fontFamily: 'hoon',
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
           ),
         ),
         centerTitle: true,

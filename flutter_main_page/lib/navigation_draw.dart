@@ -8,6 +8,7 @@ import 'package:flutter_main_page/pages/loginPage/reset_pass.dart';
 import 'package:flutter_main_page/pages/mainPage/com_notice.dart';
 import 'package:flutter_main_page/pages/others/calculate.dart';
 import 'package:flutter_main_page/pages/mainPage/myContentDelete.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 import 'pages/loginPage/login_page.dart';
@@ -25,7 +26,7 @@ class NavigationDrawerWidget extends StatelessWidget {
       required this.isAdmin,
       required this.userNumber})
       : super(key: key);
-
+  final _subStyle = TextStyle(fontSize: 20, color: Colors.black);
   final padding = EdgeInsets.symmetric(horizontal: 20);
   Future<void> _launchUrl(Uri url) async {
     if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
@@ -122,9 +123,8 @@ class NavigationDrawerWidget extends StatelessWidget {
           ),
           Text(
             "Community",
-            style: TextStyle(
-              fontFamily: 'hoon',
-              fontSize: 20,
+            style: GoogleFonts.doHyeon(
+              textStyle: _subStyle,
             ),
           ),
           SizedBox(),
@@ -159,9 +159,8 @@ class NavigationDrawerWidget extends StatelessWidget {
           ),
           Text(
             "My Page",
-            style: TextStyle(
-              fontFamily: 'hoon',
-              fontSize: 20,
+            style: GoogleFonts.doHyeon(
+              textStyle: _subStyle,
             ),
           ),
           _buildMenuItem(
@@ -187,9 +186,8 @@ class NavigationDrawerWidget extends StatelessWidget {
           ),
           Text(
             "Others",
-            style: TextStyle(
-              fontFamily: 'hoon',
-              fontSize: 20,
+            style: GoogleFonts.doHyeon(
+              textStyle: _subStyle,
             ),
           ),
           ListTile(
@@ -225,9 +223,8 @@ class NavigationDrawerWidget extends StatelessWidget {
           ),
           Text(
             "More + ",
-            style: TextStyle(
-              fontFamily: 'hoon',
-              fontSize: 20,
+            style: GoogleFonts.doHyeon(
+              textStyle: _subStyle,
             ),
           ),
           _buildIcon(),

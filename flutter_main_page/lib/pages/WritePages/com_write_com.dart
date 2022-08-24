@@ -1,14 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
 
 class Write {
   String title;
@@ -48,7 +47,7 @@ class _WriteComPageState extends State<WriteComPage> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: const [
-                Text('이벤트를 등록하시겠습니까? \n등록된 이벤트는 내정보 페이지에서 관리할 수 있습니다.')
+                Text('글을 등록하시겠습니까?\n등록된 글은 내정보 페이지에서 관리할 수 있습니다.')
               ],
             ),
             actions: [
@@ -136,12 +135,10 @@ class _WriteComPageState extends State<WriteComPage> {
       appBar: AppBar(
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           "글쓰기",
-          style: TextStyle(
-            fontSize: 25,
-            color: Colors.black,
-            fontFamily: 'hoon',
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
           ),
         ),
         centerTitle: true,
