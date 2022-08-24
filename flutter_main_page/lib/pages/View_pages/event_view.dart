@@ -85,6 +85,7 @@ class _EventViewPageState extends State<EventViewPage> {
                           }));
                         },
                         child: Hero(
+                          transitionOnUserGestures: true,
                           tag: widget.url!,
                           child: Container(
                               width: MediaQuery.of(context).size.width,
