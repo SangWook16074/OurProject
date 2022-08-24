@@ -221,6 +221,7 @@ class _ComViewPageState extends State<ComViewPage> {
                                   }));
                                 },
                                 child: Hero(
+                                  transitionOnUserGestures: true,
                                   tag: widget.url!,
                                   child: Container(
                                       width: MediaQuery.of(context).size.width,
