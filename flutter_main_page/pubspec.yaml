@@ -59,6 +59,7 @@ dependencies:
   url_launcher: ^6.1.5
   google_mobile_ads: ^0.13.4
   flutter_slidable: ^2.0.0
+  google_fonts: ^3.0.1
   
 
 
@@ -125,17 +126,17 @@ flutter:
       fonts:
         - asset: assets/Fonts/Pacifico-Regular.ttf
 
-    - family: Dokdo
-      fonts:
-        - asset: assets\Fonts\EastSeaDokdo-Regular.ttf
+    # - family: Dokdo
+    #   fonts:
+    #     - asset: assets\Fonts\EastSeaDokdo-Regular.ttf
 
-    - family: nexon
-      fonts:
-        - asset: assets\Fonts\NEXONLv1GothicRegular.ttf
+    # - family: nexon
+    #   fonts:
+    #     - asset: assets\Fonts\NEXONLv1GothicRegular.ttf
 
-    - family: hoon
-      fonts:
-        - asset: assets\Fonts\DoHyeon-Regular.ttf
+    # - family: hoon
+    #   fonts:
+    #     - asset: assets\Fonts\DoHyeon-Regular.ttf
   #         
   #
   # For details regarding fonts from package dependencies,

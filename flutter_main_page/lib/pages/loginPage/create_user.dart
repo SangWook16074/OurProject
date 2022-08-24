@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // import '../database_sub/user_info.dart';
 
@@ -18,6 +19,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
+  final _subStyle = TextStyle(fontSize: 17, color: Colors.black);
   var _userName;
   var _userNumber;
   var _userPass;
@@ -155,10 +157,9 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         ),
                         Text(
                           "계정생성",
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.black,
-                              fontFamily: 'hoon'),
+                          style: GoogleFonts.doHyeon(
+                            textStyle: mainStyle,
+                          ),
                         )
                       ],
                     ),
@@ -286,12 +287,10 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       steps: [
                         Step(
                             isActive: currentStep >= 0,
-                            title: const Text(
+                            title: Text(
                               "회원 정보",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontFamily: 'hoon',
-                                color: Colors.black,
+                              style: GoogleFonts.doHyeon(
+                                textStyle: _subStyle,
                               ),
                             ),
                             content: Column(
@@ -404,12 +403,10 @@ class _CreateUserPageState extends State<CreateUserPage> {
                             )),
                         Step(
                           isActive: currentStep >= 1,
-                          title: const Text(
+                          title: Text(
                             "비밀번호",
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontFamily: 'hoon',
-                              color: Colors.black,
+                            style: GoogleFonts.doHyeon(
+                              textStyle: _subStyle,
                             ),
                           ),
                           content: Column(
@@ -493,12 +490,10 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         ),
                         Step(
                           isActive: currentStep >= 2,
-                          title: const Text(
+                          title: Text(
                             "인증",
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontFamily: 'hoon',
-                              color: Colors.black,
+                            style: GoogleFonts.doHyeon(
+                              textStyle: _subStyle,
                             ),
                           ),
                           content: Column(

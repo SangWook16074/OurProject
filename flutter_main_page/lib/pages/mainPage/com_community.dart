@@ -3,7 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/com_view.dart';
 import 'package:flutter_main_page/pages/WritePages/com_write_com.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../custom_page_route.dart';
+import '../../main.dart';
 import 'com_search.dart';
 
 class Com {
@@ -55,12 +57,10 @@ class _ComPageState extends State<ComPage> {
           ],
           iconTheme: IconThemeData.fallback(),
           backgroundColor: Colors.white,
-          title: const Text(
+          title: Text(
             "커뮤니티",
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'hoon',
-              fontSize: 25,
+            style: GoogleFonts.doHyeon(
+              textStyle: mainStyle,
             ),
           ),
           centerTitle: true,

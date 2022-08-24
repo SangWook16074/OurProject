@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../main.dart';
 
 class Com {
   String title;
@@ -52,12 +55,10 @@ class _NoticeUpdatePageState extends State<NoticeUpdatePage> {
       appBar: AppBar(
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           "공지 수정",
-          style: TextStyle(
-            fontSize: 25,
-            color: Colors.black,
-            fontFamily: 'hoon',
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
           ),
         ),
         automaticallyImplyLeading: false,
@@ -66,32 +67,19 @@ class _NoticeUpdatePageState extends State<NoticeUpdatePage> {
           IconButton(
               onPressed: () {
                 if (_titleController.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "제목을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else if (_contentController.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "내용을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else {
-                  //수정하기
-                  _updateContent(widget.docID, _titleController.text,
-                      _contentController.text);
-                  Fluttertoast.showToast(
-                    msg: "수정이 완료되었습니다.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-
-                  Navigator.pop(context);
+                  toastMessage('제목을 입력하세요');
+                  return;
                 }
+                if (_contentController.text.isEmpty) {
+                  toastMessage('내용을 입력하세요');
+                  return;
+                }
+                //수정하기
+                _updateContent(widget.docID, _titleController.text,
+                    _contentController.text);
+                toastMessage('수정 완료!');
+
+                Navigator.pop(context);
               },
               icon: Icon(Icons.check)),
           IconButton(

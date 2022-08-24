@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/View_pages/zoom_image.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 
@@ -148,12 +149,10 @@ class _ComViewPageState extends State<ComViewPage> {
       appBar: AppBar(
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           "익명글",
-          style: TextStyle(
-            fontSize: 25,
-            color: Colors.black,
-            fontFamily: 'hoon',
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
           ),
         ),
         centerTitle: true,
@@ -442,19 +441,14 @@ class _ComViewPageState extends State<ComViewPage> {
 
             onPressed: () async {
               if (_chat.text.isEmpty) {
-                Fluttertoast.showToast(
-                  msg: "내용을 입력하세요.",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  fontSize: 16,
-                );
-              } else {
-                setState(() {
-                  _now = DateFormat('yyyy-MM-dd - HH:mm:ss')
-                      .format(DateTime.now());
-                });
-                _addChat(_chat.text, _now.toString(), widget.user!);
+                toastMessage('내용을 입력하세요');
+                return;
               }
+              setState(() {
+                _now =
+                    DateFormat('yyyy-MM-dd - HH:mm:ss').format(DateTime.now());
+              });
+              _addChat(_chat.text, _now.toString(), widget.user!);
             },
             style: TextButton.styleFrom(
               backgroundColor: Colors.blueGrey,

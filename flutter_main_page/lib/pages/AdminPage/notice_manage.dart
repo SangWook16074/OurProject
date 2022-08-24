@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/pages/mainPage/com_noticeWrite.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../../main.dart';
 import '../Update_Page/Notice_update.dart';
 
 class Notice {
@@ -107,12 +109,10 @@ class _NoticeManagePageState extends State<NoticeManagePage> {
       appBar: AppBar(
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           "공지관리",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 25,
-            fontFamily: 'hoon',
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
           ),
         ),
         centerTitle: true,

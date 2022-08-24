@@ -7,13 +7,16 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_main_page/navigation_draw.dart';
 import 'package:flutter_main_page/pages/AdminPage/add_photo.dart';
 import 'package:flutter_main_page/pages/AdminPage/notice_manage.dart';
+import 'package:flutter_main_page/pages/View_pages/event_view.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/pages/View_pages/zoom_image.dart';
 import 'package:flutter_main_page/pages/mainPage/main_alarm.dart';
 import 'package:flutter_main_page/pages/mainPage/com_notice.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../custom_page_route.dart';
+import '../../main.dart';
 import '../AdminPage/cmty_manage.dart';
 import '../AdminPage/event_manage.dart';
 import '../AdminPage/job_manage.dart';
@@ -245,11 +248,12 @@ class _MainHomeState extends State<MainHome> {
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              const Expanded(
+                              Expanded(
                                 child: Text(
                                   '학생회 이벤트',
-                                  style: TextStyle(
-                                      fontSize: 25, fontFamily: 'hoon'),
+                                  style: GoogleFonts.doHyeon(
+                                    textStyle: mainStyle,
+                                  ),
                                 ),
                               ),
                               TextButton(
@@ -293,11 +297,12 @@ class _MainHomeState extends State<MainHome> {
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: Text(
                               '공지사항',
-                              style:
-                                  TextStyle(fontSize: 25, fontFamily: 'hoon'),
+                              style: GoogleFonts.doHyeon(
+                                textStyle: mainStyle,
+                              ),
                             ),
                           ),
                           TextButton(
@@ -336,11 +341,12 @@ class _MainHomeState extends State<MainHome> {
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: Text(
                               '최근 등록된 글',
-                              style:
-                                  TextStyle(fontSize: 25, fontFamily: 'hoon'),
+                              style: GoogleFonts.doHyeon(
+                                textStyle: mainStyle,
+                              ),
                             ),
                           ),
                           TextButton(
@@ -385,11 +391,12 @@ class _MainHomeState extends State<MainHome> {
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              const Expanded(
+                              Expanded(
                                 child: Text(
                                   '학과 소식',
-                                  style: TextStyle(
-                                      fontSize: 25, fontFamily: 'hoon'),
+                                  style: GoogleFonts.doHyeon(
+                                    textStyle: mainStyle,
+                                  ),
                                 ),
                               ),
                             ],
@@ -753,22 +760,24 @@ class _MainHomeState extends State<MainHome> {
                               onTap: () {
                                 Navigator.of(context)
                                     .push(MaterialPageRoute(builder: (context) {
-                                  return ZoomImage(url: doc['url']);
+                                  return EventViewPage(
+                                      title: doc['title'],
+                                      content: doc['content'],
+                                      author: doc['author'],
+                                      time: doc['time'],
+                                      url: doc['url']);
                                 }));
                               },
-                              child: Hero(
-                                tag: doc['url'],
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: CachedNetworkImage(
-                                    imageUrl: doc['url'],
-                                    fit: BoxFit.fill,
-                                    placeholder: (context, url) => Container(
-                                      color: Colors.black,
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                child: CachedNetworkImage(
+                                  imageUrl: doc['url'],
+                                  fit: BoxFit.fill,
+                                  placeholder: (context, url) => Container(
+                                    color: Colors.black,
                                   ),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
                                 ),
                               ),
                             ),

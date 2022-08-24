@@ -4,8 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/pages/mainPage/com_search.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../custom_page_route.dart';
+import '../../main.dart';
 
 class NoticePage extends StatefulWidget {
   final String user;
@@ -33,8 +35,9 @@ class _NoticePageState extends State<NoticePage> {
         appBar: AppBar(
           title: Text(
             '공지사항',
-            style: TextStyle(
-                fontFamily: 'hoon', color: Colors.black, fontSize: 25),
+            style: GoogleFonts.doHyeon(
+              textStyle: mainStyle,
+            ),
           ),
           centerTitle: true,
           actions: [

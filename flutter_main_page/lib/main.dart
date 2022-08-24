@@ -14,6 +14,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
 late SharedPreferences prefs;
+final mainStyle = TextStyle(
+  fontSize: 25,
+  color: Colors.black,
+);
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   prefs = await SharedPreferences.getInstance();
