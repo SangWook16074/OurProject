@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/pages/Update_Page/userinfo_update.dart';
 import 'package:flutter_main_page/pages/others/QandAhome.dart';
 import 'package:flutter_main_page/pages/others/feedback.dart';
 import 'package:flutter_main_page/pages/loginPage/reset_pass.dart';
@@ -181,6 +182,8 @@ class NavigationDrawerWidget extends StatelessWidget {
           ),
           _buildMenuItem(context,
               text: '비밀번호 변경', icon: Icons.password, onTap: ResetPassPage()),
+          _buildMenuItem(context,
+              text: '이메일 변경', icon: Icons.email, onTap: UserInfoUpdate()),
           Divider(
             color: Colors.black,
           ),

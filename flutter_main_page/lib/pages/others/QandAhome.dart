@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/others/QandA.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../View_pages/qna_view.dart';
 
@@ -29,9 +30,10 @@ class _QuestionHomeState extends State<QuestionHome> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         title: Text(
-          'Q / A',
-          style:
-              TextStyle(fontFamily: 'hoon', color: Colors.black, fontSize: 25),
+          "Q / A",
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
+          ),
         ),
         centerTitle: true,
         iconTheme: IconThemeData.fallback(),

@@ -231,10 +231,10 @@ class _LoginPageState extends State<LoginPage> {
                                           _textEditingControllerPassWd.text)
                                   .then((value) {
                                 if (value.user!.emailVerified == false) {
-                                  toastMessage(
-                                      '인증 이메일을 확인해주세요.\n인증이 완료되지 않았습니다.');
+                                  toastMessage('이메일 인증을 완료해주세요!');
                                   return;
                                 }
+
                                 if (isChecked == true) {
                                   _updateAutoLoginStatus(isChecked);
                                   _saveUserData(

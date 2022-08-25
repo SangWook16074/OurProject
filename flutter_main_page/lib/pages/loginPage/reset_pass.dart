@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +68,7 @@ class _ResetPassPageState extends State<ResetPassPage> {
     return Scaffold(
         key: _scaffoldKey,
         resizeToAvoidBottomInset: true,
-        backgroundColor: Color.fromARGB(255, 242, 239, 239),
+        backgroundColor: Colors.white,
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Center(
