@@ -140,7 +140,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
     return Scaffold(
         key: _scaffoldKey,
         resizeToAvoidBottomInset: true,
-        backgroundColor: Color.fromARGB(255, 242, 239, 239),
+        backgroundColor: Colors.white,
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: SingleChildScrollView(

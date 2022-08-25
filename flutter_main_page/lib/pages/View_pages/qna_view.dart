@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../main.dart';
 
 class AnswerViewPage extends StatefulWidget {
   final String answer;
@@ -17,9 +20,10 @@ class _AnswerViewPageState extends State<AnswerViewPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '답변',
-          style:
-              TextStyle(fontFamily: 'hoon', color: Colors.black, fontSize: 25),
+          "Q / A",
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
+          ),
         ),
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,

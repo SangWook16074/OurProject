@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_const
 
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -157,8 +159,10 @@ class _MainHomeState extends State<MainHome> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(
-                    context, CustomPageRightRoute(child: MainAlarm()));
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return MainAlarm();
+                }));
               },
               icon: Icon(
                 Icons.notifications_active,
@@ -258,9 +262,15 @@ class _MainHomeState extends State<MainHome> {
                               ),
                               TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).push(
-                                        CustomPageRightRoute(
-                                            child: EventPage(widget.user)));
+                                    (Platform.isAndroid)
+                                        ? Navigator.of(context).push(
+                                            CustomPageRightRoute(
+                                                child: EventPage(widget.user)))
+                                        : Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                            return EventPage(widget.user);
+                                          }));
                                   },
                                   child: Text(
                                     '더보기',
@@ -307,8 +317,15 @@ class _MainHomeState extends State<MainHome> {
                           ),
                           TextButton(
                               onPressed: () {
-                                Navigator.of(context).push(CustomPageRightRoute(
-                                    child: NoticePage(widget.userNumber)));
+                                (Platform.isAndroid)
+                                    ? Navigator.of(context).push(
+                                        CustomPageRightRoute(
+                                            child:
+                                                NoticePage(widget.userNumber)))
+                                    : Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                        return NoticePage(widget.userNumber);
+                                      }));
                               },
                               child: Text(
                                 '더보기',
@@ -351,8 +368,14 @@ class _MainHomeState extends State<MainHome> {
                           ),
                           TextButton(
                               onPressed: () {
-                                Navigator.of(context).push(CustomPageRightRoute(
-                                    child: ComPage(widget.userNumber)));
+                                (Platform.isAndroid)
+                                    ? Navigator.of(context).push(
+                                        CustomPageRightRoute(
+                                            child: ComPage(widget.userNumber)))
+                                    : Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                        return ComPage(widget.userNumber);
+                                      }));
                               },
                               child: Text(
                                 '더보기',
@@ -595,6 +618,7 @@ class _MainHomeState extends State<MainHome> {
                       }));
                     },
                     child: Hero(
+                      transitionOnUserGestures: true,
                       tag: doc['url'],
                       child: Container(
                           width: MediaQuery.of(context).size.width,

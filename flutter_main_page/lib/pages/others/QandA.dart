@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../main.dart';
@@ -26,19 +27,7 @@ class _QuestionAddPageState extends State<QuestionAddPage> {
     super.dispose();
   }
 
-  @override
-  void initState() {
-    Timer.periodic((const Duration(seconds: 1)), (v) {
-      if (mounted) {
-        setState(() {
-          _now = DateFormat('yyyy-MM-dd - HH:mm:ss').format(DateTime.now());
-        });
-      }
-    });
-    super.initState();
-  }
-
-  void _addQuestion(String title, String content) {
+  void _addQuestion(String title, String content, String _now) {
     FirebaseFirestore.instance.collection('QnA').add({
       'title': title,
       'content': content,
@@ -57,12 +46,10 @@ class _QuestionAddPageState extends State<QuestionAddPage> {
       appBar: AppBar(
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           "Q / A",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 25,
-            fontFamily: 'hoon',
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
           ),
         ),
         centerTitle: true,
@@ -76,8 +63,12 @@ class _QuestionAddPageState extends State<QuestionAddPage> {
                 if (_content.text.isEmpty) {
                   toastMessage("내용을 입력하세요");
                 }
+                setState(() {
+                  _now = DateFormat('yyyy-MM-dd - HH:mm:ss')
+                      .format(DateTime.now());
+                });
 
-                _addQuestion(_title.text, _content.text);
+                _addQuestion(_title.text, _content.text, _now);
                 Navigator.of(context).pop();
               },
               icon: Icon(Icons.check))

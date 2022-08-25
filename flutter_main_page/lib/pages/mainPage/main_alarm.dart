@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Alarm {
   String title;
@@ -83,7 +84,7 @@ class _MainAlarmState extends State<MainAlarm> {
                     ),
                     Text(
                       '알림',
-                      style: TextStyle(fontSize: 30, fontFamily: 'hoon'),
+                      style: GoogleFonts.doHyeon(textStyle: mainStyle),
                     ),
                   ],
                 ),
