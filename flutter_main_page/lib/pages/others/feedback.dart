@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class FeedBackPage extends StatefulWidget {
@@ -25,24 +26,12 @@ class _FeedBackPageState extends State<FeedBackPage> {
     super.dispose();
   }
 
-  @override
-  void initState() {
-    Timer.periodic((const Duration(seconds: 1)), (v) {
-      if (mounted) {
-        setState(() {
-          _now = DateFormat('yyyy-MM-dd - HH:mm:ss').format(DateTime.now());
-        });
-      }
-    });
-    super.initState();
-  }
-
-  void _addFeedback(String title, String content) {
+  void _addFeedback(String title, String content, String time) {
     FirebaseFirestore.instance.collection('feedback').add({
       'title': title,
       'content': content,
       'author': widget.userNumber,
-      'time': _now
+      'time': time,
     });
     toastMessage("피드백을 작성해주셔서 감사합니다 !");
     _title.text = '';
@@ -56,12 +45,10 @@ class _FeedBackPageState extends State<FeedBackPage> {
       appBar: AppBar(
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,
-        title: const Text(
+        title: Text(
           "피드백",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 25,
-            fontFamily: 'hoon',
+          style: GoogleFonts.doHyeon(
+            textStyle: mainStyle,
           ),
         ),
         centerTitle: true,
@@ -75,8 +62,11 @@ class _FeedBackPageState extends State<FeedBackPage> {
                 if (_content.text.isEmpty) {
                   toastMessage("내용을 입력하세요");
                 }
-
-                _addFeedback(_title.text, _content.text);
+                setState(() {
+                  _now = DateFormat('yyyy-MM-dd - HH:mm:ss')
+                      .format(DateTime.now());
+                });
+                _addFeedback(_title.text, _content.text, _now);
                 Navigator.of(context).pop();
               },
               icon: Icon(Icons.check))

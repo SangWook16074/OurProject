@@ -32,13 +32,7 @@ class _UserInfoUpdateState extends State<UserInfoUpdate> {
       toastMessage('이메일 주소가 일치하지 않습니다');
       return;
     }
-    await _auth.authStateChanges().listen((User? user) {
-      if (user == null) {
-        toastMessage('다시 로그인 후 시도해 주세요');
-        return;
-      }
-      updateEmail(userNumber, newEmail);
-    });
+    updateEmail(userNumber, newEmail);
   }
 
   Future updateEmail(String user, String newEmail) async {
