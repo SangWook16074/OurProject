@@ -60,6 +60,8 @@ dependencies:
   google_mobile_ads: ^0.13.4
   flutter_slidable: ^2.0.0
   google_fonts: ^3.0.1
+  introduction_screen: ^3.0.2
+  smooth_page_indicator: ^1.0.0+2
   
 
 
@@ -98,7 +100,11 @@ flutter:
     - assets/Images/title_facebook.png
     - assets/Images/title_instagram.png
     - assets/Images/title.png
-
+    - assets/Images/page1.png
+    - assets/Images/page2.png
+    - assets/Images/page3.png
+    - assets/Images/page4.png
+    - assets/Images/page5.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

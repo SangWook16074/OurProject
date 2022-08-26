@@ -9,6 +9,7 @@ import 'package:flutter_main_page/pages/loginPage/reset_pass.dart';
 import 'package:flutter_main_page/pages/mainPage/com_notice.dart';
 import 'package:flutter_main_page/pages/others/calculate.dart';
 import 'package:flutter_main_page/pages/mainPage/myContentDelete.dart';
+import 'package:flutter_main_page/pages/others/intro.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:url_launcher/url_launcher.dart';
@@ -217,9 +218,7 @@ class NavigationDrawerWidget extends StatelessWidget {
             context,
             text: '정보',
             icon: Icons.info,
-            onTap: ComPage(
-              this.userNumber,
-            ),
+            onTap: Intro(),
           ),
           Divider(
             color: Colors.black,

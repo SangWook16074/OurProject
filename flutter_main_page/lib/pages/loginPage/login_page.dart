@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/loginPage/create_user.dart';
 import 'package:flutter_main_page/pages/loginPage/reset_pass.dart';
+import 'package:flutter_main_page/pages/others/introduce.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../mainPage/main_home.dart';
 
@@ -60,11 +61,17 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final showHome = prefs.getBool('showHome') ?? false;
     if (prefs.getBool('autoLoginStatus') == true) {
-      return MainHome(
-          userNumber: prefs.getString('userNumber').toString(),
-          user: prefs.getString('user').toString(),
-          isAdmin: prefs.getBool('isAdmin')!);
+      return showHome
+          ? MainHome(
+              userNumber: prefs.getString('userNumber').toString(),
+              user: prefs.getString('user').toString(),
+              isAdmin: prefs.getBool('isAdmin')!)
+          : OnBoardingPage(
+              userNumber: prefs.getString('userNumber').toString(),
+              user: prefs.getString('user').toString(),
+              isAdmin: prefs.getBool('isAdmin')!);
     } else {
       return Scaffold(
           resizeToAvoidBottomInset: true,
@@ -249,17 +256,23 @@ class _LoginPageState extends State<LoginPage> {
                                 prefs.setInt(
                                     'index', prefs.getInt('index') ?? 1);
 
-                                toastMessage("환영합니다!");
                                 _textEditingControllerUser.clear();
                                 _textEditingControllerPassWd.clear();
 
                                 Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => MainHome(
-                                            userNumber: userInfoData.id,
-                                            user: userInfoData['userName'],
-                                            isAdmin: userInfoData['isAdmin'])),
+                                        builder: (context) => showHome
+                                            ? MainHome(
+                                                userNumber: userInfoData.id,
+                                                user: userInfoData['userName'],
+                                                isAdmin:
+                                                    userInfoData['isAdmin'])
+                                            : OnBoardingPage(
+                                                userNumber: userInfoData.id,
+                                                user: userInfoData['userName'],
+                                                isAdmin:
+                                                    userInfoData['isAdmin'])),
                                     (route) => false);
                               });
                             } on FirebaseAuthException catch (e) {
