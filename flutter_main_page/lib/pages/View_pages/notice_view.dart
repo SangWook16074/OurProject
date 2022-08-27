@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+import '../../main.dart';
 
 class NoticeViewPage extends StatefulWidget {
   final String title;
@@ -14,6 +19,22 @@ class NoticeViewPage extends StatefulWidget {
 }
 
 class _NoticeViewPageState extends State<NoticeViewPage> {
+  BannerAd? banner;
+
+  @override
+  void initState() {
+    super.initState();
+    banner = BannerAd(
+        size: AdSize.fullBanner,
+        adUnitId: UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
+        listener: BannerAdListener(
+          onAdLoaded: (ad) {},
+          onAdFailedToLoad: (ad, error) {},
+        ),
+        request: AdRequest())
+      ..load();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +83,11 @@ class _NoticeViewPageState extends State<NoticeViewPage> {
                 ),
                 SizedBox(
                   height: 40,
+                ),
+                Container(
+                  height: 50,
+                  child:
+                      this.banner != null ? AdWidget(ad: banner!) : Container(),
                 ),
                 Divider(
                   color: Colors.grey,

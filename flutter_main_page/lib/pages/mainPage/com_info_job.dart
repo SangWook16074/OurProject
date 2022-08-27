@@ -86,7 +86,7 @@ class _InfoJobPageState extends State<InfoJobPage> {
           title: Text(
             "[취업정보] $title",
             style: const TextStyle(
-                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+                fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
             "작성자 : $author",

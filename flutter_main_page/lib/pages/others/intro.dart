@@ -20,6 +20,7 @@ class _IntroState extends State<Intro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         body: Container(
           padding: EdgeInsets.only(bottom: 80),
           child: PageView(

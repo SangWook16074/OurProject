@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/com_view.dart';
 import 'package:flutter_main_page/pages/WritePages/com_write_com.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../custom_page_route.dart';
 import '../../main.dart';
 import 'com_search.dart';
@@ -29,6 +32,22 @@ class ComPage extends StatefulWidget {
 }
 
 class _ComPageState extends State<ComPage> {
+  BannerAd? banner;
+
+  @override
+  void initState() {
+    super.initState();
+    banner = BannerAd(
+        size: AdSize.fullBanner,
+        adUnitId: UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
+        listener: BannerAdListener(
+          onAdLoaded: (ad) {},
+          onAdFailedToLoad: (ad, error) {},
+        ),
+        request: AdRequest())
+      ..load();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,8 +87,16 @@ class _ComPageState extends State<ComPage> {
         body: Column(
           children: [
             _buildItem(),
+            _bannerAd(),
           ],
         ));
+  }
+
+  Widget _bannerAd() {
+    return Container(
+      height: 50,
+      child: this.banner != null ? AdWidget(ad: banner!) : Container(),
+    );
   }
 
   Widget _buildItem() {

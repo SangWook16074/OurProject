@@ -105,7 +105,7 @@ class _SearchPageState extends State<SearchPage> {
           title: Text(
             title,
             style: const TextStyle(
-                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+                fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
             "$author | $time",
