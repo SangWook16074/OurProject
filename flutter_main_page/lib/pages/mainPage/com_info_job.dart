@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../main.dart';
 
@@ -22,6 +25,22 @@ class InfoJobPage extends StatefulWidget {
 }
 
 class _InfoJobPageState extends State<InfoJobPage> {
+  BannerAd? banner;
+
+  @override
+  void initState() {
+    super.initState();
+    banner = BannerAd(
+        size: AdSize.fullBanner,
+        adUnitId: UNIT_ID[Platform.isIOS ? 'ios' : 'android']!,
+        listener: BannerAdListener(
+          onAdLoaded: (ad) {},
+          onAdFailedToLoad: (ad, error) {},
+        ),
+        request: AdRequest())
+      ..load();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +55,12 @@ class _InfoJobPageState extends State<InfoJobPage> {
         ),
         centerTitle: true,
       ),
-      body: _buildItem(),
+      body: Column(
+        children: [
+          Expanded(child: _buildItem()),
+          _bannerAd(),
+        ],
+      ),
     );
   }
 
@@ -54,6 +78,7 @@ class _InfoJobPageState extends State<InfoJobPage> {
                     child: CircularProgressIndicator(),
                   )
                 : ListView.builder(
+                    shrinkWrap: true,
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       var data = snapshot.data!.docs[index].data()
@@ -97,6 +122,13 @@ class _InfoJobPageState extends State<InfoJobPage> {
           color: Colors.grey,
         )
       ],
+    );
+  }
+
+  Widget _bannerAd() {
+    return Container(
+      height: 50,
+      child: this.banner != null ? AdWidget(ad: banner!) : Container(),
     );
   }
 }
