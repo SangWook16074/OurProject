@@ -71,6 +71,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   prefs = await SharedPreferences.getInstance();
+  await prefs.clear();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());

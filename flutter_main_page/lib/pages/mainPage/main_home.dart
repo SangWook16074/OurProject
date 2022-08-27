@@ -661,7 +661,7 @@ class _MainHomeState extends State<MainHome> {
                         author: '익명',
                         time: com.time,
                         id: doc.id,
-                        url: (com.url != null) ? com.url : null,
+                        url: (com.url != "") ? com.url : null,
                         user: widget.userNumber)));
           },
           title: Text(
