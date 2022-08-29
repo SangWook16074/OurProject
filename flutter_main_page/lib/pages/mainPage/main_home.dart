@@ -229,6 +229,7 @@ class _MainHomeState extends State<MainHome> {
           //         ),
           //       )),
           // ),
+
           _buildIconNavigator(),
           SizedBox(
             height: 20,
