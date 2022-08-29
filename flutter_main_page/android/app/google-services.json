@@ -1,41 +1,34 @@
 {
   "project_info": {
-    "project_number": "974035462798",
-    "project_id": "ourproject-fa19a",
-    "storage_bucket": "ourproject-fa19a.appspot.com"
+    "project_number": "104119207444",
+    "project_id": "induk-community",
+    "storage_bucket": "induk-community.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:974035462798:android:66ea99405906c682f2f7df",
+        "mobilesdk_app_id": "1:104119207444:android:42a8de45c072f0cafa0901",
         "android_client_info": {
-          "package_name": "com.example.flutter_main_page"
+          "package_name": "com.algoitzm.indukjt"
         }
       },
       "oauth_client": [
         {
-          "client_id": "974035462798-696ihbmahcp24n012i96odofmnmi1p5e.apps.googleusercontent.com",
+          "client_id": "104119207444-mnd3b8tf87odiolkio3ninqtih4q2o83.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAgIqR2wfXPtsVl90zblKh5sTsvrVbTV30"
+          "current_key": "AIzaSyAbItQoakO0cA3l4-4YYIczXaiwYfLSzxc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "974035462798-696ihbmahcp24n012i96odofmnmi1p5e.apps.googleusercontent.com",
+              "client_id": "104119207444-mnd3b8tf87odiolkio3ninqtih4q2o83.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "974035462798-46jb889vk5gf6clf9lome5h0f3df0706.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "ourproject-fa19a"
-              }
             }
           ]
         }

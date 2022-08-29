@@ -20,7 +20,7 @@
 </queries>
    <application
         android:requestLegacyExternalStorage="true"
-        android:label="정통과커뮤니티"
+        android:label="정통과 커뮤니티"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:usesCleartextTraffic="true">

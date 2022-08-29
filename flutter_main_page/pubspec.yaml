@@ -64,6 +64,7 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   firebase_crashlytics: ^2.8.9
   firebase_performance: ^0.8.2+4
+  rename: ^2.0.1
   
 
 
