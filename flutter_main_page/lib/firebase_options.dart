@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAgIqR2wfXPtsVl90zblKh5sTsvrVbTV30',
-    appId: '1:974035462798:android:66ea99405906c682f2f7df',
-    messagingSenderId: '974035462798',
-    projectId: 'ourproject-fa19a',
-    storageBucket: 'ourproject-fa19a.appspot.com',
+    apiKey: 'AIzaSyAbItQoakO0cA3l4-4YYIczXaiwYfLSzxc',
+    appId: '1:104119207444:android:42a8de45c072f0cafa0901',
+    messagingSenderId: '104119207444',
+    projectId: 'induk-community',
+    storageBucket: 'induk-community.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBkziF43aUdET1GaSAwr9kh5j3taGF93H0',
-    appId: '1:974035462798:ios:3ee4cabf2e7802d7f2f7df',
-    messagingSenderId: '974035462798',
-    projectId: 'ourproject-fa19a',
-    storageBucket: 'ourproject-fa19a.appspot.com',
-    iosClientId: '974035462798-q2t8tomg73lnog186la5pgpc3kenv4h2.apps.googleusercontent.com',
-    iosBundleId: 'com.example.flutterMainPage',
+    apiKey: 'AIzaSyCNQtBGNUt6-iq41EIX5UH5pYUKP3-BnSU',
+    appId: '1:104119207444:ios:91e5c5dbc9071223fa0901',
+    messagingSenderId: '104119207444',
+    projectId: 'induk-community',
+    storageBucket: 'induk-community.appspot.com',
+    iosClientId: '104119207444-bjm3g1cgq4bslnqnvathicb0hsvmr19h.apps.googleusercontent.com',
+    iosBundleId: 'com.algoitzm.indukjt',
   );
 }
