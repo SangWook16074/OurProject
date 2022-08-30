@@ -170,6 +170,9 @@ class _CalculatePageState extends State<CalculatePage> {
     double sumG = 0;
     var div = 0;
     for (var i = 0; i < _inputField.length; i++) {
+      if (int.parse(_groupControllers[i].getPoint.text) > 100) {
+        toastMessage('정확한 점수를 입력하세요');
+      }
       sumP += int.parse(_groupControllers[i].getPoint.text) *
           int.parse(_groupControllers[i].point.text);
 
@@ -177,7 +180,6 @@ class _CalculatePageState extends State<CalculatePage> {
           int.parse(_groupControllers[i].point.text);
 
       div += int.parse(_groupControllers[i].point.text);
-      print("$sumP, $sumG, $div");
     }
     resultP = (sumP / div).toDouble();
     resultG = (sumG / div).toDouble();
@@ -244,9 +246,10 @@ class _CalculatePageState extends State<CalculatePage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
+        width: double.infinity,
         color: Colors.black12,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
             Text(
