@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '104119207444',
     projectId: 'induk-community',
     storageBucket: 'induk-community.appspot.com',
+    androidClientId: '104119207444-bqpdhr5qkm1gcdopjv28hha0jrc1o1s0.apps.googleusercontent.com',
     iosClientId: '104119207444-bjm3g1cgq4bslnqnvathicb0hsvmr19h.apps.googleusercontent.com',
     iosBundleId: 'com.algoitzm.indukjt',
   );

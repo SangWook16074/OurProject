@@ -40,12 +40,11 @@ class _IntroState extends State<Intro> {
               _buildFirstPage(
                   urlImage: 'assets/Images/title.png',
                   title: '환영합니다!',
-                  subtitle: '인덕대학교 정보통신공학과 학생들을 위한 소통앱에 가입하신것을 진심으로 환영합니다.'),
+                  subtitle: '인덕정통에 가입하신것을 진심으로 환영합니다.'),
               _buildPage(
                   urlImage: 'assets/Images/page2.png',
                   title: '학생회 이벤트',
-                  subtitle:
-                      '정보통신공학과 학생회와 인덕대학교 총학생회가 진행하는 다양한 이벤트를 한눈에 볼 수 있습니다.'),
+                  subtitle: '총학생회와 정보통신공학과 학생회가 진행하는 다양한 이벤트를 한눈에 볼 수 있습니다.'),
               _buildPage(
                   urlImage: 'assets/Images/page3.png',
                   title: '간단한 소통',
