@@ -92,5 +92,14 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:30.2.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-storage'
+
+    constraints {
+    implementation('androidx.work:work-runtime:2.7.0') {
+      because '''androidx.work:work-runtime:2.1.0 pulled from
+      play-services-ads has a bug using PendingIntent without
+      FLAG_IMMUTABLE or FLAG_MUTABLE and will fail in Apps
+      targeting S+.'''
+    }
+  }
     
 }
