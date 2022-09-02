@@ -172,6 +172,7 @@ class _CalculatePageState extends State<CalculatePage> {
     for (var i = 0; i < _inputField.length; i++) {
       if (int.parse(_groupControllers[i].getPoint.text) > 100) {
         toastMessage('정확한 점수를 입력하세요');
+        return;
       }
       sumP += int.parse(_groupControllers[i].getPoint.text) *
           int.parse(_groupControllers[i].point.text);
