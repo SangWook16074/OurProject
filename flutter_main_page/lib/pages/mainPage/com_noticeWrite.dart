@@ -50,7 +50,7 @@ class _WriteNoticeState extends State<WriteNotice> {
     final headers = {
       'content-type': 'application/json',
       'Authorization':
-          'key=AAAA4skJqo4:APA91bFmXAZAeG3JGPd5Dym_iILSxUTAwi1mQwxOCz9CuQG9wvAB2Y1lnT_CZv_uOFuWJtpFm3QomTu28sE9C9jWEi1nz3QVTEzL7Ym765LQoTtG9aqYkHYV83fW87P0_mj3eNpPtw5M' // 'key=YOUR_SERVER_KEY'
+          'key=AAAAGD39BhQ:APA91bHJ2kDvwE9yttcSqmN674ZRazo7fUhPnS7TplSCnX5TAZIFqkTP4tD-Gw2wb71Ul5JMD-KScUl9oQ1eB2pMIRG1GwX7gyz7KxKZHbRWuc7D7qa86KxyI8FGo9oOPUju3MZxsZg4' // 'key=YOUR_SERVER_KEY'
     };
 
     final response = await http.post(Uri.parse(postUrl),
