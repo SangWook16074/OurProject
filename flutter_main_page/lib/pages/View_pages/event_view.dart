@@ -89,7 +89,7 @@ class _EventViewPageState extends State<EventViewPage> {
                           tag: widget.url!,
                           child: Container(
                               width: MediaQuery.of(context).size.width,
-                              height: 400,
+                              height: MediaQuery.of(context).size.width,
                               margin:
                                   const EdgeInsets.symmetric(horizontal: 5.0),
                               child: ClipRRect(
