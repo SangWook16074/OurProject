@@ -196,6 +196,18 @@ class _UserInfoUpdateState extends State<UserInfoUpdate> {
                     children: [
                       ElevatedButton(
                           onPressed: () {
+                            if (_userNumber.text == '') {
+                              toastMessage('학번을 입력하세요');
+                              return;
+                            }
+                            if (_currentEmail.text == '') {
+                              toastMessage('이메일을 입력하세요');
+                              return;
+                            }
+                            if (_newEmail.text == '') {
+                              toastMessage('변경할 이메일을 입력하세요');
+                              return;
+                            }
                             checkUserInfo(_userNumber.text, _currentEmail.text,
                                 _newEmail.text);
                           },
