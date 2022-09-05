@@ -39,8 +39,8 @@ class _EventPageState extends State<EventPage> {
           title: Text(
             "이벤트",
             style: GoogleFonts.doHyeon(
-                                    textStyle: mainStyle,
-                                  ),
+              textStyle: mainStyle,
+            ),
           ),
           centerTitle: true,
         ),
@@ -140,7 +140,7 @@ class _EventPageState extends State<EventPage> {
           (url != '')
               ? Container(
                   width: MediaQuery.of(context).size.width,
-                  height: 400,
+                  height: MediaQuery.of(context).size.width,
                   margin: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),

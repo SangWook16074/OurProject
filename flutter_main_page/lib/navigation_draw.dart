@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/Update_Page/userinfo_update.dart';
 import 'package:flutter_main_page/pages/others/QandAhome.dart';
+import 'package:flutter_main_page/pages/others/delete_user.dart';
 import 'package:flutter_main_page/pages/others/feedback.dart';
 import 'package:flutter_main_page/pages/loginPage/reset_pass.dart';
 import 'package:flutter_main_page/pages/mainPage/com_notice.dart';
@@ -219,6 +220,14 @@ class NavigationDrawerWidget extends StatelessWidget {
             text: '정보',
             icon: Icons.info,
             onTap: Intro(),
+          ),
+          _buildMenuItem(
+            context,
+            text: '회원탈퇴',
+            icon: Icons.remove_circle,
+            onTap: UserDelete(
+              userNumber: this.userNumber,
+            ),
           ),
           Divider(
             color: Colors.black,

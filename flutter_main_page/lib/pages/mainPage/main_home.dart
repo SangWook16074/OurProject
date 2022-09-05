@@ -239,7 +239,7 @@ class _MainHomeState extends State<MainHome> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                 child: Container(
-                  height: 500,
+                  height: MediaQuery.of(context).size.width + 100,
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
@@ -401,7 +401,7 @@ class _MainHomeState extends State<MainHome> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                 child: Container(
-                  height: 320,
+                  height: MediaQuery.of(context).size.width + 100,
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
@@ -604,7 +604,7 @@ class _MainHomeState extends State<MainHome> {
 
           return CarouselSlider(
             options: CarouselOptions(
-              height: 220.0,
+              height: MediaQuery.of(context).size.width,
               enableInfiniteScroll: false,
               enlargeCenterPage: false,
             ),
@@ -762,7 +762,7 @@ class _MainHomeState extends State<MainHome> {
           return CarouselSlider(
             options: CarouselOptions(
               autoPlay: true,
-              height: 400,
+              height: MediaQuery.of(context).size.width,
               enlargeCenterPage: true,
             ),
             items: documents.map((doc) {
