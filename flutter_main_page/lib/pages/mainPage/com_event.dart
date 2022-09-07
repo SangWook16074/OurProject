@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -61,7 +64,7 @@ class _EventPageState extends State<EventPage> {
           builder: (context, snapshot) {
             return (snapshot.connectionState == ConnectionState.waiting)
                 ? Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator.adaptive(),
                   )
                 : ListView.builder(
                     itemCount: snapshot.data!.docs.length,
@@ -101,14 +104,23 @@ class _EventPageState extends State<EventPage> {
       onTap: () {
         Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => EventViewPage(
-                      title: title,
-                      content: content,
-                      author: author,
-                      time: time,
-                      url: url,
-                    )));
+            (Platform.isAndroid)
+                ? MaterialPageRoute(
+                    builder: (context) => EventViewPage(
+                          title: title,
+                          content: content,
+                          author: author,
+                          time: time,
+                          url: url,
+                        ))
+                : CupertinoPageRoute(
+                    builder: (context) => EventViewPage(
+                          title: title,
+                          content: content,
+                          author: author,
+                          time: time,
+                          url: url,
+                        )));
       },
       child: Column(
         children: [

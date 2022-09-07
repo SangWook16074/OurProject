@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -75,7 +76,7 @@ class _InfoJobPageState extends State<InfoJobPage> {
           builder: (context, snapshot) {
             return (snapshot.connectionState == ConnectionState.waiting)
                 ? Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator.adaptive(),
                   )
                 : ListView.builder(
                     shrinkWrap: true,
@@ -104,9 +105,13 @@ class _InfoJobPageState extends State<InfoJobPage> {
           onTap: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        NoticeViewPage(title, content, author, time)));
+                (Platform.isAndroid)
+                    ? MaterialPageRoute(
+                        builder: (context) =>
+                            NoticeViewPage(title, content, author, time))
+                    : CupertinoPageRoute(
+                        builder: (context) =>
+                            NoticeViewPage(title, content, author, time)));
           },
           title: Text(
             "[취업정보] $title",

@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:intl/intl.dart';
@@ -14,33 +16,59 @@ class QuestionManagePage extends StatefulWidget {
 
 class _QuestionManagePageState extends State<QuestionManagePage> {
   void _deleteItemDialog(String docID) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [Text('정말로 삭제하시겠습니까?')],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    _deleteItem(docID);
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("확인")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("취소")),
-            ],
-          );
-        });
+    (Platform.isAndroid)
+        ? showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [Text('정말로 삭제하시겠습니까?')],
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        _deleteItem(docID);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("확인")),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("취소")),
+                ],
+              );
+            })
+        : showCupertinoDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return CupertinoAlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [Text('정말로 삭제하시겠습니까?')],
+                ),
+                actions: [
+                  CupertinoDialogAction(
+                      onPressed: () {
+                        _deleteItem(docID);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("확인")),
+                  CupertinoDialogAction(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("취소")),
+                ],
+              );
+            });
   }
 
   void _deleteItem(String docID) {
@@ -84,7 +112,7 @@ class _QuestionManagePageState extends State<QuestionManagePage> {
             builder: (context, snapshot) {
               return (snapshot.connectionState == ConnectionState.waiting)
                   ? Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator.adaptive(),
                     )
                   : ListView.builder(
                       itemCount: snapshot.data!.docs.length,
@@ -131,26 +159,46 @@ class _QuestionManagePageState extends State<QuestionManagePage> {
             (answer != '' || answerTime != '')
                 ? Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => QuestionViewPage(
-                              docID: docID,
-                              userNumber: author,
-                              title: title,
-                              content: content,
-                              time: time,
-                              answer: answer,
-                              answerTime: answerTime,
-                            )))
+                    (Platform.isAndroid)
+                        ? MaterialPageRoute(
+                            builder: (context) => QuestionViewPage(
+                                  docID: docID,
+                                  userNumber: author,
+                                  title: title,
+                                  content: content,
+                                  time: time,
+                                  answer: answer,
+                                  answerTime: answerTime,
+                                ))
+                        : CupertinoPageRoute(
+                            builder: (context) => QuestionViewPage(
+                                  docID: docID,
+                                  userNumber: author,
+                                  title: title,
+                                  content: content,
+                                  time: time,
+                                  answer: answer,
+                                  answerTime: answerTime,
+                                )))
                 : Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => AnswerPage(
-                              docID: docID,
-                              userNumber: author,
-                              title: title,
-                              content: content,
-                              time: time,
-                            )));
+                    (Platform.isAndroid)
+                        ? MaterialPageRoute(
+                            builder: (context) => AnswerPage(
+                                  docID: docID,
+                                  userNumber: author,
+                                  title: title,
+                                  content: content,
+                                  time: time,
+                                ))
+                        : CupertinoPageRoute(
+                            builder: (context) => AnswerPage(
+                                  docID: docID,
+                                  userNumber: author,
+                                  title: title,
+                                  content: content,
+                                  time: time,
+                                )));
           },
           title: Text(
             title,
@@ -266,16 +314,27 @@ class QuestionViewPage extends StatelessWidget {
                 ),
                 TextButton(
                     onPressed: () {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) {
-                        return AnswerUpdatePage(
-                            userNumber: this.userNumber,
-                            title: this.title,
-                            content: this.content,
-                            time: this.time,
-                            answer: this.answer,
-                            docID: this.docID);
-                      }));
+                      Navigator.pushReplacement(
+                          context,
+                          (Platform.isAndroid)
+                              ? MaterialPageRoute(builder: (context) {
+                                  return AnswerUpdatePage(
+                                      userNumber: this.userNumber,
+                                      title: this.title,
+                                      content: this.content,
+                                      time: this.time,
+                                      answer: this.answer,
+                                      docID: this.docID);
+                                })
+                              : CupertinoPageRoute(builder: (context) {
+                                  return AnswerUpdatePage(
+                                      userNumber: this.userNumber,
+                                      title: this.title,
+                                      content: this.content,
+                                      time: this.time,
+                                      answer: this.answer,
+                                      docID: this.docID);
+                                }));
                     },
                     child: Text("수정")),
               ],
@@ -338,18 +397,6 @@ class _AnswerPageState extends State<AnswerPage> {
   void dispose() {
     _answer.dispose();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    Timer.periodic((const Duration(seconds: 1)), (v) {
-      if (mounted) {
-        setState(() {
-          _now = DateFormat('yyyy-MM-dd - HH:mm:ss').format(DateTime.now());
-        });
-      }
-    });
-    super.initState();
   }
 
   @override

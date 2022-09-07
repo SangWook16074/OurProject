@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/pages/mainPage/com_search.dart';
@@ -64,10 +65,14 @@ class _NoticePageState extends State<NoticePage> {
                 onPressed: () {
                   Navigator.push(
                       context,
-                      CustomPageRightRoute(
-                          child: SearchPage(
-                        topic: 'notice',
-                      )));
+                      (Platform.isAndroid)
+                          ? CustomPageRightRoute(
+                              child: SearchPage(
+                              topic: 'notice',
+                            ))
+                          : CupertinoPageRoute(builder: (context) {
+                              return SearchPage(topic: 'notice');
+                            }));
                 },
                 icon: Icon(Icons.search))
           ],
@@ -97,7 +102,7 @@ class _NoticePageState extends State<NoticePage> {
             builder: (context, snapshot) {
               return (snapshot.connectionState == ConnectionState.waiting)
                   ? Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator.adaptive(),
                     )
                   : ListView.builder(
                       shrinkWrap: true,
@@ -134,9 +139,13 @@ class _NoticePageState extends State<NoticePage> {
           onTap: () {
             Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        NoticeViewPage(title, content, author, time)));
+                (Platform.isAndroid)
+                    ? MaterialPageRoute(
+                        builder: (context) =>
+                            NoticeViewPage(title, content, author, time))
+                    : CupertinoPageRoute(
+                        builder: (context) =>
+                            NoticeViewPage(title, content, author, time)));
           },
           title: Text(
             title,

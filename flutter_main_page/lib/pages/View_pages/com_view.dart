@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/View_pages/zoom_image.dart';
+import 'package:flutter_main_page/pages/others/flag.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
@@ -84,33 +86,59 @@ class _ComViewPageState extends State<ComViewPage> {
   }
 
   void _deleteChatDialog(DocumentSnapshot doc) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [Text('정말로 삭제하시겠습니까?')],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    _deleteChat(doc.id);
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("확인")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("취소")),
-            ],
-          );
-        });
+    (Platform.isAndroid)
+        ? showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [Text('정말로 삭제하시겠습니까?')],
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        _deleteChat(doc.id);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("확인")),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("취소")),
+                ],
+              );
+            })
+        : showCupertinoDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return CupertinoAlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [Text('정말로 삭제하시겠습니까?')],
+                ),
+                actions: [
+                  CupertinoDialogAction(
+                      onPressed: () {
+                        _deleteChat(doc.id);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("확인")),
+                  CupertinoDialogAction(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("취소")),
+                ],
+              );
+            });
   }
 
   void _deleteChat(String id) {
@@ -214,10 +242,14 @@ class _ComViewPageState extends State<ComViewPage> {
                         (widget.url != null)
                             ? GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                    return ZoomImage(url: widget.url!);
-                                  }));
+                                  Navigator.of(context).push((Platform
+                                          .isAndroid)
+                                      ? MaterialPageRoute(builder: (context) {
+                                          return ZoomImage(url: widget.url!);
+                                        })
+                                      : CupertinoPageRoute(builder: (context) {
+                                          return ZoomImage(url: widget.url!);
+                                        }));
                                 },
                                 child: Hero(
                                   transitionOnUserGestures: true,
@@ -251,27 +283,63 @@ class _ComViewPageState extends State<ComViewPage> {
                             : Container(),
                         (widget.countLike != null)
                             ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  IconButton(
-                                      icon: Icon(
-                                        Icons.thumb_up,
-                                        size: 20,
-                                        color: widget.likedUsersList!
-                                                .contains(widget.user)
-                                            ? Colors.purple
-                                            : Colors.grey,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _updatelikedUsersList(
-                                              widget.id!,
-                                              widget.user!,
-                                              widget.likedUsersList!);
-                                          _updatecountLike(widget.id!,
-                                              widget.likedUsersList!);
-                                        });
-                                      }),
-                                  Text('추천하기')
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _updatelikedUsersList(
+                                            widget.id!,
+                                            widget.user!,
+                                            widget.likedUsersList!);
+                                        _updatecountLike(
+                                            widget.id!, widget.likedUsersList!);
+                                      });
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.thumb_up,
+                                          size: 20,
+                                          color: widget.likedUsersList!
+                                                  .contains(widget.user)
+                                              ? Colors.purple
+                                              : Colors.grey,
+                                        ),
+                                        Text('추천하기')
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          (Platform.isAndroid)
+                                              ? MaterialPageRoute(
+                                                  builder: (context) {
+                                                  return FlagPage(
+                                                    user: widget.user!,
+                                                  );
+                                                })
+                                              : CupertinoPageRoute(
+                                                  builder: (context) {
+                                                  return FlagPage(
+                                                    user: widget.user!,
+                                                  );
+                                                }));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.notification_important,
+                                            size: 20, color: Colors.red),
+                                        Text(
+                                          '신고하기',
+                                          style: TextStyle(color: Colors.red),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               )
                             : Container(),
@@ -314,7 +382,7 @@ class _ComViewPageState extends State<ComViewPage> {
           if (!snapshot.hasData) {
             return const SizedBox(
               height: 280,
-              child: Center(child: CircularProgressIndicator()),
+              child: Center(child: CircularProgressIndicator.adaptive()),
             );
           }
           final documents = snapshot.data!.docs;

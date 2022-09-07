@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,44 +29,81 @@ class _MainAlarmState extends State<MainAlarm> {
   }
 
   void _createDeleteAlarm() {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("알림 기록 전체 삭제"),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [Text('알림 기록을 지우시겠습니까? 지워진 알림은 볼 수 없습니다.')],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () async {
-                    prefs.setInt('index', 1);
-                    final instance = FirebaseFirestore.instance;
-                    final batch = instance.batch();
-                    var collection = instance.collection(
-                        'UserInfo/${prefs.getString('userNumber').toString()}/alarmlog');
-                    var snapshots = await collection.get();
-                    for (var doc in snapshots.docs) {
-                      batch.delete(doc.reference);
-                    }
-                    await batch.commit();
+    (Platform.isAndroid)
+        ? showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("알림 기록 전체 삭제"),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [Text('알림 기록을 지우시겠습니까? 지워진 알림은 볼 수 없습니다.')],
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () async {
+                        prefs.setInt('index', 1);
+                        final instance = FirebaseFirestore.instance;
+                        final batch = instance.batch();
+                        var collection = instance.collection(
+                            'UserInfo/${prefs.getString('userNumber').toString()}/alarmlog');
+                        var snapshots = await collection.get();
+                        for (var doc in snapshots.docs) {
+                          batch.delete(doc.reference);
+                        }
+                        await batch.commit();
 
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("확인")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("취소")),
-            ],
-          );
-        });
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("확인")),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("취소")),
+                ],
+              );
+            })
+        : showCupertinoDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return CupertinoAlertDialog(
+                title: Text("알림 기록 전체 삭제"),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [Text('알림 기록을 지우시겠습니까? 지워진 알림은 볼 수 없습니다.')],
+                ),
+                actions: [
+                  CupertinoDialogAction(
+                      onPressed: () async {
+                        prefs.setInt('index', 1);
+                        final instance = FirebaseFirestore.instance;
+                        final batch = instance.batch();
+                        var collection = instance.collection(
+                            'UserInfo/${prefs.getString('userNumber').toString()}/alarmlog');
+                        var snapshots = await collection.get();
+                        for (var doc in snapshots.docs) {
+                          batch.delete(doc.reference);
+                        }
+                        await batch.commit();
+
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("확인")),
+                  CupertinoDialogAction(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("취소")),
+                ],
+              );
+            });
   }
 
   @override
@@ -175,6 +215,6 @@ class _MainAlarmState extends State<MainAlarm> {
   }
 
   Widget _loading() {
-    return Center(child: CircularProgressIndicator());
+    return Center(child: CircularProgressIndicator.adaptive());
   }
 }

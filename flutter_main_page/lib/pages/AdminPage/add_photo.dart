@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -62,33 +63,59 @@ class _AddPhotoPageState extends State<AddPhotoPage> {
   }
 
   void _deleteItemDialog(DocumentSnapshot doc) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [Text('정말로 삭제하시겠습니까?')],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    _deleteItem(doc);
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("확인")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("취소")),
-            ],
-          );
-        });
+    (Platform.isAndroid)
+        ? showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [Text('정말로 삭제하시겠습니까?')],
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        _deleteItem(doc);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("확인")),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("취소")),
+                ],
+              );
+            })
+        : showCupertinoDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return CupertinoAlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [Text('정말로 삭제하시겠습니까?')],
+                ),
+                actions: [
+                  CupertinoDialogAction(
+                      onPressed: () {
+                        _deleteItem(doc);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("확인")),
+                  CupertinoDialogAction(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("취소")),
+                ],
+              );
+            });
   }
 
   void _deleteItem(DocumentSnapshot doc) {
@@ -135,13 +162,21 @@ class _AddPhotoPageState extends State<AddPhotoPage> {
                   AnimatedOpacity(
                       duration: _duration,
                       opacity: _check ? 0.0 : 1.0,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              pickedFile = null;
-                            });
-                          },
-                          child: Text("취소"))),
+                      child: (Platform.isAndroid)
+                          ? ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  pickedFile = null;
+                                });
+                              },
+                              child: Text("취소"))
+                          : CupertinoButton.filled(
+                              onPressed: () {
+                                setState(() {
+                                  pickedFile = null;
+                                });
+                              },
+                              child: Text("취소"))),
                 ],
               ),
             ),
@@ -157,7 +192,7 @@ class _AddPhotoPageState extends State<AddPhotoPage> {
         stream: FirebaseFirestore.instance.collection('eventImage').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator.adaptive());
           }
           final documents = snapshot.data!.docs;
 
@@ -187,11 +222,17 @@ class _AddPhotoPageState extends State<AddPhotoPage> {
               ),
             ),
           ),
-          ElevatedButton(
-              onPressed: () {
-                _deleteItemDialog(doc);
-              },
-              child: Text("위 사진 삭제하기")),
+          (Platform.isAndroid)
+              ? ElevatedButton(
+                  onPressed: () {
+                    _deleteItemDialog(doc);
+                  },
+                  child: Text("위 사진 삭제하기"))
+              : CupertinoButton.filled(
+                  onPressed: () {
+                    _deleteItemDialog(doc);
+                  },
+                  child: Text("위 사진 삭제하기")),
           Divider()
         ],
       ),

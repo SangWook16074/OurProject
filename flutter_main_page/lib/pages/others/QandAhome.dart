@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/others/QandA.dart';
@@ -22,9 +25,15 @@ class _QuestionHomeState extends State<QuestionHome> {
         icon: Icon(Icons.add),
         label: Text("질문작성"),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: ((context) {
-            return QuestionAddPage(userNumber: widget.userNumber);
-          })));
+          Navigator.push(
+              context,
+              (Platform.isAndroid)
+                  ? MaterialPageRoute(builder: ((context) {
+                      return QuestionAddPage(userNumber: widget.userNumber);
+                    }))
+                  : CupertinoPageRoute(builder: ((context) {
+                      return QuestionAddPage(userNumber: widget.userNumber);
+                    })));
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -64,7 +73,7 @@ class _QuestionHomeState extends State<QuestionHome> {
             builder: (context, snapshot) {
               return (snapshot.connectionState == ConnectionState.waiting)
                   ? Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator.adaptive(),
                     )
                   : ListView.builder(
                       itemCount: snapshot.data!.docs.length,
@@ -100,11 +109,17 @@ class _QuestionHomeState extends State<QuestionHome> {
             (answer != '' || answerTime != '')
                 ? Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => AnswerViewPage(
-                              answer: answer,
-                              answerTime: answerTime,
-                            )))
+                    (Platform.isAndroid)
+                        ? MaterialPageRoute(
+                            builder: (context) => AnswerViewPage(
+                                  answer: answer,
+                                  answerTime: answerTime,
+                                ))
+                        : CupertinoPageRoute(
+                            builder: (context) => AnswerViewPage(
+                                  answer: answer,
+                                  answerTime: answerTime,
+                                )))
                 : toastMessage('답변이 등록되지 않았습니다');
           },
           title: Text(

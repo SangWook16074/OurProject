@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,37 +37,67 @@ class _WriteComPageState extends State<WriteComPage> {
   final _content = TextEditingController();
 
   void _createItemDialog(Write event) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Text('글을 등록하시겠습니까?\n등록된 글은 내정보 페이지에서 관리할 수 있습니다.')
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    _addNotice(event);
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                    toastMessage('작성완료!');
-                  },
-                  child: const Text("확인")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("취소")),
-            ],
-          );
-        });
+    (Platform.isAndroid)
+        ? showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [
+                    Text('글을 등록하시겠습니까?\n등록된 글은 내정보 페이지에서 관리할 수 있습니다.')
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        _addNotice(event);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        toastMessage('작성완료!');
+                      },
+                      child: const Text("확인")),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("취소")),
+                ],
+              );
+            })
+        : showCupertinoDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return CupertinoAlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [
+                    Text('글을 등록하시겠습니까?\n등록된 글은 내정보 페이지에서 관리할 수 있습니다.')
+                  ],
+                ),
+                actions: [
+                  CupertinoDialogAction(
+                      onPressed: () {
+                        _addNotice(event);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        toastMessage('작성완료!');
+                      },
+                      child: const Text("확인")),
+                  CupertinoDialogAction(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("취소")),
+                ],
+              );
+            });
   }
 
   void _addNotice(Write com) async {

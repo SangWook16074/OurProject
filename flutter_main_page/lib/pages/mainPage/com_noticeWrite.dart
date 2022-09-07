@@ -2,11 +2,12 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -70,38 +71,69 @@ class _WriteNoticeState extends State<WriteNotice> {
   }
 
   void _createItemDialog(NoticeWrite notice, String user) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [Text('공지를 등록하시겠습니까?')],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    callOnFcmApiSendPushNotifications(
-                        title: '새 공지사항이 등록되었습니다.',
-                        body: "[공지사항] ${notice.title}");
+    (Platform.isAndroid)
+        ? showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [Text('공지를 등록하시겠습니까?')],
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        callOnFcmApiSendPushNotifications(
+                            title: '새 공지사항이 등록되었습니다.',
+                            body: "[공지사항] ${notice.title}");
 
-                    _addNotice(notice, user);
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("확인")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("취소")),
-            ],
-          );
-        });
+                        _addNotice(notice, user);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("확인")),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("취소")),
+                ],
+              );
+            })
+        : showCupertinoDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return CupertinoAlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [Text('공지를 등록하시겠습니까?')],
+                ),
+                actions: [
+                  CupertinoDialogAction(
+                      onPressed: () {
+                        callOnFcmApiSendPushNotifications(
+                            title: '새 공지사항이 등록되었습니다.',
+                            body: "[공지사항] ${notice.title}");
+
+                        _addNotice(notice, user);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("확인")),
+                  CupertinoDialogAction(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("취소")),
+                ],
+              );
+            });
   }
 
   void _addNotice(NoticeWrite notice, String user) {
@@ -114,18 +146,6 @@ class _WriteNoticeState extends State<WriteNotice> {
     toastMessage('새 공지가 등록되었습니다');
     _title.text = '';
     _content.text = '';
-  }
-
-  @override
-  void initState() {
-    Timer.periodic((const Duration(seconds: 1)), (v) {
-      if (mounted) {
-        setState(() {
-          _now = DateFormat('yyyy-MM-dd - HH:mm:ss').format(DateTime.now());
-        });
-      }
-    });
-    super.initState();
   }
 
   @override
@@ -153,24 +173,20 @@ class _WriteNoticeState extends State<WriteNotice> {
           IconButton(
               onPressed: () {
                 if (_title.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "제목을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else if (_content.text.isEmpty) {
-                  Fluttertoast.showToast(
-                    msg: "내용을 입력하세요.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    fontSize: 16,
-                  );
-                } else {
-                  _createItemDialog(
-                      NoticeWrite(_title.text, _content.text, _now.toString()),
-                      "정보통신공학과");
+                  toastMessage('제목을 입력하세요');
+                  return;
                 }
+                if (_content.text.isEmpty) {
+                  toastMessage('내용을 입력하세요');
+                  return;
+                }
+                setState(() {
+                  _now = DateFormat('yyyy-MM-dd - HH:mm:ss')
+                      .format(DateTime.now());
+                });
+                _createItemDialog(
+                    NoticeWrite(_title.text, _content.text, _now.toString()),
+                    "정보통신공학과");
               },
               icon: Icon(Icons.check))
         ],

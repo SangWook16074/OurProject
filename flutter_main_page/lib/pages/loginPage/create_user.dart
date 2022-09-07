@@ -1,7 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,26 +35,45 @@ class _CreateUserPageState extends State<CreateUserPage> {
   int currentStep = 0;
 
   void _showAuthDialog() {
-    showDialog(
-        context: _scaffoldKey.currentContext!,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            content: Text(
-                '입력한 이메일 주소로 인증확인 메일이 발송되었습니다. 인증을 완료해야 로그인할 수 있습니다.\n입력한 이메일 : ${_email.text}'),
-            actions: [
-              ElevatedButton(
-                  onPressed: () {
-                    clearController();
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("확인")),
-            ],
-          );
-        });
+    (Platform.isAndroid)
+        ? showDialog(
+            context: _scaffoldKey.currentContext!,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                content: Text(
+                    '입력한 이메일 주소로 인증확인 메일이 발송되었습니다. 인증을 완료해야 로그인할 수 있습니다.\n입력한 이메일 : ${_email.text}'),
+                actions: [
+                  ElevatedButton(
+                      onPressed: () {
+                        clearController();
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("확인")),
+                ],
+              );
+            })
+        : showCupertinoDialog(
+            context: _scaffoldKey.currentContext!,
+            barrierDismissible: false,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                content: Text(
+                    '입력한 이메일 주소로 인증확인 메일이 발송되었습니다. 인증을 완료해야 로그인할 수 있습니다.\n입력한 이메일 : ${_email.text}'),
+                actions: [
+                  CupertinoDialogAction(
+                      onPressed: () {
+                        clearController();
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("확인")),
+                ],
+              );
+            });
   }
 
   @override
@@ -168,21 +190,35 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         if (currentStep != 2) {
                           return Row(
                             children: [
-                              ElevatedButton(
-                                  onPressed: _onNext, child: Text('다음')),
+                              (Platform.isAndroid)
+                                  ? ElevatedButton(
+                                      onPressed: _onNext, child: Text('다음'))
+                                  : CupertinoButton.filled(
+                                      onPressed: _onNext, child: Text('다음')),
                               SizedBox(
                                 width: 10,
                               ),
-                              ElevatedButton(
-                                onPressed: _onCancel,
-                                child: Text(
-                                  '취소',
-                                  style: TextStyle(color: Colors.blueGrey),
-                                ),
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                ),
-                              ),
+                              (Platform.isAndroid)
+                                  ? ElevatedButton(
+                                      onPressed: _onCancel,
+                                      child: Text(
+                                        '취소',
+                                        style:
+                                            TextStyle(color: Colors.blueGrey),
+                                      ),
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                      ),
+                                    )
+                                  : CupertinoButton(
+                                      onPressed: _onCancel,
+                                      child: Text(
+                                        '취소',
+                                        style:
+                                            TextStyle(color: Colors.blueGrey),
+                                      ),
+                                      color: Colors.white,
+                                    ),
                             ],
                           );
                         }
@@ -190,91 +226,183 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         return (isChecked == true)
                             ? Row(
                                 children: [
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      bool isAdmin = false;
-                                      if (_userName.text.isEmpty) {
-                                        toastMessage("이름을 입력하세요.");
-                                        return;
-                                      }
-                                      if (_userNumber.text.isEmpty) {
-                                        toastMessage("학번을 입력하세요.");
-                                        return;
-                                      }
-                                      if (_email.text.isEmpty) {
-                                        toastMessage("이메일을 입력하세요.");
-                                        return;
-                                      }
-                                      if (_userPass.text.isEmpty) {
-                                        toastMessage("비밀번호를 입력하세요.");
-                                        return;
-                                      }
-                                      if (_userPassAgain.text.isEmpty) {
-                                        toastMessage("비밀번호를 확인해야합니다.");
-                                        return;
-                                      }
-                                      if (_userPass.text !=
-                                          _userPassAgain.text) {
-                                        toastMessage("비밀번호 확인이 안됩니다.");
-                                        return;
-                                      }
-                                      if (_authCode.text != "160") {
-                                        toastMessage("학과 번호가 틀렸습니다.");
-                                        return;
-                                      }
+                                  (Platform.isAndroid)
+                                      ? ElevatedButton(
+                                          onPressed: () async {
+                                            bool isAdmin = false;
+                                            if (_userName.text.isEmpty) {
+                                              toastMessage("이름을 입력하세요.");
+                                              return;
+                                            }
+                                            if (_userNumber.text.isEmpty) {
+                                              toastMessage("학번을 입력하세요.");
+                                              return;
+                                            }
+                                            if (_email.text.isEmpty) {
+                                              toastMessage("이메일을 입력하세요.");
+                                              return;
+                                            }
+                                            if (_userPass.text.isEmpty) {
+                                              toastMessage("비밀번호를 입력하세요.");
+                                              return;
+                                            }
+                                            if (_userPassAgain.text.isEmpty) {
+                                              toastMessage("비밀번호를 확인해야합니다.");
+                                              return;
+                                            }
+                                            if (_userPass.text !=
+                                                _userPassAgain.text) {
+                                              toastMessage("비밀번호 확인이 안됩니다.");
+                                              return;
+                                            }
+                                            if (_authCode.text != "160") {
+                                              toastMessage("학과 번호가 틀렸습니다.");
+                                              return;
+                                            }
 
-                                      try {
-                                        DocumentSnapshot userinfoData =
-                                            await FirebaseFirestore.instance
-                                                .collection('UserInfo')
-                                                .doc(_userNumber.text)
-                                                .get();
-                                        if (userinfoData.exists) {
-                                          toastMessage("이미 존재하는 학번이 있습니다.");
-                                          return;
-                                        }
+                                            try {
+                                              DocumentSnapshot userinfoData =
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection('UserInfo')
+                                                      .doc(_userNumber.text)
+                                                      .get();
+                                              if (userinfoData.exists) {
+                                                toastMessage(
+                                                    "이미 존재하는 학번이 있습니다.");
+                                                return;
+                                              }
 
-                                        await _auth
-                                            .createUserWithEmailAndPassword(
-                                                email: _email.text,
-                                                password: _userPass.text)
-                                            .then((value) {
-                                          if (value.user!.email == null) {
-                                          } else {
-                                            firestore
-                                                .collection('UserInfo')
-                                                .doc(_userNumber.text)
-                                                .set({
-                                              'userName': _userName.text,
-                                              'userNumber': _userNumber.text,
-                                              'email': _email.text,
-                                              'isAdmin': isAdmin,
-                                            });
-                                          }
-                                          return value;
-                                        });
-                                        _showAuthDialog();
+                                              await _auth
+                                                  .createUserWithEmailAndPassword(
+                                                      email: _email.text,
+                                                      password: _userPass.text)
+                                                  .then((value) {
+                                                if (value.user!.email == null) {
+                                                } else {
+                                                  firestore
+                                                      .collection('UserInfo')
+                                                      .doc(_userNumber.text)
+                                                      .set({
+                                                    'userName': _userName.text,
+                                                    'userNumber':
+                                                        _userNumber.text,
+                                                    'email': _email.text,
+                                                    'isAdmin': isAdmin,
+                                                  });
+                                                }
+                                                return value;
+                                              });
+                                              _showAuthDialog();
 
-                                        FirebaseAuth.instance.currentUser
-                                            ?.sendEmailVerification();
-                                      } on FirebaseAuthException catch (e) {
-                                        if (e.code == 'weak-password') {
-                                          toastMessage(
-                                              '비밀번호가 약합니다\n(추천)숫자 + 영어 + 특수문자');
-                                          return;
-                                        }
-                                        if (e.code == 'email-already-in-use') {
-                                          toastMessage('이미 사용된 이메일입니다.');
-                                          return;
-                                        }
-                                        toastMessage("잠시후에 다시 시도해주세요.");
-                                      }
-                                    },
-                                    child: Text('완료'),
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: Colors.blueGrey,
-                                    ),
-                                  ),
+                                              FirebaseAuth.instance.currentUser
+                                                  ?.sendEmailVerification();
+                                            } on FirebaseAuthException catch (e) {
+                                              if (e.code == 'weak-password') {
+                                                toastMessage(
+                                                    '비밀번호가 약합니다\n(추천)숫자 + 영어 + 특수문자');
+                                                return;
+                                              }
+                                              if (e.code ==
+                                                  'email-already-in-use') {
+                                                toastMessage('이미 사용된 이메일입니다.');
+                                                return;
+                                              }
+                                              toastMessage("잠시후에 다시 시도해주세요.");
+                                            }
+                                          },
+                                          child: Text('완료'),
+                                          style: TextButton.styleFrom(
+                                            backgroundColor: Colors.blueGrey,
+                                          ),
+                                        )
+                                      : CupertinoButton(
+                                          onPressed: () async {
+                                            bool isAdmin = false;
+                                            if (_userName.text.isEmpty) {
+                                              toastMessage("이름을 입력하세요.");
+                                              return;
+                                            }
+                                            if (_userNumber.text.isEmpty) {
+                                              toastMessage("학번을 입력하세요.");
+                                              return;
+                                            }
+                                            if (_email.text.isEmpty) {
+                                              toastMessage("이메일을 입력하세요.");
+                                              return;
+                                            }
+                                            if (_userPass.text.isEmpty) {
+                                              toastMessage("비밀번호를 입력하세요.");
+                                              return;
+                                            }
+                                            if (_userPassAgain.text.isEmpty) {
+                                              toastMessage("비밀번호를 확인해야합니다.");
+                                              return;
+                                            }
+                                            if (_userPass.text !=
+                                                _userPassAgain.text) {
+                                              toastMessage("비밀번호 확인이 안됩니다.");
+                                              return;
+                                            }
+                                            if (_authCode.text != "160") {
+                                              toastMessage("학과 번호가 틀렸습니다.");
+                                              return;
+                                            }
+
+                                            try {
+                                              DocumentSnapshot userinfoData =
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection('UserInfo')
+                                                      .doc(_userNumber.text)
+                                                      .get();
+                                              if (userinfoData.exists) {
+                                                toastMessage(
+                                                    "이미 존재하는 학번이 있습니다.");
+                                                return;
+                                              }
+
+                                              await _auth
+                                                  .createUserWithEmailAndPassword(
+                                                      email: _email.text,
+                                                      password: _userPass.text)
+                                                  .then((value) {
+                                                if (value.user!.email == null) {
+                                                } else {
+                                                  firestore
+                                                      .collection('UserInfo')
+                                                      .doc(_userNumber.text)
+                                                      .set({
+                                                    'userName': _userName.text,
+                                                    'userNumber':
+                                                        _userNumber.text,
+                                                    'email': _email.text,
+                                                    'isAdmin': isAdmin,
+                                                  });
+                                                }
+                                                return value;
+                                              });
+                                              _showAuthDialog();
+
+                                              FirebaseAuth.instance.currentUser
+                                                  ?.sendEmailVerification();
+                                            } on FirebaseAuthException catch (e) {
+                                              if (e.code == 'weak-password') {
+                                                toastMessage(
+                                                    '비밀번호가 약합니다\n(추천)숫자 + 영어 + 특수문자');
+                                                return;
+                                              }
+                                              if (e.code ==
+                                                  'email-already-in-use') {
+                                                toastMessage('이미 사용된 이메일입니다.');
+                                                return;
+                                              }
+                                              toastMessage("잠시후에 다시 시도해주세요.");
+                                            }
+                                          },
+                                          child: Text('완료'),
+                                          color: Colors.blueGrey,
+                                        ),
                                 ],
                               )
                             : Container();

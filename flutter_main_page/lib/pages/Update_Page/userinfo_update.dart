@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../main.dart';
@@ -190,45 +193,95 @@ class _UserInfoUpdateState extends State<UserInfoUpdate> {
                   SizedBox(
                     height: 20,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ElevatedButton(
-                          onPressed: () {
-                            if (_userNumber.text == '') {
-                              toastMessage('학번을 입력하세요');
-                              return;
-                            }
-                            if (_currentEmail.text == '') {
-                              toastMessage('이메일을 입력하세요');
-                              return;
-                            }
-                            if (_newEmail.text == '') {
-                              toastMessage('변경할 이메일을 입력하세요');
-                              return;
-                            }
-                            checkUserInfo(_userNumber.text, _currentEmail.text,
-                                _newEmail.text);
-                          },
-                          child: Text('확인')),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          '취소',
-                          style: TextStyle(color: Colors.blueGrey),
+                  (Platform.isAndroid)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: 80,
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    if (_userNumber.text == '') {
+                                      toastMessage('학번을 입력하세요');
+                                      return;
+                                    }
+                                    if (_currentEmail.text == '') {
+                                      toastMessage('이메일을 입력하세요');
+                                      return;
+                                    }
+                                    if (_newEmail.text == '') {
+                                      toastMessage('변경할 이메일을 입력하세요');
+                                      return;
+                                    }
+                                    checkUserInfo(_userNumber.text,
+                                        _currentEmail.text, _newEmail.text);
+                                  },
+                                  child: Text('확인')),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            SizedBox(
+                              width: 80,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  '취소',
+                                  style: TextStyle(color: Colors.blueGrey),
+                                ),
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: 80,
+                              child: CupertinoButton.filled(
+                                  onPressed: () {
+                                    if (_userNumber.text == '') {
+                                      toastMessage('학번을 입력하세요');
+                                      return;
+                                    }
+                                    if (_currentEmail.text == '') {
+                                      toastMessage('이메일을 입력하세요');
+                                      return;
+                                    }
+                                    if (_newEmail.text == '') {
+                                      toastMessage('변경할 이메일을 입력하세요');
+                                      return;
+                                    }
+                                    checkUserInfo(_userNumber.text,
+                                        _currentEmail.text, _newEmail.text);
+                                  },
+                                  child: Text('확인')),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            SizedBox(
+                              width: 80,
+                              child: CupertinoButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  '취소',
+                                  style: TextStyle(color: Colors.blueGrey),
+                                ),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
-                        style: TextButton.styleFrom(
-                          backgroundColor: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
