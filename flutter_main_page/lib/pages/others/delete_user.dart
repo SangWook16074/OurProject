@@ -16,7 +16,6 @@ class UserDelete extends StatefulWidget {
 
 class _UserDeleteState extends State<UserDelete> {
   final _userNumber = TextEditingController();
-  final _userPass = TextEditingController();
   final _auth = FirebaseAuth.instance;
 
   Future<void> _signOut() async {
