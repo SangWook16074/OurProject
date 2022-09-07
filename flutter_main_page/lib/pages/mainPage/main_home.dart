@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_main_page/navigation_draw.dart';
@@ -95,8 +96,11 @@ class _MainHomeState extends State<MainHome> {
                     onTap: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => NoticeManagePage()));
+                          (Platform.isAndroid)
+                              ? MaterialPageRoute(
+                                  builder: (context) => NoticeManagePage())
+                              : CupertinoPageRoute(
+                                  builder: (context) => NoticeManagePage()));
                     }),
                 SpeedDialChild(
                     child: Icon(Icons.event_available),
@@ -104,8 +108,11 @@ class _MainHomeState extends State<MainHome> {
                     onTap: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => EventManagePage()));
+                          (Platform.isAndroid)
+                              ? MaterialPageRoute(
+                                  builder: (context) => EventManagePage())
+                              : CupertinoPageRoute(
+                                  builder: (context) => EventManagePage()));
                     }),
                 SpeedDialChild(
                     child: Icon(Icons.lightbulb),
@@ -113,8 +120,11 @@ class _MainHomeState extends State<MainHome> {
                     onTap: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => JobManagePage()));
+                          (Platform.isAndroid)
+                              ? MaterialPageRoute(
+                                  builder: (context) => JobManagePage())
+                              : CupertinoPageRoute(
+                                  builder: (context) => JobManagePage()));
                     }),
                 SpeedDialChild(
                     child: Icon(Icons.message),
@@ -122,8 +132,11 @@ class _MainHomeState extends State<MainHome> {
                     onTap: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => ComManagePage()));
+                          (Platform.isAndroid)
+                              ? MaterialPageRoute(
+                                  builder: (context) => ComManagePage())
+                              : CupertinoPageRoute(
+                                  builder: (context) => ComManagePage()));
                     }),
                 SpeedDialChild(
                     child: Icon(Icons.photo_library),
@@ -131,8 +144,11 @@ class _MainHomeState extends State<MainHome> {
                     onTap: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => AddPhotoPage()));
+                          (Platform.isAndroid)
+                              ? MaterialPageRoute(
+                                  builder: (context) => AddPhotoPage())
+                              : CupertinoPageRoute(
+                                  builder: (context) => AddPhotoPage()));
                     }),
                 SpeedDialChild(
                     child: Icon(Icons.question_answer),
@@ -140,8 +156,11 @@ class _MainHomeState extends State<MainHome> {
                     onTap: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => QuestionManagePage()));
+                          (Platform.isAndroid)
+                              ? MaterialPageRoute(
+                                  builder: (context) => QuestionManagePage())
+                              : CupertinoPageRoute(
+                                  builder: (context) => QuestionManagePage()));
                     }),
               ],
             )
@@ -159,10 +178,13 @@ class _MainHomeState extends State<MainHome> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return MainAlarm();
-                }));
+                Navigator.of(context).push((Platform.isAndroid)
+                    ? MaterialPageRoute(builder: (context) {
+                        return MainAlarm();
+                      })
+                    : CupertinoPageRoute(builder: (context) {
+                        return MainAlarm();
+                      }));
               },
               icon: Icon(
                 Icons.notifications_active,
@@ -268,7 +290,7 @@ class _MainHomeState extends State<MainHome> {
                                             CustomPageRightRoute(
                                                 child: EventPage(widget.user)))
                                         : Navigator.of(context).push(
-                                            MaterialPageRoute(
+                                            CupertinoPageRoute(
                                                 builder: (context) {
                                             return EventPage(widget.user);
                                           }));
@@ -324,7 +346,7 @@ class _MainHomeState extends State<MainHome> {
                                             child:
                                                 NoticePage(widget.userNumber)))
                                     : Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) {
+                                        CupertinoPageRoute(builder: (context) {
                                         return NoticePage(widget.userNumber);
                                       }));
                               },
@@ -374,7 +396,7 @@ class _MainHomeState extends State<MainHome> {
                                         CustomPageRightRoute(
                                             child: ComPage(widget.userNumber)))
                                     : Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) {
+                                        CupertinoPageRoute(builder: (context) {
                                         return ComPage(widget.userNumber);
                                       }));
                               },
@@ -457,7 +479,7 @@ class _MainHomeState extends State<MainHome> {
           if (!snapshot.hasData) {
             return const Align(
                 alignment: Alignment.center,
-                child: CircularProgressIndicator());
+                child: CircularProgressIndicator.adaptive());
           }
           final documents = snapshot.data!.docs;
           if (documents.isEmpty) {
@@ -485,7 +507,7 @@ class _MainHomeState extends State<MainHome> {
           if (!snapshot.hasData) {
             return const Align(
                 alignment: Alignment.center,
-                child: CircularProgressIndicator());
+                child: CircularProgressIndicator.adaptive());
           }
           final documents = snapshot.data!.docs;
           if (documents.isEmpty) {
@@ -598,7 +620,7 @@ class _MainHomeState extends State<MainHome> {
         stream: FirebaseFirestore.instance.collection('eventImage').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator.adaptive());
           }
           final documents = snapshot.data!.docs;
 
@@ -613,10 +635,13 @@ class _MainHomeState extends State<MainHome> {
                 builder: (BuildContext context) {
                   return GestureDetector(
                     onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return ZoomImage(url: doc['url']);
-                      }));
+                      Navigator.of(context).push((Platform.isAndroid)
+                          ? MaterialPageRoute(builder: (context) {
+                              return ZoomImage(url: doc['url']);
+                            })
+                          : CupertinoPageRoute(builder: (context) {
+                              return ZoomImage(url: doc['url']);
+                            }));
                     },
                     child: Hero(
                       transitionOnUserGestures: true,
@@ -653,17 +678,55 @@ class _MainHomeState extends State<MainHome> {
         ListTile(
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ComViewPage(
-                        title: com.title,
-                        content: com.content,
-                        author: '익명',
-                        time: com.time,
-                        id: doc.id,
-                        url: (com.url != "") ? com.url : null,
-                        user: widget.userNumber)));
+            (com.url == '')
+                ? Navigator.push(
+                    context,
+                    (Platform.isAndroid)
+                        ? MaterialPageRoute(
+                            builder: (context) => ComViewPage(
+                                title: com.title,
+                                content: com.content,
+                                author: '익명',
+                                time: com.time,
+                                id: doc.id,
+                                user: widget.userNumber,
+                                countLike: com.countLike,
+                                likedUsersList: com.likedUsersList))
+                        : CupertinoPageRoute(
+                            builder: (context) => ComViewPage(
+                                title: com.title,
+                                content: com.content,
+                                author: '익명',
+                                time: com.time,
+                                id: doc.id,
+                                user: widget.userNumber,
+                                countLike: com.countLike,
+                                likedUsersList: com.likedUsersList)))
+                : Navigator.push(
+                    context,
+                    (Platform.isAndroid)
+                        ? MaterialPageRoute(
+                            builder: (context) => ComViewPage(
+                                title: com.title,
+                                content: com.content,
+                                author: '익명',
+                                time: com.time,
+                                id: doc.id,
+                                url: com.url!,
+                                user: widget.userNumber,
+                                countLike: com.countLike,
+                                likedUsersList: com.likedUsersList))
+                        : CupertinoPageRoute(
+                            builder: (context) => ComViewPage(
+                                title: com.title,
+                                content: com.content,
+                                author: '익명',
+                                time: com.time,
+                                id: doc.id,
+                                url: com.url!,
+                                user: widget.userNumber,
+                                countLike: com.countLike,
+                                likedUsersList: com.likedUsersList)));
           },
           title: Text(
             com.title,
@@ -712,9 +775,13 @@ class _MainHomeState extends State<MainHome> {
           onTap: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => NoticeViewPage(notice.title,
-                        notice.content, notice.author, notice.time)));
+                (Platform.isAndroid)
+                    ? MaterialPageRoute(
+                        builder: (context) => NoticeViewPage(notice.title,
+                            notice.content, notice.author, notice.time))
+                    : CupertinoPageRoute(
+                        builder: (context) => NoticeViewPage(notice.title,
+                            notice.content, notice.author, notice.time)));
           },
           title: Text(
             notice.title,
@@ -755,7 +822,7 @@ class _MainHomeState extends State<MainHome> {
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator.adaptive());
           }
           final documents = snapshot.data!.docs;
 
@@ -783,15 +850,23 @@ class _MainHomeState extends State<MainHome> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (context) {
-                                  return EventViewPage(
-                                      title: doc['title'],
-                                      content: doc['content'],
-                                      author: doc['author'],
-                                      time: doc['time'],
-                                      url: doc['url']);
-                                }));
+                                Navigator.of(context).push((Platform.isAndroid)
+                                    ? MaterialPageRoute(builder: (context) {
+                                        return EventViewPage(
+                                            title: doc['title'],
+                                            content: doc['content'],
+                                            author: doc['author'],
+                                            time: doc['time'],
+                                            url: doc['url']);
+                                      })
+                                    : CupertinoPageRoute(builder: (context) {
+                                        return EventViewPage(
+                                            title: doc['title'],
+                                            content: doc['content'],
+                                            author: doc['author'],
+                                            time: doc['time'],
+                                            url: doc['url']);
+                                      }));
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,

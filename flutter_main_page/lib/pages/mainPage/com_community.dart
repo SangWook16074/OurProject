@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/com_view.dart';
 import 'package:flutter_main_page/pages/WritePages/com_write_com.dart';
@@ -55,9 +56,13 @@ class _ComPageState extends State<ComPage> {
           icon: Icon(Icons.edit),
           label: Text("글쓰기"),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (contexst) {
-              return WriteComPage(userNumber: widget.userNumber);
-            }));
+            Navigator.of(context).push((Platform.isAndroid)
+                ? MaterialPageRoute(builder: (contexst) {
+                    return WriteComPage(userNumber: widget.userNumber);
+                  })
+                : CupertinoPageRoute(builder: (contexst) {
+                    return WriteComPage(userNumber: widget.userNumber);
+                  }));
           },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -67,10 +72,14 @@ class _ComPageState extends State<ComPage> {
                 onPressed: () {
                   Navigator.push(
                       context,
-                      CustomPageRightRoute(
-                          child: SearchPage(
-                        topic: 'com',
-                      )));
+                      (Platform.isAndroid)
+                          ? CustomPageRightRoute(
+                              child: SearchPage(
+                              topic: 'com',
+                            ))
+                          : CupertinoPageRoute(builder: (context) {
+                              return SearchPage(topic: 'com');
+                            }));
                 },
                 icon: Icon(Icons.search))
           ],
@@ -111,7 +120,7 @@ class _ComPageState extends State<ComPage> {
             builder: (context, snapshot) {
               return (snapshot.connectionState == ConnectionState.waiting)
                   ? Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator.adaptive(),
                     )
                   : ListView.builder(
                       itemCount: snapshot.data!.docs.length,
@@ -167,17 +176,29 @@ class _ComPageState extends State<ComPage> {
           onTap: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => ComViewPage(
-                        title: title,
-                        content: content,
-                        author: '익명',
-                        time: time,
-                        id: id,
-                        url: url!,
-                        user: widget.userNumber,
-                        countLike: countLike,
-                        likedUsersList: likedUsersList)));
+                (Platform.isAndroid)
+                    ? MaterialPageRoute(
+                        builder: (context) => ComViewPage(
+                            title: title,
+                            content: content,
+                            author: '익명',
+                            time: time,
+                            id: id,
+                            url: url!,
+                            user: widget.userNumber,
+                            countLike: countLike,
+                            likedUsersList: likedUsersList))
+                    : CupertinoPageRoute(
+                        builder: (context) => ComViewPage(
+                            title: title,
+                            content: content,
+                            author: '익명',
+                            time: time,
+                            id: id,
+                            url: url!,
+                            user: widget.userNumber,
+                            countLike: countLike,
+                            likedUsersList: likedUsersList)));
           },
           title: Text(
             title,
@@ -248,16 +269,27 @@ class _ComPageState extends State<ComPage> {
           onTap: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => ComViewPage(
-                        title: title,
-                        content: content,
-                        author: '익명',
-                        time: time,
-                        id: id,
-                        user: widget.userNumber,
-                        countLike: countLike,
-                        likedUsersList: likedUsersList)));
+                (Platform.isAndroid)
+                    ? MaterialPageRoute(
+                        builder: (context) => ComViewPage(
+                            title: title,
+                            content: content,
+                            author: '익명',
+                            time: time,
+                            id: id,
+                            user: widget.userNumber,
+                            countLike: countLike,
+                            likedUsersList: likedUsersList))
+                    : CupertinoPageRoute(
+                        builder: (context) => ComViewPage(
+                            title: title,
+                            content: content,
+                            author: '익명',
+                            time: time,
+                            id: id,
+                            user: widget.userNumber,
+                            countLike: countLike,
+                            likedUsersList: likedUsersList)));
           },
           title: Text(
             title,
@@ -289,27 +321,4 @@ class _ComPageState extends State<ComPage> {
       ],
     );
   }
-
-  void _updatecountLike(String docID, List likedUsersList) {
-    FirebaseFirestore.instance
-        .collection('com')
-        .doc(docID)
-        .set({'countLike': likedUsersList.length}, SetOptions(merge: true));
-  }
-
-  _updatelikedUsersList(String docID, String userNumber, List usersList) {
-    FirebaseFirestore.instance.collection('com').doc(docID)
-        // .set({'likedUsersMap': userNumber}, SetOptions(merge: true));
-        .set({'likedUsersList': userCheck(usersList, userNumber)},
-            SetOptions(merge: true));
-  }
-}
-
-userCheck(List usersList, String userNumber) {
-  if (usersList.contains(userNumber)) {
-    usersList.remove(userNumber);
-  } else {
-    usersList.add(userNumber);
-  }
-  return usersList;
 }

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/mainPage/main_home.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -81,13 +84,19 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 onPressed: () async {
                   final prefs = await SharedPreferences.getInstance();
                   prefs.setBool('showHome', true);
-                  Navigator.of(context)
-                      .pushReplacement(MaterialPageRoute(builder: (context) {
-                    return MainHome(
-                        user: widget.user,
-                        isAdmin: widget.isAdmin,
-                        userNumber: widget.userNumber);
-                  }));
+                  Navigator.of(context).pushReplacement((Platform.isAndroid)
+                      ? MaterialPageRoute(builder: (context) {
+                          return MainHome(
+                              user: widget.user,
+                              isAdmin: widget.isAdmin,
+                              userNumber: widget.userNumber);
+                        })
+                      : CupertinoPageRoute(builder: (context) {
+                          return MainHome(
+                              user: widget.user,
+                              isAdmin: widget.isAdmin,
+                              userNumber: widget.userNumber);
+                        }));
                 },
                 child: Text(
                   '시작하기',

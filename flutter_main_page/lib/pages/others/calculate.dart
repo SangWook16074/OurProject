@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
@@ -272,45 +275,85 @@ class _CalculatePageState extends State<CalculatePage> {
   Widget _buildBottons() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          SizedBox(
-            height: 50,
-            width: 130,
-            child: ElevatedButton(
-                onPressed: () {
-                  _addInputField(context);
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.add),
-                    Text("과목추가"),
-                  ],
-                )),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          SizedBox(
-            height: 50,
-            width: 130,
-            child: ElevatedButton(
-                onPressed: () async {
-                  try {
-                    setState(() {
-                      _calculate();
-                    });
-                  } catch (e) {
-                    toastMessage("제대로 입력했나요?");
-                  }
-                },
-                child: Text("계산하기")),
-          ),
-        ],
-      ),
+      child: (Platform.isAndroid)
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                SizedBox(
+                  height: 50,
+                  width: 130,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        _addInputField(context);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.add),
+                          Text("과목추가"),
+                        ],
+                      )),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                SizedBox(
+                  height: 50,
+                  width: 130,
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          setState(() {
+                            _calculate();
+                          });
+                        } catch (e) {
+                          toastMessage("제대로 입력했나요?");
+                        }
+                      },
+                      child: Text("계산하기")),
+                ),
+              ],
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                SizedBox(
+                  height: 50,
+                  width: 130,
+                  child: CupertinoButton.filled(
+                      onPressed: () {
+                        _addInputField(context);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.add),
+                          Text("과목추가"),
+                        ],
+                      )),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                SizedBox(
+                  height: 50,
+                  width: 130,
+                  child: CupertinoButton.filled(
+                      onPressed: () async {
+                        try {
+                          setState(() {
+                            _calculate();
+                          });
+                        } catch (e) {
+                          toastMessage("제대로 입력했나요?");
+                        }
+                      },
+                      child: Text("계산하기")),
+                ),
+              ],
+            ),
     );
   }
 }

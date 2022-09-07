@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -20,8 +23,12 @@ class _UserDeleteState extends State<UserDelete> {
 
   Future<void> _signOut() async {
     await _auth.signOut();
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        (Platform.isAndroid)
+            ? MaterialPageRoute(builder: (context) => LoginPage())
+            : CupertinoPageRoute(builder: (context) => LoginPage()),
+        (route) => false);
   }
 
   void deleteUserFromFirebase(BuildContext context, String docId) async {
@@ -93,41 +100,89 @@ class _UserDeleteState extends State<UserDelete> {
                   SizedBox(
                     height: 20,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ElevatedButton(
-                          onPressed: () {
-                            if (_userNumber.text == '') {
-                              toastMessage('학번을 입력하세요.');
-                              return;
-                            }
+                  (Platform.isAndroid)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: 80,
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    if (_userNumber.text == '') {
+                                      toastMessage('학번을 입력하세요.');
+                                      return;
+                                    }
 
-                            if (_userNumber.text != widget.userNumber) {
-                              toastMessage('학번이 잘못입력되었습니다.');
-                              return;
-                            }
-                            deleteUserFromFirebase(context, _userNumber.text);
-                          },
-                          child: Text('확인')),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          '취소',
-                          style: TextStyle(color: Colors.blueGrey),
+                                    if (_userNumber.text != widget.userNumber) {
+                                      toastMessage('학번이 잘못입력되었습니다.');
+                                      return;
+                                    }
+                                    deleteUserFromFirebase(
+                                        context, _userNumber.text);
+                                  },
+                                  child: Text('확인')),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            SizedBox(
+                              width: 80,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  '취소',
+                                  style: TextStyle(color: Colors.blueGrey),
+                                ),
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: 80,
+                              child: CupertinoButton.filled(
+                                  onPressed: () {
+                                    if (_userNumber.text == '') {
+                                      toastMessage('학번을 입력하세요.');
+                                      return;
+                                    }
+
+                                    if (_userNumber.text != widget.userNumber) {
+                                      toastMessage('학번이 잘못입력되었습니다.');
+                                      return;
+                                    }
+                                    deleteUserFromFirebase(
+                                        context, _userNumber.text);
+                                  },
+                                  child: Text('확인')),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            SizedBox(
+                              width: 80,
+                              child: CupertinoButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  '취소',
+                                  style: TextStyle(color: Colors.blueGrey),
+                                ),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
-                        style: TextButton.styleFrom(
-                          backgroundColor: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),

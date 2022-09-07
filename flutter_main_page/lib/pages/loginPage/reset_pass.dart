@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -38,14 +41,23 @@ class _ResetPassPageState extends State<ResetPassPage> {
   }
 
   Future resetPassword(String email) async {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: ((context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }));
+    (Platform.isAndroid)
+        ? showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: ((context) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }))
+        : showCupertinoDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: ((context) {
+              return Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            }));
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       toastMessage('이메일이 발송되었습니다.');
@@ -168,25 +180,50 @@ class _ResetPassPageState extends State<ResetPassPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                checkUserInfo(_userNumber.text, _email.text);
-                              },
-                              child: Text('확인')),
+                          SizedBox(
+                            width: 80,
+                            child: (Platform.isAndroid)
+                                ? ElevatedButton(
+                                    onPressed: () {
+                                      checkUserInfo(
+                                          _userNumber.text, _email.text);
+                                    },
+                                    child: Text('확인'))
+                                : CupertinoButton.filled(
+                                    onPressed: () {
+                                      checkUserInfo(
+                                          _userNumber.text, _email.text);
+                                    },
+                                    child: Text('확인')),
+                          ),
                           SizedBox(
                             width: 10,
                           ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              '취소',
-                              style: TextStyle(color: Colors.blueGrey),
-                            ),
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.white,
-                            ),
+                          SizedBox(
+                            width: 80,
+                            child: (Platform.isAndroid)
+                                ? ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      '취소',
+                                      style: TextStyle(color: Colors.blueGrey),
+                                    ),
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                    ),
+                                  )
+                                : CupertinoButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      '취소',
+                                      style: TextStyle(color: Colors.blueGrey),
+                                    ),
+                                    color: Colors.white,
+                                  ),
                           ),
                         ],
                       ),

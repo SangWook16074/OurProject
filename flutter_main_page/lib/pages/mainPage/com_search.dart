@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../View_pages/notice_view.dart';
@@ -62,7 +65,7 @@ class _SearchPageState extends State<SearchPage> {
           builder: (context, snapshot) {
             return (snapshot.connectionState == ConnectionState.waiting)
                 ? Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator.adaptive(),
                   )
                 : ListView.builder(
                     itemCount: snapshot.data!.docs.length,
@@ -98,9 +101,13 @@ class _SearchPageState extends State<SearchPage> {
           onTap: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        NoticeViewPage(title, content, author, time)));
+                (Platform.isAndroid)
+                    ? MaterialPageRoute(
+                        builder: (context) =>
+                            NoticeViewPage(title, content, author, time))
+                    : CupertinoPageRoute(
+                        builder: (context) =>
+                            NoticeViewPage(title, content, author, time)));
           },
           title: Text(
             title,
@@ -116,18 +123,6 @@ class _SearchPageState extends State<SearchPage> {
           color: Colors.grey,
         )
       ],
-    );
-  }
-
-  Widget _buildNonItem() {
-    return Container(
-      height: 300,
-      child: Center(
-          child: Text(
-        '검색결과가 없습니다.',
-        style: TextStyle(
-            color: Colors.grey, fontSize: 15, fontWeight: FontWeight.bold),
-      )),
     );
   }
 }

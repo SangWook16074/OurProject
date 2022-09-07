@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/Update_Page/userinfo_update.dart';
@@ -46,68 +49,127 @@ class NavigationDrawerWidget extends StatelessWidget {
 
   void _createItemDialog(BuildContext context) {
     if (prefs.getBool('isSubscribe') == true) {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Text(
-                      '푸시 알림을 해제하시겠습니까?\n알림을 해제하시면 공지, 취업정보, 이벤트 등의 등록사항을 볼 수 없습니다.')
-                ],
-              ),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      FirebaseMessaging.instance
-                          .unsubscribeFromTopic("connectTopic");
-                      prefs.setBool('isSubscribe', false);
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("확인")),
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("취소")),
-              ],
-            );
-          });
+      (Platform.isAndroid)
+          ? showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: const [
+                      Text(
+                          '푸시 알림을 해제하시겠습니까?\n알림을 해제하시면 공지, 취업정보, 이벤트 등의 등록사항을 볼 수 없습니다.')
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          FirebaseMessaging.instance
+                              .unsubscribeFromTopic("connectTopic");
+                          prefs.setBool('isSubscribe', false);
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("확인")),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("취소")),
+                  ],
+                );
+              })
+          : showCupertinoDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return CupertinoAlertDialog(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: const [
+                      Text(
+                          '푸시 알림을 해제하시겠습니까?\n알림을 해제하시면 공지, 취업정보, 이벤트 등의 등록사항을 볼 수 없습니다.')
+                    ],
+                  ),
+                  actions: [
+                    CupertinoDialogAction(
+                        onPressed: () {
+                          FirebaseMessaging.instance
+                              .unsubscribeFromTopic("connectTopic");
+                          prefs.setBool('isSubscribe', false);
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("확인")),
+                    CupertinoDialogAction(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("취소")),
+                  ],
+                );
+              });
     } else {
-      showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const [Text('푸시 알림을 설정하시겠습니까?')],
-              ),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      FirebaseMessaging.instance
-                          .subscribeToTopic("connectTopic");
-                      prefs.setBool('isSubscribe', true);
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("확인")),
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("취소")),
-              ],
-            );
-          });
+      (Platform.isAndroid)
+          ? showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: const [Text('푸시 알림을 설정하시겠습니까?')],
+                  ),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          FirebaseMessaging.instance
+                              .subscribeToTopic("connectTopic");
+                          prefs.setBool('isSubscribe', true);
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("확인")),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("취소")),
+                  ],
+                );
+              })
+          : showCupertinoDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return CupertinoAlertDialog(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: const [Text('푸시 알림을 설정하시겠습니까?')],
+                  ),
+                  actions: [
+                    CupertinoDialogAction(
+                        onPressed: () {
+                          FirebaseMessaging.instance
+                              .subscribeToTopic("connectTopic");
+                          prefs.setBool('isSubscribe', true);
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("확인")),
+                    CupertinoDialogAction(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("취소")),
+                  ],
+                );
+              });
     }
   }
 
@@ -292,7 +354,9 @@ class NavigationDrawerWidget extends StatelessWidget {
               FirebaseAuth.instance.signOut();
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  (Platform.isAndroid)
+                      ? MaterialPageRoute(builder: (context) => LoginPage())
+                      : CupertinoPageRoute(builder: (context) => LoginPage()),
                   (route) => false);
             },
           ),
@@ -308,9 +372,13 @@ class NavigationDrawerWidget extends StatelessWidget {
     return ListTile(
       onTap: () {
         Navigator.of(context).pop();
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return onTap;
-        }));
+        Navigator.of(context).push((Platform.isAndroid)
+            ? MaterialPageRoute(builder: (context) {
+                return onTap;
+              })
+            : CupertinoPageRoute(builder: (context) {
+                return onTap;
+              }));
       },
       leading: Icon(
         icon,

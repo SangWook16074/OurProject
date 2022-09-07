@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -92,27 +93,54 @@ class _NoticeViewPageState extends State<NoticeViewPage> {
                 Divider(
                   color: Colors.grey,
                 ),
-                ElevatedButton(
-                    //취소 버튼
+                (Platform.isAndroid)
+                    ? SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                            //취소 버튼
 
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.blueGrey,
-                      padding: const EdgeInsets.all(16.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "목록",
-                          style: TextStyle(fontSize: 15, letterSpacing: 4.0),
-                        ),
-                        Icon(Icons.reorder),
-                      ],
-                    )),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.blueGrey,
+                              padding: const EdgeInsets.all(16.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "목록",
+                                  style: TextStyle(
+                                      fontSize: 15, letterSpacing: 4.0),
+                                ),
+                                Icon(Icons.reorder),
+                              ],
+                            )),
+                      )
+                    : SizedBox(
+                        width: 200,
+                        child: CupertinoButton(
+                            //취소 버튼
+
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            color: Colors.blueGrey,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "목록",
+                                  style: TextStyle(
+                                      fontSize: 15, letterSpacing: 4.0),
+                                ),
+                                Icon(Icons.reorder),
+                              ],
+                            )),
+                      ),
               ],
             ),
           )

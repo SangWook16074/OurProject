@@ -1,75 +1,34 @@
-import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
 
-class Write {
+import '../../main.dart';
+
+class FlagWrite {
   String title;
   String content;
   String time;
 
-  Write(this.title, this.content, this.time);
+  FlagWrite(this.title, this.content, this.time);
 }
 
-class WriteJobPage extends StatefulWidget {
+class FlagPage extends StatefulWidget {
   final String user;
-  const WriteJobPage(this.user, {Key? key}) : super(key: key);
+  const FlagPage({Key? key, required this.user}) : super(key: key);
 
   @override
-  State<WriteJobPage> createState() => _WriteJobPageState();
+  State<FlagPage> createState() => _FlagPageState();
 }
 
-class _WriteJobPageState extends State<WriteJobPage> {
+class _FlagPageState extends State<FlagPage> {
   var _now;
   final _title = TextEditingController();
   final _content = TextEditingController();
-
-  Future<bool> callOnFcmApiSendPushNotifications(
-      {required String title, required String body}) async {
-    const postUrl = 'https://fcm.googleapis.com/fcm/send';
-    final data = {
-      "to": "/topics/connectTopic",
-      "notification": {
-        "title": title,
-        "body": body,
-      },
-      "data": {
-        "type": '0rder',
-        "id": '28',
-        "click_action": 'FLUTTER_NOTIFICATION_CLICK',
-      }
-    };
-
-    final headers = {
-      'content-type': 'application/json',
-      'Authorization':
-          'key=AAAAGD39BhQ:APA91bHJ2kDvwE9yttcSqmN674ZRazo7fUhPnS7TplSCnX5TAZIFqkTP4tD-Gw2wb71Ul5JMD-KScUl9oQ1eB2pMIRG1GwX7gyz7KxKZHbRWuc7D7qa86KxyI8FGo9oOPUju3MZxsZg4' // 'key=YOUR_SERVER_KEY'
-    };
-
-    final response = await http.post(Uri.parse(postUrl),
-        body: json.encode(data),
-        encoding: Encoding.getByName('utf-8'),
-        headers: headers);
-
-    if (response.statusCode == 200) {
-      // on success do sth
-      print('test ok push CFM');
-      return true;
-    } else {
-      print(' CFM error');
-      // on failure do sth
-      return false;
-    }
-  }
-
-  void _createItemDialog(Write job, String user) {
+  void _createItemDialog(FlagWrite flag, String user) {
     (Platform.isAndroid)
         ? showDialog(
             context: context,
@@ -81,17 +40,12 @@ class _WriteJobPageState extends State<WriteJobPage> {
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
-                    Text('취업정보를 등록하시겠습니까? 등록된 취업정보는 내정보 페이지에서 관리할 수 있습니다.')
-                  ],
+                  children: const [Text('신고내용을 접수하시겠습니까?')],
                 ),
                 actions: [
                   TextButton(
                       onPressed: () {
-                        callOnFcmApiSendPushNotifications(
-                            title: '새 취업정보가 등록되었습니다.',
-                            body: '[취업정보] ${job.title}');
-                        _addNotice(job, user);
+                        _addNotice(flag, user);
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       },
@@ -112,17 +66,12 @@ class _WriteJobPageState extends State<WriteJobPage> {
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
-                    Text('취업정보를 등록하시겠습니까? 등록된 취업정보는 내정보 페이지에서 관리할 수 있습니다.')
-                  ],
+                  children: const [Text('신고내용을 접수하시겠습니까?')],
                 ),
                 actions: [
                   CupertinoDialogAction(
                       onPressed: () {
-                        callOnFcmApiSendPushNotifications(
-                            title: '새 취업정보가 등록되었습니다.',
-                            body: '[취업정보] ${job.title}');
-                        _addNotice(job, user);
+                        _addNotice(flag, user);
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       },
@@ -137,13 +86,14 @@ class _WriteJobPageState extends State<WriteJobPage> {
             });
   }
 
-  void _addNotice(Write job, String user) {
-    FirebaseFirestore.instance.collection('job').add({
-      'title': job.title,
-      'content': job.content,
+  void _addNotice(FlagWrite flag, String user) {
+    FirebaseFirestore.instance.collection('flag').add({
+      'title': flag.title,
+      'content': flag.content,
       'author': user,
-      'time': job.time,
+      'time': flag.time,
     });
+    toastMessage('신고가 등록되었습니다');
     _title.text = '';
     _content.text = '';
   }
@@ -163,7 +113,7 @@ class _WriteJobPageState extends State<WriteJobPage> {
         iconTheme: IconThemeData.fallback(),
         backgroundColor: Colors.white,
         title: Text(
-          "취업정보",
+          "신고하기",
           style: GoogleFonts.doHyeon(
             textStyle: mainStyle,
           ),
@@ -173,23 +123,22 @@ class _WriteJobPageState extends State<WriteJobPage> {
           IconButton(
               onPressed: () {
                 if (_title.text.isEmpty) {
-                  toastMessage('제목을 입력하세요');
+                  toastMessage('신고제목을 입력하세요');
                   return;
                 }
                 if (_content.text.isEmpty) {
-                  toastMessage('내용을 입력하세요');
+                  toastMessage('신고내용을 입력하세요');
                   return;
                 }
-
                 setState(() {
                   _now = DateFormat('yyyy-MM-dd - HH:mm:ss')
                       .format(DateTime.now());
                 });
                 _createItemDialog(
-                    Write(_title.text, _content.text, _now.toString()),
-                    widget.user);
+                    FlagWrite(_title.text, _content.text, _now.toString()),
+                    "정보통신공학과");
               },
-              icon: const Icon(Icons.check))
+              icon: Icon(Icons.check))
         ],
       ),
       resizeToAvoidBottomInset: true,
@@ -203,7 +152,7 @@ class _WriteJobPageState extends State<WriteJobPage> {
                   borderRadius: BorderRadius.circular(3),
                 ),
                 child: ListView(
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   children: [
                     TextField(
@@ -216,7 +165,7 @@ class _WriteJobPageState extends State<WriteJobPage> {
                         setState(() {});
                       },
                       decoration: const InputDecoration(
-                          hintText: "제목",
+                          hintText: "신고제목",
                           hintStyle: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                           contentPadding: EdgeInsets.symmetric(
@@ -235,7 +184,7 @@ class _WriteJobPageState extends State<WriteJobPage> {
                         setState(() {});
                       },
                       decoration: const InputDecoration(
-                          hintText: "내용을 입력하세요",
+                          hintText: "신고내용을 입력하세요",
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 20.0),
                           filled: true,

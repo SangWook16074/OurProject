@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/View_pages/zoom_image.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -79,10 +80,13 @@ class _EventViewPageState extends State<EventViewPage> {
                 (widget.url != '')
                     ? GestureDetector(
                         onTap: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return ZoomImage(url: widget.url!);
-                          }));
+                          Navigator.of(context).push((Platform.isAndroid)
+                              ? MaterialPageRoute(builder: (context) {
+                                  return ZoomImage(url: widget.url!);
+                                })
+                              : CupertinoPageRoute(builder: (context) {
+                                  return ZoomImage(url: widget.url!);
+                                }));
                         },
                         child: Hero(
                           transitionOnUserGestures: true,
@@ -131,27 +135,54 @@ class _EventViewPageState extends State<EventViewPage> {
                 Divider(
                   color: Colors.grey,
                 ),
-                ElevatedButton(
-                    //취소 버튼
+                (Platform.isAndroid)
+                    ? SizedBox(
+                        width: 200,
+                        child: ElevatedButton(
+                            //취소 버튼
 
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.blueGrey,
-                      padding: const EdgeInsets.all(16.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.navigate_before),
-                        Text(
-                          "이전",
-                          style: TextStyle(fontSize: 15, letterSpacing: 4.0),
-                        ),
-                      ],
-                    )),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.blueGrey,
+                              padding: const EdgeInsets.all(16.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.navigate_before),
+                                Text(
+                                  "이전",
+                                  style: TextStyle(
+                                      fontSize: 15, letterSpacing: 4.0),
+                                ),
+                              ],
+                            )),
+                      )
+                    : SizedBox(
+                        width: 200,
+                        child: CupertinoButton(
+                            //취소 버튼
+
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            color: Colors.blueGrey,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.navigate_before),
+                                Text(
+                                  "이전",
+                                  style: TextStyle(
+                                      fontSize: 15, letterSpacing: 4.0),
+                                ),
+                              ],
+                            )),
+                      ),
               ],
             ),
           )
