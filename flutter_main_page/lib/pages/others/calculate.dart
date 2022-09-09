@@ -323,6 +323,8 @@ class _CalculatePageState extends State<CalculatePage> {
                   height: 50,
                   width: 130,
                   child: CupertinoButton.filled(
+                      padding: EdgeInsets.all(0.0),
+                      minSize: 0.0,
                       onPressed: () {
                         _addInputField(context);
                       },
@@ -341,6 +343,8 @@ class _CalculatePageState extends State<CalculatePage> {
                   height: 50,
                   width: 130,
                   child: CupertinoButton.filled(
+                      padding: EdgeInsets.all(0.0),
+                      minSize: 0.0,
                       onPressed: () async {
                         try {
                           setState(() {

@@ -148,8 +148,10 @@ class _UserDeleteState extends State<UserDelete> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             SizedBox(
-                              width: 80,
+                              height: 40,
                               child: CupertinoButton.filled(
+                                  padding: EdgeInsets.all(0.0),
+                                  minSize: 80.0,
                                   onPressed: () {
                                     if (_userNumber.text == '') {
                                       toastMessage('학번을 입력하세요.');
@@ -169,8 +171,10 @@ class _UserDeleteState extends State<UserDelete> {
                               width: 10,
                             ),
                             SizedBox(
-                              width: 80,
+                              height: 40,
                               child: CupertinoButton(
+                                padding: EdgeInsets.all(0.0),
+                                minSize: 80.0,
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },

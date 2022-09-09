@@ -180,22 +180,24 @@ class _ResetPassPageState extends State<ResetPassPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(
-                            width: 80,
-                            child: (Platform.isAndroid)
-                                ? ElevatedButton(
-                                    onPressed: () {
-                                      checkUserInfo(
-                                          _userNumber.text, _email.text);
-                                    },
-                                    child: Text('확인'))
-                                : CupertinoButton.filled(
-                                    onPressed: () {
-                                      checkUserInfo(
-                                          _userNumber.text, _email.text);
-                                    },
-                                    child: Text('확인')),
-                          ),
+                          (Platform.isAndroid)
+                              ? ElevatedButton(
+                                  onPressed: () {
+                                    checkUserInfo(
+                                        _userNumber.text, _email.text);
+                                  },
+                                  child: Text('확인'))
+                              : SizedBox(
+                                  height: 40,
+                                  child: CupertinoButton.filled(
+                                      padding: EdgeInsets.all(0.0),
+                                      minSize: 80.0,
+                                      onPressed: () {
+                                        checkUserInfo(
+                                            _userNumber.text, _email.text);
+                                      },
+                                      child: Text('확인')),
+                                ),
                           SizedBox(
                             width: 10,
                           ),
@@ -214,15 +216,21 @@ class _ResetPassPageState extends State<ResetPassPage> {
                                       backgroundColor: Colors.white,
                                     ),
                                   )
-                                : CupertinoButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text(
-                                      '취소',
-                                      style: TextStyle(color: Colors.blueGrey),
+                                : SizedBox(
+                                    height: 40,
+                                    child: CupertinoButton(
+                                      padding: EdgeInsets.all(0.0),
+                                      minSize: 80.0,
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        '취소',
+                                        style:
+                                            TextStyle(color: Colors.blueGrey),
+                                      ),
+                                      color: Colors.white,
                                     ),
-                                    color: Colors.white,
                                   ),
                           ),
                         ],
