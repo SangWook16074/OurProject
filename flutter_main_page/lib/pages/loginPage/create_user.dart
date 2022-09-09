@@ -191,33 +191,49 @@ class _CreateUserPageState extends State<CreateUserPage> {
                           return Row(
                             children: [
                               (Platform.isAndroid)
-                                  ? ElevatedButton(
-                                      onPressed: _onNext, child: Text('다음'))
-                                  : CupertinoButton.filled(
-                                      onPressed: _onNext, child: Text('다음')),
+                                  ? SizedBox(
+                                      child: ElevatedButton(
+                                          onPressed: _onNext,
+                                          child: Text('다음')),
+                                    )
+                                  : SizedBox(
+                                      height: 40,
+                                      child: CupertinoButton.filled(
+                                          padding: EdgeInsets.all(0.0),
+                                          minSize: 80.0,
+                                          onPressed: _onNext,
+                                          child: Text('다음')),
+                                    ),
                               SizedBox(
                                 width: 10,
                               ),
                               (Platform.isAndroid)
-                                  ? ElevatedButton(
-                                      onPressed: _onCancel,
-                                      child: Text(
-                                        '취소',
-                                        style:
-                                            TextStyle(color: Colors.blueGrey),
-                                      ),
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: Colors.white,
+                                  ? SizedBox(
+                                      child: ElevatedButton(
+                                        onPressed: _onCancel,
+                                        child: Text(
+                                          '취소',
+                                          style:
+                                              TextStyle(color: Colors.blueGrey),
+                                        ),
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                        ),
                                       ),
                                     )
-                                  : CupertinoButton(
-                                      onPressed: _onCancel,
-                                      child: Text(
-                                        '취소',
-                                        style:
-                                            TextStyle(color: Colors.blueGrey),
+                                  : SizedBox(
+                                      height: 40,
+                                      child: CupertinoButton(
+                                        minSize: 80.0,
+                                        padding: EdgeInsets.all(0.0),
+                                        onPressed: _onCancel,
+                                        child: Text(
+                                          '취소',
+                                          style:
+                                              TextStyle(color: Colors.blueGrey),
+                                        ),
+                                        color: Colors.white,
                                       ),
-                                      color: Colors.white,
                                     ),
                             ],
                           );
