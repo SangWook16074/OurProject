@@ -116,7 +116,8 @@ class _WriteComPageState extends State<WriteComPage> {
         'time': com.time,
         'countLike': 0,
         'likedUsersList': [],
-        'url': getUrl
+        'url': getUrl,
+        'hateUsers': [],
       });
 
       return;
@@ -130,7 +131,8 @@ class _WriteComPageState extends State<WriteComPage> {
       'time': com.time,
       'countLike': 0,
       'likedUsersList': [],
-      'url': ''
+      'url': '',
+      'hateUsers': [],
     });
     _title.text = '';
     _content.text = '';

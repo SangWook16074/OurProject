@@ -69,9 +69,13 @@ class _NoticePageState extends State<NoticePage> {
                           ? CustomPageRightRoute(
                               child: SearchPage(
                               topic: 'notice',
+                              userNumber: widget.user,
                             ))
                           : CupertinoPageRoute(builder: (context) {
-                              return SearchPage(topic: 'notice');
+                              return SearchPage(
+                                topic: 'notice',
+                                userNumber: widget.user,
+                              );
                             }));
                 },
                 icon: Icon(Icons.search))
