@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/pages/loginPage/login_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -18,7 +19,18 @@ class FlagWrite {
 
 class FlagPage extends StatefulWidget {
   final String user;
-  const FlagPage({Key? key, required this.user}) : super(key: key);
+  final String targetTitle;
+  final String targetTime;
+  final String id;
+  final List? hateUsers;
+  const FlagPage(
+      {Key? key,
+      required this.user,
+      required this.targetTime,
+      required this.targetTitle,
+      required this.id,
+      required this.hateUsers})
+      : super(key: key);
 
   @override
   State<FlagPage> createState() => _FlagPageState();
@@ -45,7 +57,10 @@ class _FlagPageState extends State<FlagPage> {
                 actions: [
                   TextButton(
                       onPressed: () {
-                        _addNotice(flag, user);
+                        _addNotice(
+                            flag, user, widget.targetTitle, widget.targetTime);
+                        _addhateUsers();
+                        Navigator.of(context).pop();
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       },
@@ -71,7 +86,10 @@ class _FlagPageState extends State<FlagPage> {
                 actions: [
                   CupertinoDialogAction(
                       onPressed: () {
-                        _addNotice(flag, user);
+                        _addNotice(
+                            flag, user, widget.targetTitle, widget.targetTime);
+                        _addhateUsers();
+                        Navigator.of(context).pop();
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       },
@@ -86,16 +104,34 @@ class _FlagPageState extends State<FlagPage> {
             });
   }
 
-  void _addNotice(FlagWrite flag, String user) {
+  void _addNotice(
+      FlagWrite flag, String user, String targetTitle, String targetTime) {
     FirebaseFirestore.instance.collection('flag').add({
       'title': flag.title,
       'content': flag.content,
       'author': user,
       'time': flag.time,
+      'targetTitle': targetTitle,
+      'targetTime': targetTime
     });
     toastMessage('신고가 등록되었습니다');
     _title.text = '';
     _content.text = '';
+  }
+
+  void _addhateUsers() {
+    FirebaseFirestore.instance.collection('com').doc(widget.id).set({
+      'hateUsers': userCheck(widget.hateUsers!, widget.user),
+    }, SetOptions(merge: true));
+  }
+
+  userCheck(List usersList, String userNumber) {
+    if (usersList.contains(userNumber)) {
+      usersList.remove(userNumber);
+    } else {
+      usersList.add(userNumber);
+    }
+    return usersList;
   }
 
   @override

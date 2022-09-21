@@ -47,10 +47,11 @@ class Com {
   String number;
   int countLike;
   List likedUsersList;
+  List hateUsers;
   String? url;
 
   Com(this.title, this.author, this.content, this.time, this.number,
-      this.countLike, this.likedUsersList, this.url);
+      this.countLike, this.likedUsersList, this.hateUsers, this.url);
 }
 
 class MainHome extends StatefulWidget {
@@ -208,50 +209,6 @@ class _MainHomeState extends State<MainHome> {
           SizedBox(
             height: 20,
           ),
-          // Padding(
-          //   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-          //   child: Container(
-          //       padding: const EdgeInsets.all(8.0),
-          //       decoration: BoxDecoration(
-          //           borderRadius: BorderRadius.circular(25),
-          //           border: Border.all(color: Colors.grey, width: 1)),
-          //       child: ClipRRect(
-          //         child: Column(
-          //           children: [
-          //             Padding(
-          //               padding: const EdgeInsets.only(left: 8.0),
-          //               child: Row(
-          //                 mainAxisSize: MainAxisSize.max,
-          //                 children: [
-          //                   const Expanded(
-          //                     child: Text(
-          //                       '정보통신공학과',
-          //                       style:
-          //                           TextStyle(fontSize: 25, fontFamily: 'hoon'),
-          //                     ),
-          //                   ),
-          //                   TextButton(
-          //                       onPressed: () {
-          //                         Navigator.of(context).push(CustomPageRoute(
-          //                             child: NoticePage(widget.userNumber)));
-          //                       },
-          //                       child: Text(
-          //                         '더보기',
-          //                         style: TextStyle(color: Colors.blueGrey),
-          //                       ))
-          //                 ],
-          //               ),
-          //             ),
-          //             SizedBox(
-          //               height: 10,
-          //             ),
-          //             _buildImage(),
-          //             _buildText(context),
-          //           ],
-          //         ),
-          //       )),
-          // ),
-
           _buildIconNavigator(),
           SizedBox(
             height: 20,
@@ -417,7 +374,6 @@ class _MainHomeState extends State<MainHome> {
           SizedBox(
             height: 30,
           ),
-
           Stack(
             children: [
               Padding(
@@ -459,7 +415,6 @@ class _MainHomeState extends State<MainHome> {
               ),
             ],
           ),
-
           SizedBox(
             height: 10,
           ),
@@ -671,8 +626,38 @@ class _MainHomeState extends State<MainHome> {
   }
 
   Widget _buildItemCom(DocumentSnapshot doc, BuildContext context) {
-    final com = Com(doc['title'], doc['author'], doc['content'], doc['time'],
-        doc['number'], doc['countLike'], doc['likedUsersList'], doc['url']);
+    final com = Com(
+        doc['title'],
+        doc['author'],
+        doc['content'],
+        doc['time'],
+        doc['number'],
+        doc['countLike'],
+        doc['likedUsersList'],
+        doc['hateUsers'],
+        doc['url']);
+    if (doc['hateUsers'].contains(widget.userNumber)) {
+      return Column(
+        children: [
+          ListTile(
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+            onTap: () {
+              toastMessage('차단된 글은 볼 수 없습니다.');
+            },
+            title: Text(
+              '사용자가 차단한 글',
+              style: const TextStyle(
+                  fontSize: 17,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Divider(
+            color: Colors.grey,
+          )
+        ],
+      );
+    }
     return Column(
       children: [
         ListTile(
@@ -684,14 +669,16 @@ class _MainHomeState extends State<MainHome> {
                     (Platform.isAndroid)
                         ? MaterialPageRoute(
                             builder: (context) => ComViewPage(
-                                title: com.title,
-                                content: com.content,
-                                author: '익명',
-                                time: com.time,
-                                id: doc.id,
-                                user: widget.userNumber,
-                                countLike: com.countLike,
-                                likedUsersList: com.likedUsersList))
+                                  title: com.title,
+                                  content: com.content,
+                                  author: '익명',
+                                  time: com.time,
+                                  id: doc.id,
+                                  user: widget.userNumber,
+                                  countLike: com.countLike,
+                                  likedUsersList: com.likedUsersList,
+                                  hateUsers: com.hateUsers,
+                                ))
                         : CupertinoPageRoute(
                             builder: (context) => ComViewPage(
                                 title: com.title,
@@ -701,7 +688,8 @@ class _MainHomeState extends State<MainHome> {
                                 id: doc.id,
                                 user: widget.userNumber,
                                 countLike: com.countLike,
-                                likedUsersList: com.likedUsersList)))
+                                likedUsersList: com.likedUsersList,
+                                hateUsers: com.hateUsers)))
                 : Navigator.push(
                     context,
                     (Platform.isAndroid)

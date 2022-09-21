@@ -49,6 +49,14 @@ class _ComPageState extends State<ComPage> {
       ..load();
   }
 
+  userCheck(List hateUsers) {
+    if (hateUsers.contains(widget.userNumber)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,9 +84,13 @@ class _ComPageState extends State<ComPage> {
                           ? CustomPageRightRoute(
                               child: SearchPage(
                               topic: 'com',
+                              userNumber: widget.userNumber,
                             ))
                           : CupertinoPageRoute(builder: (context) {
-                              return SearchPage(topic: 'com');
+                              return SearchPage(
+                                topic: 'com',
+                                userNumber: widget.userNumber,
+                              );
                             }));
                 },
                 icon: Icon(Icons.search))
@@ -139,6 +151,7 @@ class _ComPageState extends State<ComPage> {
                               data['time'],
                               data['countLike'],
                               data['likedUsersList'],
+                              data['hateUsers'],
                             );
                           } else {
                             return _buildItemImageWidget(
@@ -149,6 +162,7 @@ class _ComPageState extends State<ComPage> {
                                 data['time'],
                                 data['countLike'],
                                 data['likedUsersList'],
+                                data['hateUsers'],
                                 data['url']);
                           }
                         }
@@ -168,7 +182,30 @@ class _ComPageState extends State<ComPage> {
       String time,
       int countLike,
       List likedUsersList,
+      List hateUsers,
       String? url) {
+    if (hateUsers.contains(widget.userNumber)) {
+      return Column(
+        children: [
+          ListTile(
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+            onTap: () {
+              toastMessage('차단한 글은 볼 수 없습니다');
+            },
+            title: Text(
+              '사용자가 차단한 글',
+              style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Divider(
+            color: Colors.grey,
+          )
+        ],
+      );
+    }
     return Column(
       children: [
         ListTile(
@@ -261,7 +298,30 @@ class _ComPageState extends State<ComPage> {
     String time,
     int countLike,
     List likedUsersList,
+    List hateUsers,
   ) {
+    if (hateUsers.contains(widget.userNumber)) {
+      return Column(
+        children: [
+          ListTile(
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+            onTap: () {
+              toastMessage('차단한 글은 볼 수 없습니다');
+            },
+            title: Text(
+              '사용자가 차단한 글',
+              style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Divider(
+            color: Colors.grey,
+          )
+        ],
+      );
+    }
     return Column(
       children: [
         ListTile(
@@ -272,24 +332,28 @@ class _ComPageState extends State<ComPage> {
                 (Platform.isAndroid)
                     ? MaterialPageRoute(
                         builder: (context) => ComViewPage(
-                            title: title,
-                            content: content,
-                            author: '익명',
-                            time: time,
-                            id: id,
-                            user: widget.userNumber,
-                            countLike: countLike,
-                            likedUsersList: likedUsersList))
+                              title: title,
+                              content: content,
+                              author: '익명',
+                              time: time,
+                              id: id,
+                              user: widget.userNumber,
+                              countLike: countLike,
+                              likedUsersList: likedUsersList,
+                              hateUsers: hateUsers,
+                            ))
                     : CupertinoPageRoute(
                         builder: (context) => ComViewPage(
-                            title: title,
-                            content: content,
-                            author: '익명',
-                            time: time,
-                            id: id,
-                            user: widget.userNumber,
-                            countLike: countLike,
-                            likedUsersList: likedUsersList)));
+                              title: title,
+                              content: content,
+                              author: '익명',
+                              time: time,
+                              id: id,
+                              user: widget.userNumber,
+                              countLike: countLike,
+                              likedUsersList: likedUsersList,
+                              hateUsers: hateUsers,
+                            )));
           },
           title: Text(
             title,

@@ -29,6 +29,7 @@ class ComViewPage extends StatefulWidget {
   final String? url;
   final int? countLike;
   final List? likedUsersList;
+  final List? hateUsers;
   const ComViewPage(
       {Key? key,
       required this.title,
@@ -39,7 +40,8 @@ class ComViewPage extends StatefulWidget {
       this.user,
       this.url,
       this.countLike,
-      this.likedUsersList})
+      this.likedUsersList,
+      this.hateUsers})
       : super(key: key);
 
   @override
@@ -314,20 +316,28 @@ class _ComViewPageState extends State<ComViewPage> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.of(context).push(
-                                          (Platform.isAndroid)
-                                              ? MaterialPageRoute(
-                                                  builder: (context) {
-                                                  return FlagPage(
-                                                    user: widget.user!,
-                                                  );
-                                                })
-                                              : CupertinoPageRoute(
-                                                  builder: (context) {
-                                                  return FlagPage(
-                                                    user: widget.user!,
-                                                  );
-                                                }));
+                                      Navigator.of(context).push((Platform
+                                              .isAndroid)
+                                          ? MaterialPageRoute(
+                                              builder: (context) {
+                                              return FlagPage(
+                                                user: widget.user!,
+                                                targetTitle: widget.title,
+                                                targetTime: widget.time,
+                                                id: widget.id!,
+                                                hateUsers: widget.hateUsers!,
+                                              );
+                                            })
+                                          : CupertinoPageRoute(
+                                              builder: (context) {
+                                              return FlagPage(
+                                                user: widget.user!,
+                                                targetTitle: widget.title,
+                                                targetTime: widget.time,
+                                                id: widget.id!,
+                                                hateUsers: widget.hateUsers!,
+                                              );
+                                            }));
                                     },
                                     child: Row(
                                       children: [
