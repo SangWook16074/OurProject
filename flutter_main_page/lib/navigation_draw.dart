@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/pages/Update_Page/userinfo_update.dart';
+import 'package:flutter_main_page/pages/market/com_market.dart';
 import 'package:flutter_main_page/pages/others/QandAhome.dart';
 import 'package:flutter_main_page/pages/others/delete_user.dart';
 import 'package:flutter_main_page/pages/others/feedback.dart';
@@ -217,6 +218,14 @@ class NavigationDrawerWidget extends StatelessWidget {
             icon: Icons.message,
             onTap: ComPage(
               this.userNumber,
+            ),
+          ),
+          _buildMenuItem(
+            context,
+            text: '전공서 중고마켓',
+            icon: Icons.wallet_giftcard,
+            onTap: MarketPage(
+              userNumber: this.userNumber,
             ),
           ),
           Divider(

@@ -13,6 +13,7 @@ import 'package:flutter_main_page/pages/AdminPage/notice_manage.dart';
 import 'package:flutter_main_page/pages/View_pages/event_view.dart';
 import 'package:flutter_main_page/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/pages/View_pages/zoom_image.dart';
+import 'package:flutter_main_page/pages/market/com_market.dart';
 import 'package:flutter_main_page/pages/mainPage/main_alarm.dart';
 import 'package:flutter_main_page/pages/mainPage/com_notice.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -37,6 +38,16 @@ class Notice {
   String time;
 
   Notice(this.title, this.content, this.author, this.time);
+}
+
+class Market {
+  String title;
+  String content;
+  String price;
+  String time;
+  String url;
+
+  Market(this.title, this.content, this.price, this.time, this.url);
 }
 
 class Com {
@@ -371,6 +382,10 @@ class _MainHomeState extends State<MainHome> {
                   ],
                 )),
           ),
+          SizedBox(
+            height: 30,
+          ),
+          _buildMarket(),
           SizedBox(
             height: 30,
           ),
@@ -887,5 +902,123 @@ class _MainHomeState extends State<MainHome> {
             }).toList(),
           );
         });
+  }
+
+  Widget _buildMarket() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              border: Border.all(color: Colors.grey, width: 1)),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '전공서 중고마켓',
+                        style: GoogleFonts.doHyeon(
+                          textStyle: mainStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text('사용하지 않는 전공서를 필요한 학과사람들에게 중고로 판매해보세요!'),
+                ElevatedButton.icon(
+                    icon: Icon(Icons.arrow_right_alt),
+                    onPressed: () {
+                      (Platform.isAndroid)
+                          ? Navigator.of(context).push(CustomPageRightRoute(
+                              child: MarketPage(
+                              userNumber: widget.userNumber,
+                            )))
+                          : Navigator.of(context)
+                              .push(CupertinoPageRoute(builder: (context) {
+                              return MarketPage(
+                                userNumber: widget.userNumber,
+                              );
+                            }));
+                    },
+                    label: Text(
+                      '마켓으로',
+                      style: TextStyle(color: Colors.white),
+                    ))
+              ],
+            ),
+          )),
+    );
+  }
+
+  Widget _buildMarketItem() {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('market')
+            .orderBy('time', descending: true)
+            .limit(5)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Align(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator.adaptive());
+          }
+          final documents = snapshot.data!.docs;
+          if (documents.isEmpty) {
+            return _buildNonItem();
+          } else {
+            return ListView(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              children:
+                  documents.map((doc) => _MarketItem(doc, context)).toList(),
+            );
+          }
+        });
+  }
+
+  Widget _MarketItem(DocumentSnapshot doc, BuildContext context) {
+    final market = Market(
+        doc['title'], doc['content'], doc['price'], doc['time'], doc['url']);
+    return Container(
+      child: Column(
+        children: [
+          ListTile(
+            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+            onTap: () {
+              // Navigator.push(
+              //     context,
+              //     (Platform.isAndroid)
+              //         ? MaterialPageRoute(
+              //             builder: (context) => NoticeViewPage(notice.title,
+              //                 notice.content, notice.author, notice.time))
+              //         : CupertinoPageRoute(
+              //             builder: (context) => NoticeViewPage(notice.title,
+              //                 notice.content, notice.author, notice.time)));
+            },
+            title: Text(
+              market.title,
+              style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey),
+            ),
+            subtitle: Text(
+              "익명 | ${market.time}",
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+          Divider(),
+        ],
+      ),
+    );
   }
 }
