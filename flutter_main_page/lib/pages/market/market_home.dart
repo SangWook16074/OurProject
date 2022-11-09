@@ -116,6 +116,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
 
                   return _buildMarketItem(
                       id,
+                      data['server'],
                       data['title'],
                       data['price'],
                       data['time'],
@@ -127,8 +128,8 @@ class _MarketHomePageState extends State<MarketHomePage> {
         });
   }
 
-  Widget _buildMarketItem(String id, String title, String price, String time,
-      String content, String url, List hateUsers) {
+  Widget _buildMarketItem(String id, String server, String title, String price,
+      String time, String content, String url, List hateUsers) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Container(
@@ -142,6 +143,8 @@ class _MarketHomePageState extends State<MarketHomePage> {
                     ? MaterialPageRoute(builder: (context) {
                         return MarketItemPage(
                           id: id,
+                          userNumber: widget.userNumber,
+                          server: server,
                           title: title,
                           price: price,
                           time: time,
@@ -151,6 +154,8 @@ class _MarketHomePageState extends State<MarketHomePage> {
                       })
                     : CupertinoPageRoute(builder: (context) {
                         return MarketItemPage(
+                          userNumber: widget.userNumber,
+                          server: server,
                           id: id,
                           title: title,
                           price: price,
@@ -223,7 +228,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
             ),
             Align(
               alignment: Alignment.center,
-              child: (hateUsers.contains(widget.userNumber))
+              child: (!hateUsers.contains(widget.userNumber))
                   ? Container(
                       width: MediaQuery.of(context).size.width - 10,
                       height: MediaQuery.of(context).size.width * (1 / 3) + 15,
@@ -268,7 +273,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
                       },
                     )
                   : AndroidPopUp(
-                      hateUsers, id, hateUsers.contains(widget.userNumber)),
+                      hateUsers, id, !hateUsers.contains(widget.userNumber)),
             ),
           ],
         ),
@@ -277,13 +282,12 @@ class _MarketHomePageState extends State<MarketHomePage> {
   }
 
   void buildIosPopUp(List<dynamic> hateUsers, String id) {
-    (hateUsers.contains(widget.userNumber))
-        ? IosShowItemPopUp(hateUsers, id, hateUsers.contains(widget.userNumber))
-        : IosNoShowItemPopUp(
-            hateUsers, id, hateUsers.contains(widget.userNumber));
+    (!hateUsers.contains(widget.userNumber))
+        ? IosShowItemPopUp(hateUsers, id)
+        : IosNoShowItemPopUp(hateUsers, id);
   }
 
-  Future<void> IosShowItemPopUp(List hateUsers, String id, condition) async {
+  Future<void> IosShowItemPopUp(List hateUsers, String id) async {
     final int? number = await showCupertinoModalPopup(
         context: context, builder: buildShowItemActionSheet);
 
@@ -297,7 +301,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
     }
   }
 
-  Future<void> IosNoShowItemPopUp(List hateUsers, String id, condition) async {
+  Future<void> IosNoShowItemPopUp(List hateUsers, String id) async {
     final int? number = await showCupertinoModalPopup(
         context: context, builder: buildNoShowItemActionSheet);
 

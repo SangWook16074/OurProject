@@ -66,6 +66,7 @@ dependencies:
   firebase_performance: ^0.8.2+4
   rename: ^2.0.1
   flutter_platform_widgets: ^2.0.0
+  uuid: ^3.0.6
   
 
 

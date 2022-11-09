@@ -127,6 +127,7 @@ class _MarkerAddPageState extends State<MarkerAddPage> {
 
       final getUrl = await ref.getDownloadURL();
       FirebaseFirestore.instance.collection('market').add({
+        'server': widget.userNumber,
         'title': market.title,
         'content': market.content,
         'number': widget.userNumber,

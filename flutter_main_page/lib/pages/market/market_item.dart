@@ -1,29 +1,49 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/pages/market/market_chat_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../main.dart';
 import '../View_pages/zoom_image.dart';
 
+// ignore: must_be_immutable
 class MarketItemPage extends StatelessWidget {
+  final String userNumber;
   final String id;
+  final String server;
   final String title;
   final String content;
   final String price;
   final String time;
   final String url;
-  const MarketItemPage(
-      {Key? key,
-      required this.id,
-      required this.title,
-      required this.content,
-      required this.price,
-      required this.time,
-      required this.url})
-      : super(key: key);
+  MarketItemPage({
+    Key? key,
+    required this.id,
+    required this.userNumber,
+    required this.server,
+    required this.title,
+    required this.content,
+    required this.price,
+    required this.time,
+    required this.url,
+  }) : super(key: key);
+  String chatID = Uuid().v1();
+
+  void _makeChatRoom() {
+    var db = FirebaseFirestore.instance.collection('chat').doc(chatID);
+    db.set({
+      'listner': [
+        this.server,
+        this.userNumber,
+      ]
+    });
+    db.collection('messages').add({});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +60,29 @@ class MarketItemPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 10.0,
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          if (this.server == this.userNumber) {
+            toastMessage('본인이 등록한 상품입니다');
+            return;
+          }
+          _makeChatRoom();
+          await Navigator.of(context).pushReplacement((Platform.isAndroid)
+              ? MaterialPageRoute(builder: (context) {
+                  return ChatViewPage(
+                    chatID: chatID,
+                  );
+                })
+              : CupertinoPageRoute(builder: (context) {
+                  return ChatViewPage(
+                    chatID: chatID,
+                  );
+                }));
+        },
+        icon: Icon(Icons.chat),
+        label: Text('문의하기'),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Center(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -136,16 +179,6 @@ class MarketItemPage extends StatelessWidget {
                   height: 150,
                 ),
               ),
-              ElevatedButton(
-                  onPressed: () {},
-                  child: Text(
-                    '문의하기',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.blueGrey,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20))))
             ],
           ),
         ),
