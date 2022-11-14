@@ -122,14 +122,23 @@ class _MarketHomePageState extends State<MarketHomePage> {
                       data['time'],
                       data['content'],
                       data['url'],
-                      data['hateUsers']);
+                      data['hateUsers'],
+                      data['serverToken']);
                 });
           }
         });
   }
 
-  Widget _buildMarketItem(String id, String server, String title, String price,
-      String time, String content, String url, List hateUsers) {
+  Widget _buildMarketItem(
+      String id,
+      String server,
+      String title,
+      String price,
+      String time,
+      String content,
+      String url,
+      List hateUsers,
+      String serverToken) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Container(
@@ -150,6 +159,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
                           time: time,
                           content: content,
                           url: url,
+                          serverToken: serverToken,
                         );
                       })
                     : CupertinoPageRoute(builder: (context) {
@@ -162,6 +172,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
                           time: time,
                           content: content,
                           url: url,
+                          serverToken: serverToken,
                         );
                       }));
               },
@@ -203,7 +214,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
                     Container(
                       padding: EdgeInsets.all(10.0),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Text(

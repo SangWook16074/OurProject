@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ class MarkerAddPage extends StatefulWidget {
 }
 
 class _MarkerAddPageState extends State<MarkerAddPage> {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
   File? image;
   var _now;
   final title = TextEditingController(); // 제목
@@ -118,6 +121,7 @@ class _MarkerAddPageState extends State<MarkerAddPage> {
 
   void _addMarketItem(Write market) async {
     if (image != null) {
+      String? token = await messaging.getToken();
       final ref = FirebaseStorage.instance
           .ref()
           .child('market')
@@ -135,6 +139,7 @@ class _MarkerAddPageState extends State<MarkerAddPage> {
         'time': market.time,
         'url': getUrl,
         'hateUsers': [],
+        'serverToken': token,
       });
 
       return;

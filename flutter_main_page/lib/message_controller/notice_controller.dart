@@ -46,7 +46,7 @@ class NotificationController extends GetxController {
         prefs.setBool('isSubscribe', true);
       }
 
-      print(token);
+      print('이 장치의 토큰 : $token');
     } catch (e) {}
   }
 

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,12 +7,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/chat_bubble.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:http/http.dart' as http;
 
 enum MenuItem { item1, item2 }
 
 class ChatViewPage extends StatefulWidget {
   final String chatID;
-  const ChatViewPage({Key? key, required this.chatID}) : super(key: key);
+  final String userNumber;
+  ChatViewPage({Key? key, required this.chatID, required this.userNumber})
+      : super(key: key);
 
   @override
   State<ChatViewPage> createState() => _ChatViewPageState();
@@ -21,6 +25,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
   TextEditingController _chat = TextEditingController();
 
   final user = FirebaseAuth.instance.currentUser;
+  final db = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +57,13 @@ class _ChatViewPageState extends State<ChatViewPage> {
   }
 
   void chatSend(String message) {
-    var db =
-        FirebaseFirestore.instance.collection('chat/${widget.chatID}/messages');
-    db.add({'message': message, 'time': Timestamp.now(), 'userID': user!.uid});
+    var ref = db.collection('chat/${widget.chatID}/messages');
+    ref.add({'message': message, 'time': Timestamp.now(), 'userID': user!.uid});
+  }
+
+  void updateRecentMessage(String message) {
+    var ref = db.collection('chat').doc(widget.chatID);
+    ref.update({'title': message, 'time': Timestamp.now()});
   }
 
   Widget _buildChatBody() {
@@ -78,9 +87,12 @@ class _ChatViewPageState extends State<ChatViewPage> {
               itemBuilder: (context, index) {
                 var data =
                     snapshot.data!.docs[index].data() as Map<String, dynamic>;
-                return ChatBubble(
-                    message: data['message'],
-                    isMe: data['userID'].toString() == user!.uid);
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ChatBubble(
+                      message: data['message'],
+                      isMe: data['userID'].toString() == user!.uid),
+                );
               },
             );
           }),
@@ -111,6 +123,8 @@ class _ChatViewPageState extends State<ChatViewPage> {
               }
 
               chatSend(_chat.text);
+              updateRecentMessage(_chat.text);
+              callOnFcmApiSendPushNotifications(title: '상대방', body: _chat.text);
               setState(() {
                 _chat.text = '';
               });
@@ -122,7 +136,28 @@ class _ChatViewPageState extends State<ChatViewPage> {
     );
   }
 
-  void _createItemDialog(String id, List hateUsers) {
+  Future<void> quitChatRoom() async {
+    var list = await FirebaseFirestore.instance
+        .collection('chat')
+        .doc(widget.chatID)
+        .get();
+    var users = list['listener'];
+    if (users.length == 1) {
+      FirebaseFirestore.instance.collection('chat').doc(widget.chatID).delete();
+      return;
+    }
+    FirebaseFirestore.instance.collection('chat').doc(widget.chatID).set(
+        {'listener': userQuit(list['listener'], widget.userNumber)},
+        SetOptions(merge: true));
+  }
+
+  userQuit(List usersList, String userNumber) {
+    usersList.remove(userNumber);
+
+    return usersList;
+  }
+
+  void _createItemDialog() {
     (Platform.isAndroid)
         ? showDialog(
             context: context,
@@ -138,7 +173,8 @@ class _ChatViewPageState extends State<ChatViewPage> {
                 ),
                 actions: [
                   TextButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        quitChatRoom();
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       },
@@ -164,6 +200,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
                 actions: [
                   CupertinoDialogAction(
                       onPressed: () {
+                        quitChatRoom();
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       },
@@ -196,7 +233,9 @@ class _ChatViewPageState extends State<ChatViewPage> {
       icon: Icon(Icons.menu),
       onSelected: (value) {
         if (value == MenuItem.item1) {}
-        if (value == MenuItem.item2) {}
+        if (value == MenuItem.item2) {
+          _createItemDialog();
+        }
       },
       itemBuilder: (context) => [
         PopupMenuItem(
@@ -227,6 +266,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
           CupertinoActionSheetAction(
             isDestructiveAction: true,
             onPressed: () {
+              _createItemDialog();
               Navigator.of(context).pop(2);
             },
             child: Text('대화방 나가기'),
@@ -260,5 +300,52 @@ class _ChatViewPageState extends State<ChatViewPage> {
             Navigator.of(context).pop();
           },
         ));
+  }
+
+  Future<bool> callOnFcmApiSendPushNotifications({
+    required String title,
+    required String body,
+  }) async {
+    var list = await FirebaseFirestore.instance
+        .collection('chat')
+        .doc(widget.chatID)
+        .get();
+
+    String? token = list['token'][widget.userNumber];
+
+    const postUrl = 'https://fcm.googleapis.com/fcm/send';
+    final data = {
+      "to": token,
+      "notification": {
+        "title": title,
+        "body": body,
+      },
+      "data": {
+        "type": '0rder',
+        "id": '28',
+        "click_action": 'FLUTTER_NOTIFICATION_CLICK',
+      }
+    };
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization':
+          'key=AAAAGD39BhQ:APA91bHJ2kDvwE9yttcSqmN674ZRazo7fUhPnS7TplSCnX5TAZIFqkTP4tD-Gw2wb71Ul5JMD-KScUl9oQ1eB2pMIRG1GwX7gyz7KxKZHbRWuc7D7qa86KxyI8FGo9oOPUju3MZxsZg4' // 'key=YOUR_SERVER_KEY'
+    };
+
+    final response = await http.post(Uri.parse(postUrl),
+        body: json.encode(data),
+        encoding: Encoding.getByName('utf-8'),
+        headers: headers);
+
+    if (response.statusCode == 200) {
+      // on success do sth
+      print('test ok push CFM');
+      return true;
+    } else {
+      print(' CFM error');
+      // on failure do sth
+      return false;
+    }
   }
 }
