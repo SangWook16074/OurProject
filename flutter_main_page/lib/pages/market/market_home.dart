@@ -362,13 +362,6 @@ class _MarketHomePageState extends State<MarketHomePage> {
           );
   }
 
-  Widget _buildNonItem() {
-    return Center(
-      child: Container(
-          child: Text('등록된 상품이 없습니다', style: TextStyle(fontSize: 40))),
-    );
-  }
-
   Widget buildShowItemActionSheet(BuildContext context) {
     return CupertinoActionSheet(
         actions: [
@@ -415,5 +408,12 @@ class _MarketHomePageState extends State<MarketHomePage> {
             Navigator.of(context).pop();
           },
         ));
+  }
+
+  Widget _buildNonItem() {
+    return Center(
+      child: Container(
+          child: Text('등록된 상품이 없습니다', style: TextStyle(fontSize: 40))),
+    );
   }
 }
