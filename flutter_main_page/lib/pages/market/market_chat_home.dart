@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/market/market_chat_page.dart';
@@ -15,12 +16,14 @@ class MarketChatPage extends StatefulWidget {
 }
 
 class _MarketChatPageState extends State<MarketChatPage> {
+  final user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('chat')
-            .where('listener', arrayContains: widget.userNumber)
+            .where('listener', arrayContains: user!.uid)
             .orderBy('time', descending: true)
             .snapshots(),
         builder: (context, snapshot) {

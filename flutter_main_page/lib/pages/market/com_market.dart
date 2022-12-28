@@ -7,7 +7,7 @@ import 'package:flutter_main_page/pages/market/market_myinfo.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../main.dart';
-import 'market_chat.dart';
+import 'market_chat_home.dart';
 import 'market_home.dart';
 
 class MarketPage extends StatefulWidget {

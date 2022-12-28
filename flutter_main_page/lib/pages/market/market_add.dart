@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,6 +36,7 @@ class MarkerAddPage extends StatefulWidget {
 
 class _MarkerAddPageState extends State<MarkerAddPage> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  final user = FirebaseAuth.instance.currentUser;
 
   File? image;
   var _now;
@@ -131,7 +133,7 @@ class _MarkerAddPageState extends State<MarkerAddPage> {
 
       final getUrl = await ref.getDownloadURL();
       FirebaseFirestore.instance.collection('market').add({
-        'server': widget.userNumber,
+        'server': user!.uid,
         'title': market.title,
         'content': market.content,
         'number': widget.userNumber,

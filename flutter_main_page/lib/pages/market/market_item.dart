@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,12 +38,13 @@ class MarketItemPage extends StatelessWidget {
   }) : super(key: key);
 
   String chatID = Uuid().v1();
+  final user = FirebaseAuth.instance.currentUser;
 
   Future _checkAlreadyQuest(BuildContext context) async {
     try {
       var data = await FirebaseFirestore.instance
           .collection('chat')
-          .where('listner', arrayContains: this.userNumber)
+          .where('listener', arrayContains: user!.uid)
           .where('productID', isEqualTo: this.id)
           .get();
 
@@ -64,15 +66,14 @@ class MarketItemPage extends StatelessWidget {
     db.set({
       'listener': [
         this.server,
-        this.userNumber,
+        user!.uid,
       ],
-      'token': {this.server: myToken, this.userNumber: this.serverToken},
+      'token': {this.server: myToken, user!.uid: this.serverToken},
       'title': '새롭게 생긴 채팅',
       'time': Timestamp.now(),
       'productID': this.id,
       'productName': this.title,
     });
-    db.collection('messages').add({});
 
     await Navigator.of(context).pushReplacement((Platform.isAndroid)
         ? MaterialPageRoute(builder: (context) {
@@ -106,7 +107,7 @@ class MarketItemPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          if (this.server == this.userNumber) {
+          if (this.server == user!.uid) {
             toastMessage('본인이 등록한 상품입니다');
             return;
           }

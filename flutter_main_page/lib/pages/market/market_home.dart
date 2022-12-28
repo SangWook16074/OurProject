@@ -104,7 +104,8 @@ class _MarketHomePageState extends State<MarketHomePage> {
             return Center(
               child: CircularProgressIndicator.adaptive(),
             );
-          } else if (!snapshot.hasData) {
+          }
+          if (snapshot.data!.docs.isEmpty) {
             return _buildNonItem();
           } else {
             return ListView.builder(
@@ -413,7 +414,10 @@ class _MarketHomePageState extends State<MarketHomePage> {
   Widget _buildNonItem() {
     return Center(
       child: Container(
-          child: Text('등록된 상품이 없습니다', style: TextStyle(fontSize: 40))),
+        child: Text(
+          '등록된 상품이 없습니다.',
+        ),
+      ),
     );
   }
 }

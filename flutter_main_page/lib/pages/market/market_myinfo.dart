@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/pages/market/market_item_view.dart';
@@ -16,6 +17,8 @@ class MarketMyInfoPage extends StatefulWidget {
 }
 
 class _MarketMyInfoPageState extends State<MarketMyInfoPage> {
+  final user = FirebaseAuth.instance.currentUser;
+
   void _createUpdateItemDialog() {
     (Platform.isAndroid)
         ? showDialog(
@@ -132,7 +135,7 @@ class _MarketMyInfoPageState extends State<MarketMyInfoPage> {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('market')
-            .where('server', isEqualTo: widget.userNumber)
+            .where('server', isEqualTo: user!.uid)
             .orderBy('time', descending: true)
             .snapshots(),
         builder: (context, snapshot) {

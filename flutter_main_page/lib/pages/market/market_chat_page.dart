@@ -56,9 +56,26 @@ class _ChatViewPageState extends State<ChatViewPage> {
     );
   }
 
-  void chatSend(String message) {
-    var ref = db.collection('chat/${widget.chatID}/messages');
-    ref.add({'message': message, 'time': Timestamp.now(), 'userID': user!.uid});
+  chatSend(String message) async {
+    Map<String, bool> isRead = {};
+
+    var list = await db.collection('chat').doc(widget.chatID).get();
+
+    List? users = list['listener'];
+    for (int i = 0; i < users!.length; i++) {
+      if (users[i] == user!.uid) {
+        return;
+      }
+      isRead.addAll({users[i]: false});
+    }
+    print(isRead);
+
+    await db.collection('chat/${widget.chatID}/messages').add({
+      'message': message,
+      'time': Timestamp.now(),
+      'userID': user!.uid,
+      'isRead': isRead,
+    });
   }
 
   void updateRecentMessage(String message) {
@@ -80,6 +97,9 @@ class _ChatViewPageState extends State<ChatViewPage> {
               return Center(
                 child: CircularProgressIndicator.adaptive(),
               );
+            }
+            if (snapshot.data!.docs.isEmpty) {
+              return Container();
             }
             final docs = snapshot.data!.docs;
             return ListView.builder(
@@ -147,12 +167,12 @@ class _ChatViewPageState extends State<ChatViewPage> {
       return;
     }
     FirebaseFirestore.instance.collection('chat').doc(widget.chatID).set(
-        {'listener': userQuit(list['listener'], widget.userNumber)},
+        {'listener': userQuit(list['listener'], user!.uid)},
         SetOptions(merge: true));
   }
 
-  userQuit(List usersList, String userNumber) {
-    usersList.remove(userNumber);
+  userQuit(List usersList, String uid) {
+    usersList.remove(uid);
 
     return usersList;
   }
@@ -311,7 +331,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
         .doc(widget.chatID)
         .get();
 
-    String? token = list['token'][widget.userNumber];
+    String? token = list['token'][user!.uid];
 
     const postUrl = 'https://fcm.googleapis.com/fcm/send';
     final data = {
