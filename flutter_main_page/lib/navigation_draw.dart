@@ -5,23 +5,23 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
-import 'package:flutter_main_page/pages/Update_Page/userinfo_update.dart';
-import 'package:flutter_main_page/pages/market/com_market.dart';
-import 'package:flutter_main_page/pages/others/QandAhome.dart';
-import 'package:flutter_main_page/pages/others/delete_user.dart';
-import 'package:flutter_main_page/pages/others/feedback.dart';
-import 'package:flutter_main_page/pages/loginPage/reset_pass.dart';
-import 'package:flutter_main_page/pages/mainPage/com_notice.dart';
-import 'package:flutter_main_page/pages/others/calculate.dart';
-import 'package:flutter_main_page/pages/mainPage/myContentDelete.dart';
-import 'package:flutter_main_page/pages/others/intro.dart';
+import 'package:flutter_main_page/src/pages/Update_Page/userinfo_update.dart';
+import 'package:flutter_main_page/src/pages/market/com_market.dart';
+import 'package:flutter_main_page/src/pages/others/QandAhome.dart';
+import 'package:flutter_main_page/src/pages/others/delete_user.dart';
+import 'package:flutter_main_page/src/pages/others/feedback.dart';
+import 'package:flutter_main_page/src/pages/loginPage/reset_pass.dart';
+import 'package:flutter_main_page/src/pages/mainPage/com_notice.dart';
+import 'package:flutter_main_page/src/pages/others/calculate.dart';
+import 'package:flutter_main_page/src/pages/mainPage/myContentDelete.dart';
+import 'package:flutter_main_page/src/pages/others/intro.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:url_launcher/url_launcher.dart';
-import 'pages/loginPage/login_page.dart';
-import 'pages/mainPage/com_community.dart';
-import 'pages/mainPage/com_event.dart';
-import 'pages/mainPage/com_info_job.dart';
+import 'src/pages/loginPage/login_page.dart';
+import 'src/pages/mainPage/com_community.dart';
+import 'src/pages/mainPage/com_event.dart';
+import 'src/pages/mainPage/com_info_job.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final String userNumber;
