@@ -24,7 +24,6 @@ class _CreateUserPageState extends State<CreateUserPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
-  final _subStyle = TextStyle(fontSize: 17, color: Colors.black);
   late TextEditingController _userName;
   late TextEditingController _userNumber;
   late TextEditingController _userPass;

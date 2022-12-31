@@ -4,23 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../../../main.dart';
+import 'package:flutter_main_page/src/components/font_text.dart';
 import '../View_pages/event_view.dart';
 
-class Event {
-  String id;
-  String title;
-  String content;
-  String author;
-  String time;
-  int countLike;
-  List likedUsersList;
-
-  Event(this.id, this.title, this.content, this.author, this.time,
-      this.countLike, this.likedUsersList);
-}
 
 class EventPage extends StatefulWidget {
   final String userNumber;
@@ -31,6 +17,8 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> {
+
+  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -39,12 +27,7 @@ class _EventPageState extends State<EventPage> {
         appBar: AppBar(
           iconTheme: IconThemeData.fallback(),
           backgroundColor: Colors.white,
-          title: Text(
-            "이벤트",
-            style: GoogleFonts.doHyeon(
-              textStyle: mainStyle,
-            ),
-          ),
+          title: FontText(text: '이벤트', type: FontType.SUB, fontSize: 25,),
           centerTitle: true,
         ),
         resizeToAvoidBottomInset: true,

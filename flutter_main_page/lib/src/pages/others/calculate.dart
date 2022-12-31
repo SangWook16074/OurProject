@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/src/components/font_text.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CalculatePage extends StatefulWidget {
@@ -139,12 +140,7 @@ class _CalculatePageState extends State<CalculatePage> {
             ),
           ],
           backgroundColor: Colors.white,
-          title: Text(
-            "학점계산기",
-            style: GoogleFonts.doHyeon(
-              textStyle: mainStyle,
-            ),
-          ),
+          title: FontText(type: FontType.SUB, text: '학점계산기', fontSize: 25,),
           centerTitle: true,
         ),
         body: GestureDetector(

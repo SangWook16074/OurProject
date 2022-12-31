@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/src/components/custom_text_field.dart';
 import 'package:flutter_main_page/src/components/font_text.dart';
+import 'package:flutter_main_page/src/controller/auth_controller.dart';
 import 'package:flutter_main_page/src/pages/loginPage/create_user.dart';
 import 'package:flutter_main_page/src/pages/loginPage/reset_pass.dart';
 import 'package:flutter_main_page/src/pages/others/introduce.dart';
+import 'package:get/get.dart';
 import '../mainPage/main_home.dart';
 
 bool isChecked = false;
@@ -27,133 +27,28 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _auth = FirebaseAuth.instance;
+  
   late bool autoLoginStatus;
   late String userNumber;
   late String user;
   late bool isAdmin;
+  final showHome = prefs.getBool('showHome') ?? false;
   late TextEditingController _textEditingControllerUser;
   late TextEditingController _textEditingControllerPassWd;
-  final showHome = prefs.getBool('showHome') ?? false;
-
-
-
-  Future login() async {
-
-    if (_textEditingControllerUser.text.isEmpty) {
-      toastMessage("학번을 입력하세요.");
-      return;
-    }
-    if (_textEditingControllerPassWd
-        .text.isEmpty) {
-      toastMessage("비밀번호를 입력하세요.");
-      return;
-    }
-
-    try {
-      final String user =
-          _textEditingControllerUser.text;
-      DocumentSnapshot userInfoData =
-          await FirebaseFirestore.instance
-              .collection('UserInfo')
-              .doc(user)
-              .get();
-
-      if (!userInfoData.exists) {
-        toastMessage("가입하지 않은 학번입니다.");
-        return;
-      }
-      await _auth
-          .signInWithEmailAndPassword(
-              email: userInfoData['email'],
-              password:
-                  _textEditingControllerPassWd
-                      .text)
-          .then((value) {
-        if (value.user!.emailVerified == false) {
-          toastMessage('이메일 인증을 완료해주세요!');
-          return;
-        }
-
-        if (isChecked == true) {
-          _updateAutoLoginStatus(isChecked);
-          _saveUserData(
-              userInfoData['userNumber'],
-              userInfoData['userName'],
-              userInfoData['isAdmin']);
-          return;
-        }
-
-        prefs.setString('userNumber',
-            userInfoData['userNumber']);
-        prefs.setInt(
-            'index', prefs.getInt('index') ?? 1);
-
-        _textEditingControllerUser.clear();
-        _textEditingControllerPassWd.clear();
-
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) => showHome
-                    ? MainHome(
-                        userNumber:
-                            userInfoData.id,
-                        user: userInfoData[
-                            'userName'],
-                        isAdmin: userInfoData[
-                            'isAdmin'])
-                    : OnBoardingPage(
-                        userNumber:
-                            userInfoData.id,
-                        user: userInfoData[
-                            'userName'],
-                        isAdmin: userInfoData[
-                            'isAdmin'])),
-            (route) => false);
-      });
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        toastMessage('비밀번호가 다릅니다');
-        return;
-      }
-
-      toastMessage('잠시 후에 다시 시도해주세요');
-    }
-  }
-  Future<void> _updateAutoLoginStatus(bool boolean) async {
-    if (boolean == true) {
-      prefs.setBool('autoLoginStatus', true);
-    } else {
-      prefs.setBool('autoLoginStatus', false);
-    }
-  }
-
-  Future<void> _saveUserData(String number, String name, bool boolean) async {
-    prefs.setString('userNumber', number);
-    prefs.setString('user', name);
-
-    prefs.setBool('isAdmin', boolean);
-  }
   
   @override
   void initState() {
     super.initState();
     _textEditingControllerUser = TextEditingController();
     _textEditingControllerPassWd = TextEditingController();
-
-    Map<TextEditingController, String> controllers = {
-      _textEditingControllerUser : '이름',
-      _textEditingControllerPassWd : '비밀번호',
-    };
   }
   
-
   @override
   void dispose() {
+    _textEditingControllerUser.clear();
+    _textEditingControllerPassWd.clear();
     _textEditingControllerUser.dispose();
     _textEditingControllerPassWd.dispose();
-    _textEditingControllerPassWd.clear();
     super.dispose();
   }
 
@@ -278,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                 ? ElevatedButton(
                     //로그인 버튼
 
-                    onPressed: login,
+                    onPressed:() => Get.find<AuthController>().login(_textEditingControllerUser.text, _textEditingControllerPassWd.text),
                     style: TextButton.styleFrom(
                       backgroundColor: Colors.blueGrey,
                       padding: const EdgeInsets.all(16.0),
@@ -293,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                 : CupertinoButton(
                     //로그인 버튼
 
-                    onPressed: login,
+                    onPressed: () => Get.find<AuthController>().login(_textEditingControllerUser.text, _textEditingControllerPassWd.text),
                     color: Colors.blueGrey,
                     padding: const EdgeInsets.all(16.0),
                     child: const Text(

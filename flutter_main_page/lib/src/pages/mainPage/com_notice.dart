@@ -5,11 +5,10 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_main_page/src/components/font_text.dart';
 import 'package:flutter_main_page/src/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/src/pages/mainPage/com_search.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-
 import '../../../custom_page_route.dart';
 import '../../../main.dart';
 
@@ -53,12 +52,7 @@ class _NoticePageState extends State<NoticePage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            '공지사항',
-            style: GoogleFonts.doHyeon(
-              textStyle: mainStyle,
-            ),
-          ),
+          title: FontText(text: '공지사항', fontSize: 25, type: FontType.SUB,),
           centerTitle: true,
           actions: [
             IconButton(
