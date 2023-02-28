@@ -7,8 +7,9 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/message_controller/notice_controller.dart';
-import 'package:flutter_main_page/pages/loginPage/login_page.dart';
+import 'package:flutter_main_page/src/binding/init_binding.dart';
+import 'package:flutter_main_page/src/controller/notice_controller.dart';
+import 'package:flutter_main_page/src/pages/loginPage/login_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -100,7 +101,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialBinding:
-          BindingsBuilder.put(() => NotificationController(), permanent: true),
+          InitBinding(),
       home: AnimatedSplashScreen(
           duration: 2000,
           splash: Image.asset(
