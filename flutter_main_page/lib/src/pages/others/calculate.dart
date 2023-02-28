@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/src/components/font_text.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CalculatePage extends StatefulWidget {
   const CalculatePage({Key? key}) : super(key: key);
@@ -149,12 +148,7 @@ class _CalculatePageState extends State<CalculatePage> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 _buildResult(),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                      child: Text(
-                          "Pass/Fail 교과목은 성적 산출에서 제외됩니다. 따라서 학점계산기에 기재하면 잘못된 성적이 산출됩니다.")),
-                ),
+                _buildText(),
                 _buildCalculate(),
                 _buildBottons(),
               ],
@@ -355,5 +349,14 @@ class _CalculatePageState extends State<CalculatePage> {
               ],
             ),
     );
+  }
+  
+  Widget _buildText() {
+    return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                      child: Text(
+                          "Pass/Fail 교과목은 성적 산출에서 제외됩니다. 따라서 학점계산기에 기재하면 잘못된 성적이 산출됩니다.")),
+                );
   }
 }

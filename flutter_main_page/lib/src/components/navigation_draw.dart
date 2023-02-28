@@ -18,10 +18,10 @@ import 'package:flutter_main_page/src/pages/others/intro.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:url_launcher/url_launcher.dart';
-import 'src/pages/loginPage/login_page.dart';
-import 'src/pages/mainPage/com_community.dart';
-import 'src/pages/mainPage/com_event.dart';
-import 'src/pages/mainPage/com_info_job.dart';
+import '../pages/loginPage/login_page.dart';
+import '../pages/mainPage/com_community.dart';
+import '../pages/mainPage/com_event.dart';
+import '../pages/mainPage/com_info_job.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final String userNumber;

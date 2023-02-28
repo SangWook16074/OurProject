@@ -9,7 +9,7 @@ import 'package:flutter_main_page/src/components/font_text.dart';
 import 'package:flutter_main_page/src/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/src/pages/mainPage/com_search.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import '../../../custom_page_route.dart';
+import '../../components/custom_page_route.dart';
 import '../../../main.dart';
 
 class NoticePage extends StatefulWidget {
@@ -52,7 +52,11 @@ class _NoticePageState extends State<NoticePage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: FontText(text: '공지사항', fontSize: 25, type: FontType.SUB,),
+          title: FontText(
+            text: '공지사항',
+            fontSize: 25,
+            type: FontType.SUB,
+          ),
           centerTitle: true,
           actions: [
             IconButton(

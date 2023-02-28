@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_main_page/chat_bubble.dart';
+import 'package:flutter_main_page/src/components/chat_bubble.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:http/http.dart' as http;
 

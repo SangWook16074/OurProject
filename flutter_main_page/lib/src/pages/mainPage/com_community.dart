@@ -8,7 +8,7 @@ import 'package:flutter_main_page/src/pages/View_pages/com_view.dart';
 import 'package:flutter_main_page/src/pages/WritePages/com_write_com.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import '../../../custom_page_route.dart';
+import '../../components/custom_page_route.dart';
 import '../../../main.dart';
 import 'com_search.dart';
 

@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:flutter_main_page/src/components/custom_text_field.dart';
 import 'package:flutter_main_page/src/components/font_text.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // import '../database_sub/user_info.dart';
 

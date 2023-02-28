@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_main_page/navigation_draw.dart';
+import 'package:flutter_main_page/src/components/navigation_draw.dart';
 import 'package:flutter_main_page/src/components/font_text.dart';
 import 'package:flutter_main_page/src/pages/AdminPage/add_photo.dart';
 import 'package:flutter_main_page/src/pages/AdminPage/notice_manage.dart';
@@ -21,7 +21,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../custom_page_route.dart';
+import '../../components/custom_page_route.dart';
 import '../../../main.dart';
 import '../AdminPage/cmty_manage.dart';
 import '../AdminPage/event_manage.dart';
@@ -95,9 +95,7 @@ class _MainHomeState extends State<MainHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: widget.isAdmin == true
-          ? _speedDial()
-          : null,
+      floatingActionButton: widget.isAdmin == true ? _speedDial() : null,
       endDrawer: NavigationDrawerWidget(
           userNumber: widget.userNumber,
           user: widget.user,
@@ -111,7 +109,7 @@ class _MainHomeState extends State<MainHome> {
         actions: [
           IconButton(
               onPressed: () {
-                Get.to(()=>MainAlarm());
+                Get.to(() => MainAlarm());
               },
               icon: Icon(
                 Icons.notifications_active,
@@ -747,232 +745,232 @@ class _MainHomeState extends State<MainHome> {
       ),
     );
   }
-  
+
   Widget _speedDial() {
     return SpeedDial(
-              gradientBoxShape: BoxShape.circle,
-              spaceBetweenChildren: 10,
-              spacing: 10,
-              icon: Icons.manage_accounts,
-              overlayOpacity: 0.6,
-              overlayColor: Colors.black,
-              children: [
-                _dialChild(Icon(Icons.edit_notifications), '공지관리', NoticeManagePage()),
-                _dialChild(Icon(Icons.event_available), '이벤트관리', EventManagePage()),
-                _dialChild(Icon(Icons.lightbulb), '취업정보관리', JobManagePage()),
-                _dialChild(Icon(Icons.message), '커뮤니티관리', ComManagePage()),
-                _dialChild(Icon(Icons.photo_library), '배너사진관리', AddPhotoPage()),
-                _dialChild(Icon(Icons.question_answer), 'Q / A관리', QuestionManagePage()),
-              ],
-            );
+      gradientBoxShape: BoxShape.circle,
+      spaceBetweenChildren: 10,
+      spacing: 10,
+      icon: Icons.manage_accounts,
+      overlayOpacity: 0.6,
+      overlayColor: Colors.black,
+      children: [
+        _dialChild(Icon(Icons.edit_notifications), '공지관리', NoticeManagePage()),
+        _dialChild(Icon(Icons.event_available), '이벤트관리', EventManagePage()),
+        _dialChild(Icon(Icons.lightbulb), '취업정보관리', JobManagePage()),
+        _dialChild(Icon(Icons.message), '커뮤니티관리', ComManagePage()),
+        _dialChild(Icon(Icons.photo_library), '배너사진관리', AddPhotoPage()),
+        _dialChild(
+            Icon(Icons.question_answer), 'Q / A관리', QuestionManagePage()),
+      ],
+    );
   }
-  
+
   SpeedDialChild _dialChild(Icon icon, String label, Widget nextPage) {
     return SpeedDialChild(
-                    child: icon,
-                    label: label,
-                    onTap: () {
-                      Get.to(() => nextPage);
-                    });
+        child: icon,
+        label: label,
+        onTap: () {
+          Get.to(() => nextPage);
+        });
   }
-  
+
   Widget _event() {
     return Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                child: Container(
-                  height: MediaQuery.of(context).size.width + 100,
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(color: Colors.grey, width: 1)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+          child: Container(
+            height: MediaQuery.of(context).size.width + 100,
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(color: Colors.grey, width: 1)),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Column(
+                children: [
+                  Container(
+                    height: 40,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        Container(
-                          height: 40,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: FontText(text: '학생회 이벤트', type: FontType.SUB, fontSize: 25,)
-                              ),
-                              TextButton(
-                                  onPressed: () {
-                                    (Platform.isAndroid)
-                                        ? Navigator.of(context).push(
-                                            CustomPageRightRoute(
-                                                child: EventPage(widget.user)))
-                                        : Navigator.of(context).push(
-                                            CupertinoPageRoute(
-                                                builder: (context) {
-                                            return EventPage(widget.user);
-                                          }));
-                                  },
-                                  child: Text(
-                                    '더보기',
-                                    style: TextStyle(color: Colors.blueGrey),
-                                  ))
-                            ],
-                          ),
-                        ),
+                        Expanded(
+                            child: FontText(
+                          text: '학생회 이벤트',
+                          type: FontType.SUB,
+                          fontSize: 25,
+                        )),
+                        TextButton(
+                            onPressed: () {
+                              (Platform.isAndroid)
+                                  ? Navigator.of(context).push(
+                                      CustomPageRightRoute(
+                                          child: EventPage(widget.user)))
+                                  : Navigator.of(context).push(
+                                      CupertinoPageRoute(builder: (context) {
+                                      return EventPage(widget.user);
+                                    }));
+                            },
+                            child: Text(
+                              '더보기',
+                              style: TextStyle(color: Colors.blueGrey),
+                            ))
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 70.0),
-                child: _buildEvent(),
-              ),
-            ],
-          );
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 70.0),
+          child: _buildEvent(),
+        ),
+      ],
+    );
   }
-  
+
   Widget _notice() {
     return Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            child: Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    border: Border.all(color: Colors.grey, width: 1)),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '공지사항',
-                              style: GoogleFonts.doHyeon(
-                                textStyle: mainStyle,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                (Platform.isAndroid)
-                                    ? Navigator.of(context).push(
-                                        CustomPageRightRoute(
-                                            child:
-                                                NoticePage(widget.userNumber)))
-                                    : Navigator.of(context).push(
-                                        CupertinoPageRoute(builder: (context) {
-                                        return NoticePage(widget.userNumber);
-                                      }));
-                              },
-                              child: Text(
-                                '더보기',
-                                style: TextStyle(color: Colors.blueGrey),
-                              ))
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    _buildNotice(),
-                  ],
-                )),
-          );
-  }
-  
-  Widget _com() {
-    return Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            child: Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    border: Border.all(color: Colors.grey, width: 1)),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '최근 등록된 글',
-                              style: GoogleFonts.doHyeon(
-                                textStyle: mainStyle,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                (Platform.isAndroid)
-                                    ? Navigator.of(context).push(
-                                        CustomPageRightRoute(
-                                            child: ComPage(widget.userNumber)))
-                                    : Navigator.of(context).push(
-                                        CupertinoPageRoute(builder: (context) {
-                                        return ComPage(widget.userNumber);
-                                      }));
-                              },
-                              child: Text(
-                                '더보기',
-                                style: TextStyle(color: Colors.blueGrey),
-                              ))
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    _buildCom(),
-                  ],
-                )),
-          );
-  }
-  
-  Widget _bannerImage() {
-    return Stack(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              border: Border.all(color: Colors.grey, width: 1)),
+          child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                child: Container(
-                  height: MediaQuery.of(context).size.width + 100,
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(color: Colors.grey, width: 1)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Column(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '공지사항',
+                        style: GoogleFonts.doHyeon(
+                          textStyle: mainStyle,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          (Platform.isAndroid)
+                              ? Navigator.of(context).push(CustomPageRightRoute(
+                                  child: NoticePage(widget.userNumber)))
+                              : Navigator.of(context)
+                                  .push(CupertinoPageRoute(builder: (context) {
+                                  return NoticePage(widget.userNumber);
+                                }));
+                        },
+                        child: Text(
+                          '더보기',
+                          style: TextStyle(color: Colors.blueGrey),
+                        ))
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              _buildNotice(),
+            ],
+          )),
+    );
+  }
+
+  Widget _com() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              border: Border.all(color: Colors.grey, width: 1)),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '최근 등록된 글',
+                        style: GoogleFonts.doHyeon(
+                          textStyle: mainStyle,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          (Platform.isAndroid)
+                              ? Navigator.of(context).push(CustomPageRightRoute(
+                                  child: ComPage(widget.userNumber)))
+                              : Navigator.of(context)
+                                  .push(CupertinoPageRoute(builder: (context) {
+                                  return ComPage(widget.userNumber);
+                                }));
+                        },
+                        child: Text(
+                          '더보기',
+                          style: TextStyle(color: Colors.blueGrey),
+                        ))
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              _buildCom(),
+            ],
+          )),
+    );
+  }
+
+  Widget _bannerImage() {
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+          child: Container(
+            height: MediaQuery.of(context).size.width + 100,
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(color: Colors.grey, width: 1)),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Column(
+                children: [
+                  Container(
+                    height: 40,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        Container(
-                          height: 40,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  '학과 소식',
-                                  style: GoogleFonts.doHyeon(
-                                    textStyle: mainStyle,
-                                  ),
-                                ),
-                              ),
-                            ],
+                        Expanded(
+                          child: Text(
+                            '학과 소식',
+                            style: GoogleFonts.doHyeon(
+                              textStyle: mainStyle,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 70.0),
-                child: _buildBannerImage(),
-              ),
-            ],
-          );
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 70.0),
+          child: _buildBannerImage(),
+        ),
+      ],
+    );
   }
 }
