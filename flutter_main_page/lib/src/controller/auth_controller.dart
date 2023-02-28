@@ -1,47 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_main_page/src/constants/firebase_constants.dart';
 import 'package:get/get.dart';
 import '../../main.dart';
 import '../pages/mainPage/main_home.dart';
 import '../pages/others/introduce.dart';
 import 'error_controller.dart';
 
-class AuthController extends GetxController with ErrorMessage{
+class AuthController extends GetxController {
   final bool? isChecked;
-  final _auth = FirebaseAuth.instance;
-  final firestore = FirebaseFirestore.instance;
   final showHome = prefs.getBool('showHome') ?? false;
 
   AuthController({this.isChecked}) {}
 
   Future login(String id, String password) async {
     if (id == '') {
-      toastErrorMessage("학번을 입력하세요.");
+      ErrorMessage.toastErrorMessage("학번을 입력하세요.");
       return;
     }
     if (password == '') {
-      toastErrorMessage("비밀번호를 입력하세요.");
+      ErrorMessage.toastErrorMessage("비밀번호를 입력하세요.");
       return;
     }
 
     try {
-      final String user =
-          id;
+      final String user = id;
       DocumentSnapshot userInfoData =
-          await FirebaseFirestore.instance
-              .collection('UserInfo')
-              .doc(user)
-              .get();
+          await firebaseFirestore.collection('UserInfo').doc(user).get();
 
       if (!userInfoData.exists) {
-        toastErrorMessage("가입하지 않은 학번입니다.");
+        ErrorMessage.toastErrorMessage("가입하지 않은 학번입니다.");
         return;
       }
-      await _auth
+      await auth
           .signInWithEmailAndPassword(
-            email: userInfoData['email'],
-            password:password,
-          )
+        email: userInfoData['email'],
+        password: password,
+      )
           .then((value) {
         if (value.user!.emailVerified == false) {
           toastMessage('이메일 인증을 완료해주세요!');
@@ -50,39 +45,31 @@ class AuthController extends GetxController with ErrorMessage{
 
         if (isChecked == true) {
           _updateAutoLoginStatus(isChecked!);
-          _saveUserData(
-              userInfoData['userNumber'],
-              userInfoData['userName'],
+          _saveUserData(userInfoData['userNumber'], userInfoData['userName'],
               userInfoData['isAdmin']);
           return;
         }
 
-        prefs.setString('userNumber',
-            userInfoData['userNumber']);
-        prefs.setInt(
-            'index', prefs.getInt('index') ?? 1);
+        prefs.setString('userNumber', userInfoData['userNumber']);
+        prefs.setInt('index', prefs.getInt('index') ?? 1);
 
-        Get.off(showHome ? MainHome(
-                        userNumber:
-                            userInfoData.id,
-                        user: userInfoData[
-                            'userName'],
-                        isAdmin: userInfoData[
-                            'isAdmin']) : OnBoardingPage(
-                        userNumber:
-                            userInfoData.id,
-                        user: userInfoData[
-                            'userName'],
-                        isAdmin: userInfoData[
-                            'isAdmin']));
+        Get.off(showHome
+            ? MainHome(
+                userNumber: userInfoData.id,
+                user: userInfoData['userName'],
+                isAdmin: userInfoData['isAdmin'])
+            : OnBoardingPage(
+                userNumber: userInfoData.id,
+                user: userInfoData['userName'],
+                isAdmin: userInfoData['isAdmin']));
       });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
-        toastErrorMessage('비밀번호가 다릅니다');
+        ErrorMessage.toastErrorMessage('비밀번호가 다릅니다');
         return;
       }
 
-      toastErrorMessage('잠시 후에 다시 시도해주세요');
+      ErrorMessage.toastErrorMessage('잠시 후에 다시 시도해주세요');
     }
   }
 
@@ -181,6 +168,6 @@ class AuthController extends GetxController with ErrorMessage{
   //       }
   //       toastMessage("잠시후에 다시 시도해주세요.");
   //     }
-    
+
   // }
 }

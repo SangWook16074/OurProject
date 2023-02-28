@@ -7,21 +7,14 @@ import 'package:flutter_main_page/src/pages/View_pages/zoom_image.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../main.dart';
+import '../../data/model/event_model.dart';
 
 class EventViewPage extends StatefulWidget {
-  final String title;
-  final String content;
-  final String author;
-  final String time;
-  final String? url;
-  const EventViewPage(
-      {Key? key,
-      required this.title,
-      required this.content,
-      required this.author,
-      required this.time,
-      this.url})
-      : super(key: key);
+  final EventModel eventModel;
+  const EventViewPage({
+    Key? key,
+    required this.eventModel,
+  }) : super(key: key);
 
   @override
   State<EventViewPage> createState() => _EventViewPageState();
@@ -62,35 +55,35 @@ class _EventViewPageState extends State<EventViewPage> {
               shrinkWrap: true,
               children: [
                 Text(
-                  widget.title,
+                  widget.eventModel.title,
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "[${widget.author}]",
+                  "[${widget.eventModel.author}]",
                   style: const TextStyle(color: Colors.blueGrey, fontSize: 15),
                 ),
                 Text(
-                  widget.time,
+                  widget.eventModel.time,
                   style: const TextStyle(fontSize: 15, color: Colors.grey),
                 ),
                 Divider(
                   color: Colors.grey,
                 ),
-                (widget.url != '')
+                (widget.eventModel.url != '')
                     ? GestureDetector(
                         onTap: () {
                           Navigator.of(context).push((Platform.isAndroid)
                               ? MaterialPageRoute(builder: (context) {
-                                  return ZoomImage(url: widget.url!);
+                                  return ZoomImage(url: widget.eventModel.url);
                                 })
                               : CupertinoPageRoute(builder: (context) {
-                                  return ZoomImage(url: widget.url!);
+                                  return ZoomImage(url: widget.eventModel.url);
                                 }));
                         },
                         child: Hero(
                           transitionOnUserGestures: true,
-                          tag: widget.url!,
+                          tag: widget.eventModel.url,
                           child: Container(
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.width,
@@ -101,7 +94,7 @@ class _EventViewPageState extends State<EventViewPage> {
                                   child: Container(
                                     width: MediaQuery.of(context).size.width,
                                     child: CachedNetworkImage(
-                                      imageUrl: widget.url!,
+                                      imageUrl: widget.eventModel.url,
                                       fit: BoxFit.fill,
                                       placeholder: (context, url) => Container(
                                         color: Colors.black,
@@ -118,7 +111,7 @@ class _EventViewPageState extends State<EventViewPage> {
                   height: 40,
                 ),
                 Text(
-                  widget.content,
+                  widget.eventModel.content,
                   style: const TextStyle(
                     fontSize: 20,
                   ),

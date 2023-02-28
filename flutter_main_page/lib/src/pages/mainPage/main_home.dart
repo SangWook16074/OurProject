@@ -11,7 +11,6 @@ import 'package:flutter_main_page/src/components/navigation_draw.dart';
 import 'package:flutter_main_page/src/components/font_text.dart';
 import 'package:flutter_main_page/src/pages/AdminPage/add_photo.dart';
 import 'package:flutter_main_page/src/pages/AdminPage/notice_manage.dart';
-import 'package:flutter_main_page/src/pages/View_pages/event_view.dart';
 import 'package:flutter_main_page/src/pages/View_pages/notice_view.dart';
 import 'package:flutter_main_page/src/pages/View_pages/zoom_image.dart';
 import 'package:flutter_main_page/src/pages/market/com_market.dart';
@@ -577,23 +576,23 @@ class _MainHomeState extends State<MainHome> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.of(context).push((Platform.isAndroid)
-                                    ? MaterialPageRoute(builder: (context) {
-                                        return EventViewPage(
-                                            title: doc['title'],
-                                            content: doc['content'],
-                                            author: doc['author'],
-                                            time: doc['time'],
-                                            url: doc['url']);
-                                      })
-                                    : CupertinoPageRoute(builder: (context) {
-                                        return EventViewPage(
-                                            title: doc['title'],
-                                            content: doc['content'],
-                                            author: doc['author'],
-                                            time: doc['time'],
-                                            url: doc['url']);
-                                      }));
+                                // Navigator.of(context).push((Platform.isAndroid)
+                                //     ? MaterialPageRoute(builder: (context) {
+                                //         return EventViewPage(
+                                //             title: doc['title'],
+                                //             content: doc['content'],
+                                //             author: doc['author'],
+                                //             time: doc['time'],
+                                //             url: doc['url']);
+                                //       })
+                                //     : CupertinoPageRoute(builder: (context) {
+                                //         return EventViewPage(
+                                //             title: doc['title'],
+                                //             content: doc['content'],
+                                //             author: doc['author'],
+                                //             time: doc['time'],
+                                //             url: doc['url']);
+                                //       }));
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,

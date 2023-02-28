@@ -6,11 +6,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_main_page/main.dart';
 import 'package:get/get.dart';
 
+import '../constants/firebase_constants.dart';
+
 var isSubscribe = false;
 
 class NotificationController extends GetxController {
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
   @override
   Future<void> onInit() async {
     NotificationSettings settings = await messaging.requestPermission(
