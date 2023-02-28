@@ -1,23 +1,16 @@
-import 'package:cached_network_image/cached_network_image.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/src/components/font_text.dart';
 import 'package:flutter_main_page/src/controller/event_controller.dart';
 import 'package:flutter_main_page/src/data/model/event_model.dart';
 import 'package:get/get.dart';
+
+import '../../components/event_image.dart';
 import '../View_pages/event_view.dart';
 
 class EventPage extends GetView<EventController> {
   final String userNumber;
   EventPage(this.userNumber, {Key? key}) : super(key: key);
-
-  userCheck(List usersList, String userNumber) {
-    if (usersList.contains(userNumber)) {
-      usersList.remove(userNumber);
-    } else {
-      usersList.add(userNumber);
-    }
-    return usersList;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,24 +74,9 @@ class EventPage extends GetView<EventController> {
             height: 10,
           ),
           (eventModel.url != '')
-              ? Container(
-                  width: Get.size.width,
-                  height: Get.size.width,
-                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Container(
-                        width: Get.size.width,
-                        child: CachedNetworkImage(
-                          imageUrl: eventModel.url,
-                          fit: BoxFit.fill,
-                          placeholder: (context, url) => Container(
-                            color: Colors.black,
-                          ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                        ),
-                      )))
+              ? EventImage(
+                  url: eventModel.url,
+                )
               : Container(),
           Divider(),
         ],
