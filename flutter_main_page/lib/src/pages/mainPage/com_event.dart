@@ -23,24 +23,26 @@ class EventPage extends GetView<EventController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData.fallback(),
-          backgroundColor: Colors.white,
-          title: FontText(
-            text: '이벤트',
-            type: FontType.SUB,
-            fontSize: 25,
+      child: Obx(
+        () => Scaffold(
+          appBar: AppBar(
+            iconTheme: IconThemeData.fallback(),
+            backgroundColor: Colors.white,
+            title: FontText(
+              text: '이벤트',
+              type: FontType.SUB,
+              fontSize: 25,
+            ),
+            centerTitle: true,
           ),
-          centerTitle: true,
+          resizeToAvoidBottomInset: true,
+          body: ListView.builder(
+              itemCount: controller.events.length,
+              itemBuilder: (context, index) {
+                final eventModel = controller.events[index];
+                return _buildItemWidget(eventModel);
+              }),
         ),
-        resizeToAvoidBottomInset: true,
-        body: ListView.builder(
-            itemCount: controller.events.length,
-            itemBuilder: (context, index) {
-              final eventModel = controller.events[index];
-              return _buildItemWidget(eventModel);
-            }),
       ),
     );
   }
