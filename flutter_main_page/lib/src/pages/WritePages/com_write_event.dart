@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_main_page/main.dart';
+import 'package:flutter_main_page/src/constants/server_key.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -55,8 +56,7 @@ class _WriteEventPageState extends State<WriteEventPage> {
 
     final headers = {
       'content-type': 'application/json',
-      'Authorization':
-          'key=AAAAGD39BhQ:APA91bHJ2kDvwE9yttcSqmN674ZRazo7fUhPnS7TplSCnX5TAZIFqkTP4tD-Gw2wb71Ul5JMD-KScUl9oQ1eB2pMIRG1GwX7gyz7KxKZHbRWuc7D7qa86KxyI8FGo9oOPUju3MZxsZg4' // 'key=YOUR_SERVER_KEY'
+      'Authorization': 'key=$server_key' // 'key=YOUR_SERVER_KEY'
     };
 
     final response = await http.post(Uri.parse(postUrl),
